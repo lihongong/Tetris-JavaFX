@@ -12,6 +12,19 @@ public class MinoT extends Mino {
         create(Color.MAGENTA);
     }
     @Override
+    public boolean checkTSpinConfiguration(Block[][] inactiveBlocks) {
+        for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+            Block currentBlock = blocks[i];
+            int currentRow = currentBlock.getRow();
+            int currentCol = currentBlock.getCol();
+            if (currentRow > 0 && inactiveBlocks[currentRow - 1][currentCol] != null) {
+                // if there is an inactive block above one of the mino blocks
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
     public void setPlayingFieldStartPosition() {
         // make sure to set the direction to 1 (or else it will appear to be in the direction 1 but the direction is not 1)
         direction = 1;

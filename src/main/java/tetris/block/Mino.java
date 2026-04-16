@@ -2,7 +2,7 @@ package tetris.block;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import tetris.Controller;
+import tetris.logic.GameState;
 import tetris.util.Copyable;
 
 import static tetris.util.TetrisConstants.*;
@@ -46,7 +46,10 @@ public abstract class Mino implements Copyable<Mino> {
     /**
      * set {@code isActive} to false and remove the shadow blocks from playing field pane
      */
-    public void deactivate(Pane playingField) {
+    public void deactivate(Pane playingField) { //  this method is not used anymore liao !!!!!
+        isActive = false;
+    }
+    public void deactivate() {
         isActive = false;
     }
 
@@ -87,7 +90,7 @@ public abstract class Mino implements Copyable<Mino> {
      * position can be found, the mino won't be rotated.
      * Try snapping it to the left, right, bottom, bottom left, bottom right, top left and top right.</>
      */
-    public void tryRotatingMino(Block[][] inactiveBlockArray, Controller gameController) {
+    /*public void tryRotatingMino(Block[][] inactiveBlockArray, TetrisManager tetrisManager) {
         int altPosition = 1;
         boolean canRotate = true;
 
@@ -156,7 +159,79 @@ public abstract class Mino implements Copyable<Mino> {
                 gameController.resetDeactivation();
             }
         }
+    }*/
+    // copy version for new refactoring
+    public void tryRotatingMino(Block[][] inactiveBlockArray, GameState gameState) {
+        int altPosition = 1;
+        boolean canRotate = true;
+
+        while (isAlternatePositionValid(inactiveBlockArray)) {
+            if (altPosition == 1) { // push left
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col -= 1;
+                }
+                altPosition++;
+            } else if (altPosition == 2) { // push right
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col += 1;
+                    ghostBlocks[i].col += 1;
+                }
+                altPosition++;
+            } else if (altPosition == 3) { // push down
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col -= 1;
+                    ghostBlocks[i].row += 1;
+                }
+                altPosition++;
+            } else if (altPosition == 4) { // push down left
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col -= 1;
+                }
+                altPosition++;
+            } else if (altPosition == 5) { // push down right
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col += 1;
+                    ghostBlocks[i].col += 1;
+                }
+                altPosition++;
+            } else if (altPosition == 6) { // push up left
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].row -= 1;
+                    ghostBlocks[i].row -= 1;
+                    ghostBlocks[i].col -= 1;
+                    ghostBlocks[i].col -= 1;
+                }
+                altPosition++;
+            } else if (altPosition == 7) { // push up right
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col += 1;
+                    ghostBlocks[i].col += 1;
+                }
+                altPosition++;
+            } else {
+                // Don't push up because it will cause infinite falling
+                // Reset to original position
+                for (int i = 0; i < NUM_OF_BLOCKS_PER_MINO; i++) {
+                    ghostBlocks[i].col -= 1;
+                    ghostBlocks[i].row += 1;
+                    // altPosition++;
+                }
+                canRotate = false;
+                break;
+            }
+        }
+        if (canRotate) {
+            int numOfDirections = 4;
+            this.direction = this.direction < numOfDirections ? this.direction + 1 : 1;
+            this.setRotation();
+
+            // Mino is pushed upwards, so need to reset deactivation
+            if (altPosition == 7 || altPosition == 8) {
+                gameState.resetDeactivation();
+            }
+        }
     }
+
     /**
      * Checks if the rotated mino will exceed boundary or overlap with other inactive blocks.
      */
@@ -225,6 +300,30 @@ public abstract class Mino implements Copyable<Mino> {
             }
         }
         return false;
+    }
+
+    // =================================================
+    // mino position checking
+    // =================================================
+
+    /**
+     * Checks if there is any inactive block on top of the T mino.
+     * This method is called when clearing a line.
+     * @return false for non-T-shape minos, for T-shape mino, return true if there is any inactive block on top of it,
+     * else return false.
+     */
+    public boolean checkTSpinConfiguration(Block[][] inactiveBlocks) {
+        return false; // overriden by MinoT
+    }
+
+    /**
+     * Checks if the mino is at the starting position.
+     * <p>This method is invoked when the mino has touched down to see if it is already game over (touch down but still
+     * at starting position).</p>
+     */
+    public boolean isAtStartingPosition() {
+        // every mino's block0 will always be at MINO_START_X, MINO_START_Y position at the beginning
+        return blocks[0].getRow() == MINO_START_Y && blocks[0].getCol() == MINO_START_X;
     }
 
     // =================================================

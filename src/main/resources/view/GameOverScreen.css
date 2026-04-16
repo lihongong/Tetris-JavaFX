@@ -1,0 +1,26 @@
+.left-aligned-button {
+    -fx-alignment: center-left;
+    -fx-content-display: left;
+    -fx-padding: 0 0 0 10; /* Left padding of 10px */
+
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 32px; /* Adjusted from 40px to match design */
+    -fx-text-fill: black;
+}
+
+#restartButton {
+    -fx-background-image: url('../images/restartButtonBackground.png');
+    -fx-background-size:800px 100px;
+}
+#exitButton {
+    -fx-background-image: url('../images/exitButtonBackground.png');
+    -fx-background-size:800px 100px;
+}
+
+.label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 60px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+}

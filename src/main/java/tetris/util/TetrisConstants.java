@@ -54,11 +54,13 @@ public class TetrisConstants {
     public static final int AUTO_DROP_INTERVAL = 120 * 3 / 4; // adjust the dropping speed of minos
     public static final int BLOCK_FADING_DURATION = 7; // in millisecond, around 8 frames when FPS is 120
     public static final int BLOCK_FALLING_DURATION = 8; // in millisecond, around 8 frames when FPS is 120
+    public static final int T_SPIN_DURATION = 30;
+    public static final int TWO_MINUTE_DURATION = FPS * 120;
 
     // =================================================
     // Colors and Designs
     // =================================================
-    public static final Color PLAYING_FIELD_GRID_LIGHT_GREY = Color.rgb(15, 15, 15);
-    public static final Color PLAYING_FIELD_GRID_GREY = Color.rgb(8, 8, 8);
+    public static final Color PLAYING_FIELD_GRID_LIGHT_GREY = Color.rgb(30, 30, 30, 0.75);
+    public static final Color PLAYING_FIELD_GRID_GREY = Color.rgb(16, 16, 16, 0.75);
 
 }

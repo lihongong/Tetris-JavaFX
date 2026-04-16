@@ -1,0 +1,26 @@
+.centered-button {
+    -fx-alignment: center;
+    -fx-content-display: center;
+    -fx-padding: 0 0 0 0;
+
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 32px; /* Adjusted from 40px to match design */
+    -fx-text-fill: black;
+
+}
+
+.label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 60px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+}
+
+#mainLayout {
+    -fx-background-image: url('/images/gameplay_backgrounds/3.png');
+    -fx-background-size: 1024px 432px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: cover;
+}
