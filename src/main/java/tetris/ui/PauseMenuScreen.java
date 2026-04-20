@@ -54,8 +54,10 @@ public class PauseMenuScreen extends UiPart<VBox> {
     public void handleExitButton() {
         exitButtonHandler.handle();
     }
-    public void openPauseMenuEffects(GameState gameState, GameScreen gameScreen) {
+    public void openPauseMenuEffects(GameState gameState, GameScreen gameScreen, MainWindow mainWindow) {
         gameScreen.setBlurEffects();
+
+        this.getRoot().setDisable(true);
 
         setButtonOnMouseEntered(gameState);
 
@@ -94,7 +96,8 @@ public class PauseMenuScreen extends UiPart<VBox> {
         ParallelTransition combined = new ParallelTransition(slide, fade, slide2, fade2, slide3, fade3, pausedLabelFadeIn);
 
         combined.setOnFinished(e -> {
-            gameState.isTransitionEffectsOn = false;
+            //gameState.isTransitionEffectsOn = false;
+            this.getRoot().setDisable(false);
         });
 
         combined.play();

@@ -144,23 +144,28 @@ public class GameController {
     }
 
     public void pauseGame() {
+        /*
         if (gameState.isTransitionEffectsOn) {
             return;
         }
         gameState.isTransitionEffectsOn = true;
+*/
+
 
         gameState.pauseTheGame();
         currentGameLoop.pause();
 
-        pauseMenuScreen.openPauseMenuEffects(gameState, gameScreen);
+        pauseMenuScreen.openPauseMenuEffects(gameState, gameScreen, mainWindow);
         //gameScreen.getRoot().setEffect(new GaussianBlur(10));
         //pauseMenuScreen.getRoot().setVisible(true);
     }
     public void resumeGame() {
+        /*
         if (gameState.isTransitionEffectsOn) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;
+        gameState.isTransitionEffectsOn = true;*/
+        pauseMenuScreen.getRoot().setDisable(true);
 
         // gameScreen.getRoot().setEffect(null); // remove blur
         ParallelTransition combined = pauseMenuScreen.closePauseMenuEffects(gameState, gameScreen);
@@ -176,7 +181,8 @@ public class GameController {
             gameState.resumeTheGame();
             currentGameLoop.play();
 
-            gameState.isTransitionEffectsOn = false;
+            //gameState.isTransitionEffectsOn = false;
+            pauseMenuScreen.getRoot().setDisable(false);
         });
 
         combined.play();
