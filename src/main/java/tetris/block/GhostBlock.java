@@ -16,5 +16,4 @@ public class GhostBlock {
         this.col = col;
         this.row = row;
     }
-
 }

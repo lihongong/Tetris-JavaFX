@@ -110,7 +110,7 @@ public class MainWindow extends UiPart<StackPane> {
 
         startMenuScreen.setStartButtonHandler(gameController::startButtonInStartMenu);
 
-        selectMenuScreen.setRelaxBlitzExitHandler(gameController::relaxButton, gameController::blitzButton, gameController::exitButtonInSelectMenu);
+        selectMenuScreen.setSelectMenuButtonsHandler(gameController::relaxButton, gameController::sprintButton, gameController::blitzButton, gameController::exitButtonInSelectMenu);
 
         GameState gameState = gameController.getGameState();
         new KeyInputController(mainScene, gameState, gameController);

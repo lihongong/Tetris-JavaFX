@@ -29,7 +29,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
         super(FXML);
     }
 
-    public void setRelaxBlitzExitHandler(ButtonHandler relaxButtonHandler, ButtonHandler blitzButtonHandler, ButtonHandler exitButtonHandler) {
+    public void setSelectMenuButtonsHandler(ButtonHandler relaxButtonHandler, ButtonHandler sprintButtonHandler, ButtonHandler blitzButtonHandler, ButtonHandler exitButtonHandler) {
         this.relaxButtonHandler = relaxButtonHandler;
         this.blitzButtonHandler = blitzButtonHandler;
         this.exitButtonHandler = exitButtonHandler;

@@ -75,7 +75,7 @@ public class GameController {
                 )
         );
         relaxGameLoop.setCycleCount(Timeline.INDEFINITE); // repeat forever
-/*
+
         sprintGameLoop = new Timeline(
                 new KeyFrame(Duration.seconds(1.0 / FPS),
                         e -> {
@@ -84,7 +84,7 @@ public class GameController {
                 )
         );
         sprintGameLoop.setCycleCount(Timeline.INDEFINITE); // repeat forever
-*/
+
         blitzGameLoop = new Timeline(
                 new KeyFrame(Duration.seconds(1.0 / FPS),
                         e -> {
@@ -106,6 +106,16 @@ public class GameController {
             gameOverScreen.openGameOverScreenEffects(gameState, gameScreen);
         } else {
             gameplayManager.update();
+        }
+    }
+
+    public void sprintUpdate() {
+        assert sprintGameLoop == currentGameLoop;
+
+        if (gameState.isGameOver()) {
+            sprintGameLoop.pause();
+
+            gameOverScreen.openGameOverScreenEffects(gameState, gameScreen);
         }
     }
 
@@ -366,23 +376,36 @@ public class GameController {
     }
 
     public void relaxButton() {
-        // set timer in gameScreen to invisible
-        gameScreen.setTimerVisibility(false);
+        // hide timer in gameScreen
+        gameScreen.hideTimer();
 
         currentGameLoop = relaxGameLoop;
         gameState.setGameMode(GameMode.RELAX);
         startGame();
     }
+    public void sprintButton() {
+        // show count up timer in gameScreen
+        gameScreen.showCountUpTimer();
+
+        currentGameLoop = sprintGameLoop;
+        gameState.setGameMode(GameMode.SPRINT);
+        startGame();
+    }
     public void blitzButton() {
-        // set timer in gameScreen to visible
-        gameScreen.setTimerVisibility(true);
+        // set timer and timer bar in gameScreen to visible
+        gameScreen.showCountDownTimerAndBar();
 
         currentGameLoop = blitzGameLoop;
         gameState.setGameMode(GameMode.BLITZ);
         startGame();
     }
 
-    public void startGame() {
+    /**
+     * Control the UI so that it is prepared for the gameplay
+     * Also set up the game model and timer UI
+     * Then RUN THE GAME LOOP
+     */
+    private void startGame() {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         //       but do set "is transition effects on" flag to true to prevent other transition effects
         //       from popping in (e.g. can't pause when starting game screen)
@@ -414,7 +437,7 @@ public class GameController {
 
             gameState.isTransitionEffectsOn = false;
 
-            currentGameLoop.play();
+            currentGameLoop.play(); // RUN THE GAME LOOP
         });
         // set up the model & timer ui before animation finish !!!
         gameplayManager.restartGame();

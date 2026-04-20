@@ -9,8 +9,11 @@ public class GameState {
     private boolean isDeactivating;
     private boolean isEffectOn; // effect is on when there is line removal
     private boolean isTSpin;
-    private boolean isGameOver;
     private boolean isPaused;
+
+    // game is over flags
+    private boolean isGameOver;
+    private boolean isSprintOver;
 
 
     // game counter
@@ -48,7 +51,15 @@ public class GameState {
 
     }
 
-
+    public boolean isAnimating() {
+        return isTransitionEffectsOn;
+    }
+    public void setAnimatingState() {
+        isTransitionEffectsOn = true;
+    }
+    public void stopAnimatingState() {
+        isTransitionEffectsOn = false;
+    }
 
     // =================================================
     // Flags methods
@@ -99,6 +110,10 @@ public class GameState {
     public void setGameOver() {
         isGameOver = true;
     }
+    public boolean isSprintOver(int score) {
+        return false;
+    }
+
     public void restartGame() {
         //gameCounter = 0;
         timeManager.resetCounter();

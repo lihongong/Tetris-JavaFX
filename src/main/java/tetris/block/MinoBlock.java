@@ -7,9 +7,9 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 
-import java.awt.*;
-
-import static tetris.util.TetrisConstants.*;
+import static tetris.util.TetrisConstants.BLOCK_FADING_DURATION;
+import static tetris.util.TetrisConstants.BLOCK_FALLING_DURATION;
+import static tetris.util.TetrisConstants.BLOCK_SIZE;
 
 public class MinoBlock extends Block {
     private Color color;

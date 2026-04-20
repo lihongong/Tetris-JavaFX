@@ -233,6 +233,7 @@ public class GameScreen extends UiPart<VBox> {
                 int numLinesFall = numLinesFallList.get(i);
 
                 fallingBlock.drawFalling(blockGC, workingCounter, numLinesFall);
+
             }
         }
     }
@@ -400,11 +401,19 @@ public class GameScreen extends UiPart<VBox> {
 
         return removingBlurAnimation;
     }
-
-    public void setTimerVisibility(boolean isVisible) {
-        timer.setVisible(isVisible);
-        timerBar.setVisible(isVisible);
+    public void hideTimer() {
+        timer.setVisible(false);
+        timerBar.setVisible(false);
     }
+    public void showCountUpTimer() {
+        timer.setVisible(true);
+        timerBar.setVisible(false);
+    }
+    public void showCountDownTimerAndBar() {
+        timer.setVisible(true);
+        timerBar.setVisible(true);
+    }
+
     public void updateTime(int currentCounter) {
         int numOfSecondsLeft = 120 - currentCounter / FPS;
         int minute = numOfSecondsLeft / 60;
@@ -413,7 +422,59 @@ public class GameScreen extends UiPart<VBox> {
         String secondString = String.format("%02d", second);
         timer.setText(minuteString + ":" + secondString);
 
-        double progress = 1.0 - 1.0 * currentCounter / (TWO_MINUTE_DURATION); // 2 minutes
+        double progress = 1.0 - 1.0 * currentCounter / (TWO_MINUTE_DURATION); // 2 minutes, progress goes from 1.0 to 0.0
+        assert progress >= 0.0 && progress <= 1.0 : "Progress out of range: " + progress;
+
         timerBar.setProgress(progress);
+
+        // set color of timer & timer bar
+        String cssColor = getTimerBarColor(progress);
+
+        if (second % 2 == 0) {
+            timer.setStyle("-fx-text-fill: " + cssColor + ";");
+        } else if (second % 2 == 1 && progress < 0.1) {
+            timer.setStyle("-fx-text-fill: white");
+        }
+        timerBar.setStyle("-fx-accent: " + cssColor + ";");
+    }
+
+    /**
+     * Set the timer bar from Blue -> Green -> Yellow -> Red by following the progress value and adjusting the r,g,b values
+     * @param progress goes from 1.0 to 0.0, it is the progress of the timer bar
+     * @return color of the timer bar in {@code String} to set it for timer bar color in CSS
+     */
+    private String getTimerBarColor(double progress) {
+        double red, green, blue;
+        double firstPhase = 0.5;  // cyan -> green
+        double secondPhase = 0.3; // green -> yellow
+        double thridPhase = 0.1;  // yellow -> dark orange
+                                  // last phase: dark orange -> red
+
+        if (progress > firstPhase) {
+            // cyan to green
+            double t = (progress - firstPhase) / (1.0 - firstPhase); // normalize progress = (1.0 -> 0.5) to t = (1.0 -> 0.0)
+            red = 0.0;
+            green = 255 - t * 100;
+            blue = t * 255;
+        } else if (progress > secondPhase) {
+            // green to yellow
+            double t = (progress - secondPhase) / (firstPhase - secondPhase); // normalize progress = (0.5-> 0.3) to t = (1.0 -> 0.0)
+            red = 255 - t * 255;
+            green = 255;
+            blue = 0;
+        } else if (progress > thridPhase) {
+            // yellow to dark orange
+            double t = (progress - thridPhase) / (secondPhase - thridPhase); // normalize progress = (0.3-> 0.1) to t = (1.0 -> 0.0)
+            red = 255;
+            green = t * (255 - 116) + 116;
+            blue = 0;
+        } else {
+            double t = progress / thridPhase; // // normalize progress = (0.1 -> 0.0) to t = (1.0 -> 0.0)
+            red = 255;
+            green = t * 116;
+            blue = 0;
+        }
+
+        return String.format("rgb(%d,%d,%d)", (int) red, (int) green, (int) blue);
     }
 }

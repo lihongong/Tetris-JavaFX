@@ -63,4 +63,8 @@ public class TetrisConstants {
     public static final Color PLAYING_FIELD_GRID_LIGHT_GREY = Color.rgb(30, 30, 30, 0.75);
     public static final Color PLAYING_FIELD_GRID_GREY = Color.rgb(16, 16, 16, 0.75);
 
+    // =================================================
+    // Scores and metrics
+    // =================================================
+    public static final int SPRINT_MODE_SCORE_CAP = 1000;
 }
