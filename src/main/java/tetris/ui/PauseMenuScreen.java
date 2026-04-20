@@ -54,10 +54,14 @@ public class PauseMenuScreen extends UiPart<VBox> {
     public void handleExitButton() {
         exitButtonHandler.handle();
     }
-    public void openPauseMenuEffects(GameState gameState, GameScreen gameScreen, MainWindow mainWindow) {
-        gameScreen.setBlurEffects();
+    public void openPauseMenuEffects(GameState gameState, GameScreen gameScreen) {
 
-        this.getRoot().setDisable(true);
+        if (this.getRoot().isDisable()) {
+            return;
+        }
+        this.getRoot().setDisable(true); // prevent multiple animation happening at once
+
+        gameScreen.setBlurEffects();
 
         setButtonOnMouseEntered(gameState);
 
@@ -181,7 +185,7 @@ public class PauseMenuScreen extends UiPart<VBox> {
     private void setButtonOnMouseEntered(GameState gameState) {
         // resume button
         resumeButton.setOnMouseEntered(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!gameState.isTransitionEffectsOn || true) {
                 if (resumeButtonHoverAnimation != null) {
                     resumeButtonHoverAnimation.stop();
                 }
@@ -192,7 +196,7 @@ public class PauseMenuScreen extends UiPart<VBox> {
             }
         });
         resumeButton.setOnMouseExited(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!gameState.isTransitionEffectsOn || true) {
                 if (resumeButtonHoverAnimation != null) {
                     resumeButtonHoverAnimation.stop();
                 }
@@ -203,7 +207,7 @@ public class PauseMenuScreen extends UiPart<VBox> {
         });
         // restart button
         restartButton.setOnMouseEntered(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!gameState.isTransitionEffectsOn || true) {
                 if (restartButtonHoverAnimation != null) {
                     restartButtonHoverAnimation.stop();
                 }

@@ -82,6 +82,11 @@ public class TimesUpScreen extends UiPart<VBox> {
     }
 
     public void closeTimesUpScreenEffects(GameState gameState, GameScreen gameScreen) {
+        if (this.getRoot().isDisable()) {
+            return;
+        }
+        this.getRoot().setDisable(true); // prevent multiple animation happening at once
+
         int fromX = 500;
 
         TranslateTransition slide2 = new TranslateTransition(Duration.seconds(0.2), restartButton);
@@ -112,7 +117,7 @@ public class TimesUpScreen extends UiPart<VBox> {
         combined.setOnFinished(e -> {
             this.getRoot().setVisible(false);
 
-            gameState.isTransitionEffectsOn = false;
+            this.getRoot().setDisable(false); // prevent multiple animation happening at once
         });
 
         combined.play();

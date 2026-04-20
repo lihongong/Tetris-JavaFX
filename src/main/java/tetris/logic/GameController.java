@@ -144,27 +144,18 @@ public class GameController {
     }
 
     public void pauseGame() {
-        /*
-        if (gameState.isTransitionEffectsOn) {
-            return;
-        }
-        gameState.isTransitionEffectsOn = true;
-*/
-
-
         gameState.pauseTheGame();
         currentGameLoop.pause();
 
-        pauseMenuScreen.openPauseMenuEffects(gameState, gameScreen, mainWindow);
+        pauseMenuScreen.openPauseMenuEffects(gameState, gameScreen);
         //gameScreen.getRoot().setEffect(new GaussianBlur(10));
         //pauseMenuScreen.getRoot().setVisible(true);
     }
     public void resumeGame() {
-        /*
-        if (gameState.isTransitionEffectsOn) {
+
+        if (pauseMenuScreen.getRoot().isDisable()) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;*/
         pauseMenuScreen.getRoot().setDisable(true);
 
         // gameScreen.getRoot().setEffect(null); // remove blur
@@ -175,13 +166,11 @@ public class GameController {
 
         combined.setOnFinished(e -> {
             pauseMenuScreen.getRoot().setVisible(false);
-            //gameScreen.setRemoveEffects();
 
             // only resume the game logic after the animation is finished
             gameState.resumeTheGame();
             currentGameLoop.play();
 
-            //gameState.isTransitionEffectsOn = false;
             pauseMenuScreen.getRoot().setDisable(false);
         });
 
@@ -190,10 +179,10 @@ public class GameController {
     }
 
     public void restartGameInGameOver() {
-        if (gameState.isTransitionEffectsOn) {
+        if (gameOverScreen.getRoot().isDisable()) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;
+        gameOverScreen.getRoot().setDisable(true); // prevent multiple animation happening at once
 
         // transition effects
         gameOverScreen.closeGameOverScreenEffects(gameState, gameScreen);
@@ -204,11 +193,6 @@ public class GameController {
     }
 
     public void restartGameInTimesUp() {
-        if (gameState.isTransitionEffectsOn) {
-            return;
-        }
-        gameState.isTransitionEffectsOn = true;
-
         // transition effects
         timesUpScreen.closeTimesUpScreenEffects(gameState, gameScreen);
 
@@ -218,10 +202,10 @@ public class GameController {
     }
 
     public void restartGameInPauseMenu() {
-        if (gameState.isTransitionEffectsOn) {
+        if (pauseMenuScreen.getRoot().isDisable()) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;
+        pauseMenuScreen.getRoot().setDisable(true); // prevent multiple animation happening at once
 
         // transition effects
         ParallelTransition combined = pauseMenuScreen.closePauseMenuEffects(gameState, gameScreen);
@@ -234,7 +218,7 @@ public class GameController {
             pauseMenuScreen.getRoot().setVisible(false);
             //gameScreen.setRemoveEffects();
 
-            gameState.isTransitionEffectsOn = false;
+            pauseMenuScreen.getRoot().setDisable(false); // prevent multiple animation happening at once
 
             // restart model
             // only start the game after animation is finished
@@ -248,10 +232,11 @@ public class GameController {
     }
     public void exitButtonInGameOver() {
         // synchronization flags
-        if (gameState.isTransitionEffectsOn) {
+        if (gameOverScreen.getRoot().isDisable()) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;
+        gameOverScreen.getRoot().setDisable(true); // prevent multiple animation happening at once
+
         this.isIgnoreKeyInput = false;
 
         // transition effects
@@ -273,7 +258,7 @@ public class GameController {
             mainWindow.removeNodesFromRoot(pauseMenuScreen.getRoot(), gameScreen.getRoot(),
                                            gameOverScreen.getRoot(), timesUpScreen.getRoot());
 
-            gameState.isTransitionEffectsOn = false;
+            gameOverScreen.getRoot().setDisable(false); // enable ui interaction again (disable it to prevent multiple animation at once)
         });
 
         combined.play();
@@ -281,10 +266,10 @@ public class GameController {
     }
     public void exitButtonInTimesUp() {
         // synchronization flags
-        if (gameState.isTransitionEffectsOn) {
+        if (pauseMenuScreen.getRoot().isDisable()) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;
+        pauseMenuScreen.getRoot().setDisable(true); // prevent multiple animation happening at once
         this.isIgnoreKeyInput = false;
 
         // transition effects
@@ -306,7 +291,7 @@ public class GameController {
             mainWindow.removeNodesFromRoot(pauseMenuScreen.getRoot(), gameScreen.getRoot(),
                     gameOverScreen.getRoot(), timesUpScreen.getRoot());
 
-            gameState.isTransitionEffectsOn = false;
+            gameOverScreen.getRoot().setDisable(false); // enable ui interaction again (disable it to prevent multiple animation at once)
         });
 
         combined.play();
@@ -314,10 +299,11 @@ public class GameController {
     }
     public void exitButtonInPauseMenu() {
         // synchronization flags
-        if (gameState.isTransitionEffectsOn) {
+        if (pauseMenuScreen.getRoot().isDisable()) {
             return;
         }
-        gameState.isTransitionEffectsOn = true;
+        pauseMenuScreen.getRoot().setDisable(true); // prevent multiple animation happening at once
+
         this.isIgnoreKeyInput = true;
 
         // transition effects
@@ -338,7 +324,7 @@ public class GameController {
             mainWindow.removeNodesFromRoot(pauseMenuScreen.getRoot(), gameScreen.getRoot(),
                                            gameOverScreen.getRoot(), timesUpScreen.getRoot());
 
-            gameState.isTransitionEffectsOn = false;
+            pauseMenuScreen.getRoot().setDisable(false); // enable ui interaction again (disable it to prevent multiple animation at once)
         });
 
         combined.play();
@@ -415,7 +401,8 @@ public class GameController {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         //       but do set "is transition effects on" flag to true to prevent other transition effects
         //       from popping in (e.g. can't pause when starting game screen)
-        gameState.isTransitionEffectsOn = true;
+        mainWindow.getRoot().setDisable(true); //replace is transtition effect on flag with root.setDisable()
+
         this.isIgnoreKeyInput = false; // allow key input when game start
 
         // set new background for gameScreen
@@ -441,7 +428,7 @@ public class GameController {
             // handle nodes
             mainWindow.removeNodesFromRoot(selectMenuScreen.getRoot());
 
-            gameState.isTransitionEffectsOn = false;
+            mainWindow.getRoot().setDisable(false); // prevent multiple animation happening at once
 
             currentGameLoop.play(); // RUN THE GAME LOOP
         });
