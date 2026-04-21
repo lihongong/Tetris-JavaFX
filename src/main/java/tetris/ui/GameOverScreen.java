@@ -78,7 +78,7 @@ public class GameOverScreen  extends UiPart<VBox> {
         ParallelTransition combined = new ParallelTransition(slide2, fade2, slide3, fade3, gameOverLabelFadeIn);
 
         combined.setOnFinished(e -> {
-            gameState.isTransitionEffectsOn = false; // *** actually dont neeed
+
         });
 
         combined.play();
@@ -153,7 +153,7 @@ public class GameOverScreen  extends UiPart<VBox> {
     private void setButtonOnMouseEntered(GameState gameState) {
         // restart button
         restartButton.setOnMouseEntered(e -> {
-            if (!gameState.isTransitionEffectsOn || true) {
+            if (!this.getRoot().isDisable()) {
                 if (restartButtonHoverAnimation != null) {
                     restartButtonHoverAnimation.stop();
                 }
@@ -164,7 +164,7 @@ public class GameOverScreen  extends UiPart<VBox> {
             }
         });
         restartButton.setOnMouseExited(e -> {
-            if (!gameState.isTransitionEffectsOn || true) {
+            if (!this.getRoot().isDisable()) {
                 if (restartButtonHoverAnimation != null) {
                     restartButtonHoverAnimation.stop();
                 }
@@ -175,7 +175,7 @@ public class GameOverScreen  extends UiPart<VBox> {
         });
         // exit button
         exitButton.setOnMouseEntered(e -> {
-            if (!gameState.isTransitionEffectsOn || true) {
+            if (!this.getRoot().isDisable()) {
                 if (exitButtonHoverAnimation != null) {
                     exitButtonHoverAnimation.stop();
                 }
@@ -186,7 +186,7 @@ public class GameOverScreen  extends UiPart<VBox> {
             }
         });
         exitButton.setOnMouseExited(e -> {
-            if (!gameState.isTransitionEffectsOn || true) {
+            if (!this.getRoot().isDisable()) {
                 if (exitButtonHoverAnimation != null) {
                     exitButtonHoverAnimation.stop();
                 }

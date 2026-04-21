@@ -26,11 +26,6 @@ public class GameState {
     private GameMode gameMode;
     private TimeManager timeManager;
 
-    /**
-     * Ensures that only one transition effect will happen at a given moment.
-     * This prevents "race condition" when two buttons are pressed which causes two effects to happen together.
-     */
-    public boolean isTransitionEffectsOn;
 
 
     public GameState(TimeManager timeManager) {
@@ -49,16 +44,6 @@ public class GameState {
         //gameCounter = 0;
         effectCounter = 0;
 
-    }
-
-    public boolean isAnimating() {
-        return isTransitionEffectsOn;
-    }
-    public void setAnimatingState() {
-        isTransitionEffectsOn = true;
-    }
-    public void stopAnimatingState() {
-        isTransitionEffectsOn = false;
     }
 
     // =================================================
@@ -110,7 +95,7 @@ public class GameState {
     public void setGameOver() {
         isGameOver = true;
     }
-    public boolean isSprintOver(int score) {
+    public boolean isSprintOver() {
         return false;
     }
 

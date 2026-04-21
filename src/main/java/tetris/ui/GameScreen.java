@@ -430,10 +430,12 @@ public class GameScreen extends UiPart<VBox> {
         // set color of timer & timer bar
         String cssColor = getTimerBarColor(progress);
 
-        if (second % 2 == 0) {
-            timer.setStyle("-fx-text-fill: " + cssColor + ";");
-        } else if (second % 2 == 1 && progress < 0.1) {
-            timer.setStyle("-fx-text-fill: white");
+        if (progress < (1.0 / 6)) { // 20 seconds left, starts blinking the timer number :)
+            if (second % 2 == 0) {
+                timer.setStyle("-fx-text-fill: " + cssColor + ";");
+            } else {
+                timer.setStyle("-fx-text-fill: white");
+            }
         }
         timerBar.setStyle("-fx-accent: " + cssColor + ";");
     }

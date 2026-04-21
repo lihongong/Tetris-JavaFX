@@ -26,6 +26,7 @@ public class MainWindow extends UiPart<StackPane> {
     private PauseMenuScreen pauseMenuScreen;
     private GameOverScreen gameOverScreen;
     private TimesUpScreen timesUpScreen;
+    private SprintOverScreen sprintOverScreen;
     private StartMenuScreen startMenuScreen;
     private SelectMenuScreen selectMenuScreen;
     @FXML
@@ -107,6 +108,7 @@ public class MainWindow extends UiPart<StackPane> {
 
         gameOverScreen.setRestartExitButtonHandler(gameController::restartGameInGameOver, gameController::exitButtonInGameOver);
         timesUpScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInGameOver);
+        //sprintOverScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInGameOver);
 
         startMenuScreen.setStartButtonHandler(gameController::startButtonInStartMenu);
 

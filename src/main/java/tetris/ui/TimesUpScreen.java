@@ -75,7 +75,7 @@ public class TimesUpScreen extends UiPart<VBox> {
         ParallelTransition combined = new ParallelTransition(slide2, fade2, slide3, fade3, timesUpLabelFadeIn);
 
         combined.setOnFinished(e -> {
-            gameState.isTransitionEffectsOn = false;
+            // dont need istrans flag liao
         });
 
         combined.play();
@@ -155,7 +155,7 @@ public class TimesUpScreen extends UiPart<VBox> {
     private void setButtonOnMouseEntered(GameState gameState) {
         // restart button
         restartButton.setOnMouseEntered(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!this.getRoot().isDisable()) {
                 if (restartButtonHoverAnimation != null) {
                     restartButtonHoverAnimation.stop();
                 }
@@ -166,7 +166,7 @@ public class TimesUpScreen extends UiPart<VBox> {
             }
         });
         restartButton.setOnMouseExited(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!this.getRoot().isDisable()) {
                 if (restartButtonHoverAnimation != null) {
                     restartButtonHoverAnimation.stop();
                 }
@@ -177,7 +177,7 @@ public class TimesUpScreen extends UiPart<VBox> {
         });
         // exit button
         exitButton.setOnMouseEntered(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!this.getRoot().isDisable()) {
                 if (exitButtonHoverAnimation != null) {
                     exitButtonHoverAnimation.stop();
                 }
@@ -188,7 +188,7 @@ public class TimesUpScreen extends UiPart<VBox> {
             }
         });
         exitButton.setOnMouseExited(e -> {
-            if (!gameState.isTransitionEffectsOn) {
+            if (!this.getRoot().isDisable()) {
                 if (exitButtonHoverAnimation != null) {
                     exitButtonHoverAnimation.stop();
                 }

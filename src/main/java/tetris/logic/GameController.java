@@ -112,6 +112,11 @@ public class GameController {
     public void sprintUpdate() {
         assert sprintGameLoop == currentGameLoop;
 
+        if (gameState.isSprintOver()) {
+            sprintGameLoop.pause();
+
+
+        }
         if (gameState.isGameOver()) {
             sprintGameLoop.pause();
 
@@ -125,7 +130,6 @@ public class GameController {
         if (timeManager.isTimesUp()) {
             blitzGameLoop.pause();
 
-            // blitz times up screen open up TODO
             timesUpScreen.openTimesUpScreenEffects(gameState, gameScreen);
         }
         if (gameState.isGameOver()) {
@@ -330,6 +334,27 @@ public class GameController {
         combined.play();
     }
 
+    // =============================
+    // Start & Select Menu Buttons
+    // =============================
+
+    public void startButtonInStartMenu() {
+        // NOTE: no check of "is transition effects on" so it feels more responsive
+        this.isIgnoreKeyInput = true; // don't allow key input
+
+        // transition effects
+        mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
+
+        FadeTransition fadeInSelectMenu = new FadeTransition(Duration.seconds(0.3), selectMenuScreen.getRoot());
+        fadeInSelectMenu.setFromValue(0.0);
+        fadeInSelectMenu.setToValue(1.0);
+
+        fadeInSelectMenu.setOnFinished(e -> {
+            mainWindow.removeNodesFromRoot(startMenuScreen.getRoot());
+        });
+        fadeInSelectMenu.play();
+    }
+
     public void exitButtonInSelectMenu() {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         this.isIgnoreKeyInput = true;
@@ -350,23 +375,6 @@ public class GameController {
         fadeInStartMenuScreen.play();
     }
 
-    public void startButtonInStartMenu() {
-        // NOTE: no check of "is transition effects on" so it feels more responsive
-        this.isIgnoreKeyInput = true; // don't allow key input
-
-        // transition effects
-        mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
-
-        FadeTransition fadeInSelectMenu = new FadeTransition(Duration.seconds(0.3), selectMenuScreen.getRoot());
-        fadeInSelectMenu.setFromValue(0.0);
-        fadeInSelectMenu.setToValue(1.0);
-
-        fadeInSelectMenu.setOnFinished(e -> {
-            mainWindow.removeNodesFromRoot(startMenuScreen.getRoot());
-        });
-        fadeInSelectMenu.play();
-    }
-
     public void relaxButton() {
         // hide timer in gameScreen
         gameScreen.hideTimer();
@@ -381,7 +389,9 @@ public class GameController {
 
         currentGameLoop = sprintGameLoop;
         gameState.setGameMode(GameMode.SPRINT);
-        startGame();
+
+        mainWindow.addNodesToRoot();
+
     }
     public void blitzButton() {
         // set timer and timer bar in gameScreen to visible
@@ -401,9 +411,7 @@ public class GameController {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         //       but do set "is transition effects on" flag to true to prevent other transition effects
         //       from popping in (e.g. can't pause when starting game screen)
-        mainWindow.getRoot().setDisable(true); //replace is transtition effect on flag with root.setDisable()
-
-        this.isIgnoreKeyInput = false; // allow key input when game start
+        pauseMenuScreen.getRoot().setDisable(true); //replace is transtition effect on flag with root.setDisable()
 
         // set new background for gameScreen
         gameScreen.setRandomBackGroundImage();
@@ -428,8 +436,9 @@ public class GameController {
             // handle nodes
             mainWindow.removeNodesFromRoot(selectMenuScreen.getRoot());
 
-            mainWindow.getRoot().setDisable(false); // prevent multiple animation happening at once
+            pauseMenuScreen.getRoot().setDisable(false); // prevent multiple animation happening at once
 
+            isIgnoreKeyInput = false; // allow key input when game start
             currentGameLoop.play(); // RUN THE GAME LOOP
         });
         // set up the model & timer ui before animation finish !!!
