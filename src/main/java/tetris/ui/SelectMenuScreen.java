@@ -114,10 +114,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
 
     /**
      * Add startMenuScreen to MainWindow, fade In the Start menu, remove SelectMenu at the end of effect.
-     * @param mainWindow
      * @param startMenuScreen
      */
-    public void exitSelectMenuScreenEffect(MainWindow mainWindow, StartMenuScreen startMenuScreen) {
+    public void fromSelectMenuToStartMenu(StartMenuScreen startMenuScreen) {
         // prevent multiple click on Buttons and cause bugs :(((
         // e.g. multiple startMenuScreen instances added into mainWindow
         if (this.isUiEffectsOn()) {
@@ -153,7 +152,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
      * Set random background for gameScreen. add gameScreen, gameOverScreen, timesUpScreen, pauseMenuScreen to MainWindow.
      * Fade in gameScreen and then remove Select Menu Screen at the end of effects
      */
-    public void renderGameScreenFromSelectMenu(GameScreen gameScreen) {
+    public void fromSelectMenuToGameScreen(GameScreen gameScreen) {
         if (this.isUiEffectsOn()) {
             return;
         }
@@ -167,7 +166,8 @@ public class SelectMenuScreen extends UiPart<VBox> {
         this.showNode(gameScreen.getRoot());
         gameScreen.getRoot().setEffect(null); // clear the blur effects just in case.
 
-        FadeTransition fadeInGameScreen = new FadeTransition(Duration.seconds(1.0), gameScreen.getRoot());
+        float animateDuration = 0.8f; // Fade into Game Screen Duration
+        FadeTransition fadeInGameScreen = new FadeTransition(Duration.seconds(animateDuration), gameScreen.getRoot());
         fadeInGameScreen.setFromValue(0.0);
         fadeInGameScreen.setToValue(1.0);
 
@@ -184,6 +184,30 @@ public class SelectMenuScreen extends UiPart<VBox> {
         combined.play();
     }
 
+    public void fromSelectMenuToSprintModes(SprintModesScreen sprintModesScreen) {
+        if (this.isUiEffectsOn()) {
+            return;
+        }
+        this.setUiEffectsOn();
+
+        ParallelTransition fadeInSprintModeScreen = sprintModesScreen.openSprintModesScreen(0.3f);
+
+        ParallelTransition combined = this.slideOutButtons();
+
+        combined.getChildren().add(fadeInSprintModeScreen);
+        combined.setOnFinished(e -> {
+            this.hideNode(this.getRoot());
+
+            this.setUiEffectsOff();
+        });
+
+        combined.play();
+    }
+
+    /**
+     * Util method to help other screen generate the effects of opening the Select Menu Screen from their screen
+     * @return a {@code ParallelTransition} that contains the fade in and sliding out of buttons effects
+     */
     public ParallelTransition openSelectMenuEffects(float animateDuration) {
         this.showNode(this.getRoot());
 
@@ -192,6 +216,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
         fadeInSelectMenu.setToValue(1.0);
 
         ParallelTransition combined = this.slideInButtons();
+
         combined.getChildren().add(fadeInSelectMenu);
         return combined;
     }

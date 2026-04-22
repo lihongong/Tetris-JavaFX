@@ -66,5 +66,7 @@ public class TetrisConstants {
     // =================================================
     // Scores and metrics
     // =================================================
-    public static final int SPRINT_MODE_SCORE_CAP = 1000;
+    public static final int SPRINT_MODE_A_CAP = 20;
+    public static final int SPRINT_MODE_B_CAP = 40;
+    public static final int SPRINT_MODE_C_CAP = 60;
 }

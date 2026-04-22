@@ -46,8 +46,9 @@ public class GameScreen extends UiPart<VBox> {
     private Label timer;
     @FXML
     private ProgressBar timerBar;
-
-
+    @FXML
+    private StackPane tubeContainer;
+    private LineMeterTube lineMeterTube;
 
     // Graphic contexts
     private GraphicsContext playingFieldGC; // Draw the grid background in the playing field
@@ -56,6 +57,7 @@ public class GameScreen extends UiPart<VBox> {
     private GraphicsContext blockGC; // Draw the minos and blocks in the playing field
     private GraphicsContext shadowGC; // Draw the minos' shadow in the playing field
     private GraphicsContext specialEffectGC;
+    private Timeline activeBlurTimeline;
 
     // Keeps data for animation
     private ArrayList<MinoBlock> fadingBlocks;
@@ -86,6 +88,9 @@ public class GameScreen extends UiPart<VBox> {
     }
 
     private void fillInnerParts() {
+        lineMeterTube = new LineMeterTube(20, 300);
+        tubeContainer.getChildren().add(lineMeterTube);
+        tubeContainer.setVisible(false); // hide it, only appear when Sprint Mode
 
         // Draw the grid background in the playing field
         Canvas playingFieldCanvas = new Canvas(PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
@@ -360,6 +365,8 @@ public class GameScreen extends UiPart<VBox> {
         this.highScore.setText("" + newHighScore);
     }
 
+    //public void updateNumLinesClear
+
     // =================================================
     // Restart game & Pause menu
     // =================================================
@@ -368,51 +375,76 @@ public class GameScreen extends UiPart<VBox> {
         shadowGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
         holdBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
         nextBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
+
+        lineMeterTube.setTubeProgress(0, 1); // set it to zero progress
     }
     public void setBlurEffects() {
-
-        Timeline addingBlurAnimation = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(gaussianBlur.radiusProperty(), 0.0)),
-                new KeyFrame(Duration.seconds(0.8), new KeyValue(gaussianBlur.radiusProperty(), 10.0))
-        );
-
-        addingBlurAnimation.play();
-
         this.getRoot().setEffect(gaussianBlur);
+
+        activeBlurTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.3),
+                        new KeyValue(gaussianBlur.radiusProperty(), 10.0))
+        );
+        activeBlurTimeline.play();
     }
     public Animation setRemoveEffects() {
         //this.getRoot().setEffect(null); // remove any blur
-        Timeline removingBlurAnimation = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(gaussianBlur.radiusProperty(), gaussianBlur.getRadius())),
-                new KeyFrame(Duration.seconds(0.15), new KeyValue(gaussianBlur.radiusProperty(), 0))
+        activeBlurTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.15),
+                        new KeyValue(gaussianBlur.radiusProperty(), 0))
         );
-
-        // Optional: Remove the effect entirely after animation finishes
-
-        removingBlurAnimation.setOnFinished(e -> {
-            // reset effects
-            this.getRoot().setEffect(null);
-        });
-
-        //removingBlurAnimation.play();
 
         this.getRoot().setOpacity(1.0); // remove any fading effects
 
-        return removingBlurAnimation;
+        activeBlurTimeline.setOnFinished(e -> {
+            // Only remove the effect if the radius actually reached 0
+            if (gaussianBlur.getRadius() < 0.1) {
+                this.getRoot().setEffect(null);
+            }
+        });
+
+        return activeBlurTimeline;
     }
     public void hideTimer() {
         timer.setVisible(false);
         timerBar.setVisible(false);
+
+        this.hideLineMeterTube();
     }
-    public void showCountUpTimer() {
+    public void showCountUpTimerAndTube() {
         timer.setVisible(true);
         timerBar.setVisible(false);
 
-        this.renderLineMeterTube();
+        this.showLineMeterTube();
     }
     public void showCountDownTimerAndBar() {
         timer.setVisible(true);
         timerBar.setVisible(true);
+
+        this.hideLineMeterTube();
+    }
+
+    /**
+     * Shows the stop watch timer for Sprint mode. Shows HOURS (if nonzero) : MINUTES : SECONDS : CENTISECONDS
+     */
+    public void updateStopWatch(int currentCounter) {
+        int centisecond = (100 * currentCounter / FPS) % 100; // two decimal places of a second
+        int second = (currentCounter / FPS) % 60;             // mod 60 seconds
+        int minute = (currentCounter / (FPS * 60)) % 60;      // mod 60 minutes
+        int hour = (currentCounter / (FPS * 3600)) % 24;      // mod 24 hrs
+
+        String minuteString = String.format("%02d", minute);
+        String secondString = String.format("%02d", second);
+        String centisecondString = String.format("%02d", centisecond);
+        if (hour == 0) {
+            timer.setText(minuteString + ":" + secondString + ":" + centisecondString);
+        } else {
+            String hourString = String.format("%02d", hour);
+            timer.setText(hourString + ":" + minuteString + ":" + secondString + ":" + centisecondString);
+        }
+    }
+    public void setSprintLineMeterTubeProgress(int numLinesClear, int sprintGoal) {
+        lineMeterTube.setTubeProgress(numLinesClear, sprintGoal);
     }
 
     /**
@@ -482,7 +514,10 @@ public class GameScreen extends UiPart<VBox> {
         return String.format("rgb(%d,%d,%d)", (int) red, (int) green, (int) blue);
     }
 
-    public void renderLineMeterTube() {
-
+    public void showLineMeterTube() {
+        this.tubeContainer.setVisible(true);
+    }
+    public void hideLineMeterTube() {
+        this.tubeContainer.setVisible(false);
     }
 }

@@ -211,15 +211,13 @@ public class TimesUpScreen extends UiPart<VBox> {
         fadeOutTimesUpLabel.setToValue(fadeOutTo);
 
         // Fade in the Select Menu Screen
-        FadeTransition fadeInSelectMenuScreen = new FadeTransition(Duration.seconds(animateDuration), selectMenuScreen.getRoot());
-        fadeInSelectMenuScreen.setFromValue(0.0);
-        fadeInSelectMenuScreen.setToValue(1.0);
+        ParallelTransition selectMenuButtonSlidingInEffects = selectMenuScreen.openSelectMenuEffects(animateDuration);
 
         // unblur the gameScreen - just in case
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
         // combine all animation :)
         ParallelTransition combined = new ParallelTransition(slide1, fadeOut1, slide2, fadeOut2, fadeOutTimesUpLabel,
-                                                             fadeInSelectMenuScreen, gameScreenUnblur);
+                                                             selectMenuButtonSlidingInEffects, gameScreenUnblur);
 
         combined.setOnFinished(e -> {
             // Hide/Remove Unused nodes

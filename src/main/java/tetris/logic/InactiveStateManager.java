@@ -119,7 +119,8 @@ public class InactiveStateManager {
 
             // TODO: if in SprintMode, make GameScreen increase the LineMeterTube Height !!!
             if (gameState.getGameMode() == GameMode.SPRINT) {
-                // gameScreen.setSprintLineMeterTubeProgress();
+                gameState.checkSprintOver(gameMetrics.getNumLinesClear());
+                gameScreen.setSprintLineMeterTubeProgress(gameMetrics.getNumLinesClear(), gameState.getSprintGoal());
             }
         }
         if (gotLineRemoval && isPotentialTSpin) {

@@ -83,7 +83,7 @@ public abstract class UiPart<T extends Node> {
     }
 
     // We don't do mainWindow.getRoot().add(Screens) because it is slow and laggy sometimes
-    // Now, we add all the Screens in Mainwindow at launch, if screen is needed, set it to visible, else set not visible
+    // Now, we add all the Screens in Mainwindow at launch time and hide the unused screens
     public void hideNode(Node... nodes) {
         for (Node node : nodes) {
             node.setVisible(false);
@@ -94,13 +94,13 @@ public abstract class UiPart<T extends Node> {
         node.setVisible(true);
     }
 
-    public boolean isUiEffectsOn() {
+    public static boolean isUiEffectsOn() {
         return isUiEffectsOn;
     }
-    public void setUiEffectsOn() {
+    public static void setUiEffectsOn() {
         isUiEffectsOn = true;
     }
-    public void setUiEffectsOff() {
+    public static void setUiEffectsOff() {
         isUiEffectsOn = false;
     }
 

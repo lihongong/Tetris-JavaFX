@@ -65,42 +65,19 @@ public class SprintModesScreen extends UiPart<VBox> {
     /**
      * Renders the Sprint Modes Screen (different # lines to clear)
      */
-    public void openSprintModesScreen(SelectMenuScreen selectMenuScreen) {
-        if (this.isUiEffectsOn()) {
-            return;
-        }
-        this.setUiEffectsOn();
-        System.out.println("sprint modes screens");
+    public ParallelTransition openSprintModesScreen(float animateDuration) {
         this.showNode(this.getRoot());
 
-        FadeTransition fadeInSprintModeScreen = new FadeTransition(Duration.seconds(1.0), this.getRoot());
+        FadeTransition fadeInSprintModeScreen = new FadeTransition(Duration.seconds(animateDuration), this.getRoot());
         fadeInSprintModeScreen.setFromValue(0.0);
         fadeInSprintModeScreen.setToValue(1.0);
 
-        fadeInSprintModeScreen.setOnFinished(e -> {
-            this.hideNode(selectMenuScreen.getRoot());
-        });
-        fadeInSprintModeScreen.play();
+        ParallelTransition combined = this.slideInButtons();
+        combined.getChildren().add(fadeInSprintModeScreen);
+        return combined;
     }
 
-    public void closeSprintModesScreen(SelectMenuScreen selectMenuScreen) {
-        if (this.isUiEffectsOn()) {
-            return;
-        }
-        this.setUiEffectsOn();
-
-        this.showNode(this.getRoot());
-
-        FadeTransition fadeInSprintModeScreen = new FadeTransition(Duration.seconds(1.0), this.getRoot());
-        fadeInSprintModeScreen.setFromValue(0.0);
-        fadeInSprintModeScreen.setToValue(1.0);
-
-        fadeInSprintModeScreen.setOnFinished(e -> {
-            this.hideNode(selectMenuScreen.getRoot());
-        });
-    }
-
-    public void renderGameScreenFromSprintModes(GameScreen gameScreen) {
+    public void fromSprintModesToGameScreen (GameScreen gameScreen) {
         if (this.isUiEffectsOn()) {
             return;
         }
@@ -114,7 +91,8 @@ public class SprintModesScreen extends UiPart<VBox> {
         this.showNode(gameScreen.getRoot());
         gameScreen.getRoot().setEffect(null); // clear the blur effects just in case.
 
-        FadeTransition fadeInGameScreen = new FadeTransition(Duration.seconds(1.0), gameScreen.getRoot());
+        float animateDuration = 0.8f; // Fade into Game Screen Duration
+        FadeTransition fadeInGameScreen = new FadeTransition(Duration.seconds(animateDuration), gameScreen.getRoot());
         fadeInGameScreen.setFromValue(0.0);
         fadeInGameScreen.setToValue(1.0);
 
@@ -131,6 +109,26 @@ public class SprintModesScreen extends UiPart<VBox> {
         combined.play();
     }
 
+    public void fromSprintModesToSelectMenu(SelectMenuScreen selectMenuScreen) {
+        if (this.isUiEffectsOn()) {
+            return;
+        }
+        this.setUiEffectsOn();
+
+        ParallelTransition fadeInSelectMenuScreen = selectMenuScreen.openSelectMenuEffects(0.3f);
+
+        ParallelTransition combined = this.slideOutButtons();
+
+        combined.getChildren().add(fadeInSelectMenuScreen);
+        combined.setOnFinished(e -> {
+            this.hideNode(this.getRoot());
+
+            this.setUiEffectsOff();
+        });
+
+        combined.play();
+    }
+
     private ParallelTransition slideInButtons() {
         int fromX = 1200;
         int toX = 0;
@@ -141,23 +139,18 @@ public class SprintModesScreen extends UiPart<VBox> {
         TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), clear20LinesButton);
         slide1.setFromX(fromX);
         slide1.setToX(toX);
-
         TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), clear40LinesButton);
         slide2.setFromX(fromX);
         slide2.setToX(toX);
-
         TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), clear60LinesButton);
         slide3.setFromX(fromX);
         slide3.setToX(toX);
-
         TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), backButton);
         slide4.setFromX(fromX);
         slide4.setToX(toX);
-
         FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(animateDuration), clear20LinesButton);
         fadeIn1.setFromValue(fadeInFrom);
         fadeIn1.setToValue(fadeInTo);
-
         FadeTransition fadeIn2 = new FadeTransition(Duration.seconds(animateDuration), clear40LinesButton);
         fadeIn2.setFromValue(fadeInFrom);
         fadeIn2.setToValue(fadeInTo);

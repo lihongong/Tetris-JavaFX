@@ -32,8 +32,8 @@ public class LineMeterTube extends StackPane {
         this.setMaxSize(width, maxHeight);
         this.setMinSize(width, maxHeight);
         this.setPrefSize(width, maxHeight);
-        this.setStyle("-fx-border-color: #555; -fx-border-width: 3; " +
-                "-fx-background-color: rgba(255,255,255,0.05); -fx-border-radius: 5;"); // black tube
+        this.setStyle("-fx-border-color: #202020; -fx-border-width: 2; " +
+                "-fx-background-color: rgba(255,255,255,0.05);"); //" -fx-border-radius: 5;"); // black tube
 
         // The inner filling (progress bar) -- Path element
         // Use 5 points to form the shape of the progress bar: bottom left, bottom right

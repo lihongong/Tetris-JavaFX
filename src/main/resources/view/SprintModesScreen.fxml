@@ -8,15 +8,15 @@
 <VBox fx:id="mainLayout" alignment="CENTER" stylesheets="@SprintModesScreen.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label fx:id="titleLabel" alignment="TOP_CENTER" contentDisplay="TOP" minHeight="150.0" minWidth="680.0" prefHeight="150.0" prefWidth="680.0" stylesheets="@SelectMenu.css" text="Lines To Clear" />
-        <HBox>
+        <HBox alignment="CENTER_RIGHT">
             <children>
-                <VBox minWidth="800.0" />
-                <VBox alignment="CENTER_LEFT" minHeight="100.0" minWidth="1200.0" prefWidth="1600.0" spacing="20.0">
+                <VBox HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="300.0" />
+                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minHeight="100.0" spacing="20.0">
                     <children>
-                        <Button fx:id="clear20LinesButton" focusTraversable="false" minHeight="100.0" minWidth="800.0" mnemonicParsing="false" onAction="#handleClear20Button" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="20 LINES" />
-                        <Button fx:id="clear40LinesButton" focusTraversable="false" minHeight="100.0" minWidth="1200.0" mnemonicParsing="false" onAction="#handleClear40Button" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="40 LINES" />
-                        <Button fx:id="clear60LinesButton" focusTraversable="false" minHeight="100.0" minWidth="1200.0" mnemonicParsing="false" onAction="#handleClear60Button" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="60 LINES" />
-                  <Button fx:id="backButton" focusTraversable="false" minHeight="100.0" minWidth="1200.0" mnemonicParsing="false" onAction="#handleBackButton" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="BACK" />
+                        <Button fx:id="clear20LinesButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleClear20Button" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="20 LINES" />
+                        <Button fx:id="clear40LinesButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleClear40Button" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="40 LINES" />
+                        <Button fx:id="clear60LinesButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleClear60Button" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="60 LINES" />
+                  <Button fx:id="backButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleBackButton" styleClass="left-aligned-button" stylesheets="@SprintModesScreen.css" text="BACK" />
                     </children>
                 </VBox>
             </children>

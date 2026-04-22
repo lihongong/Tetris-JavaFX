@@ -1,5 +1,8 @@
 package tetris.ui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.Button;
 import javafx.util.Duration;

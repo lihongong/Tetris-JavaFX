@@ -25,6 +25,7 @@ public class GameState {
     // game modes and goals
     private GameMode gameMode;
     private TimeManager timeManager;
+    private int sprintGoal;
 
 
 
@@ -95,8 +96,13 @@ public class GameState {
     public void setGameOver() {
         isGameOver = true;
     }
+    public void checkSprintOver(int numLines) {
+        this.isSprintOver = numLines >= sprintGoal;
+        System.out.println("numline: " + numLines + ", sprintgoal: " + sprintGoal);
+        System.out.println("checksprintOver " + isSprintOver);
+    }
     public boolean isSprintOver() {
-        return false;
+        return isSprintOver;
     }
 
     public void restartGame() {
@@ -163,6 +169,12 @@ public class GameState {
         return gameMode;
     }
 
+    public void setSprintGoal(int newSprintGoal) {
+        this.sprintGoal = newSprintGoal;
+    }
+    public int getSprintGoal() {
+        return this.sprintGoal;
+    }
 
 
 
