@@ -62,6 +62,7 @@ public class TetrisConstants {
     // =================================================
     public static final Color PLAYING_FIELD_GRID_LIGHT_GREY = Color.rgb(30, 30, 30, 0.75);
     public static final Color PLAYING_FIELD_GRID_GREY = Color.rgb(16, 16, 16, 0.75);
+    public static final double GAME_SCREEN_BLUR_AMOUNT = 5.0;
 
     // =================================================
     // Scores and metrics

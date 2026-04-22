@@ -25,18 +25,25 @@
                </Pane>
                <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="170.0">
                   <children>
-                     <VBox fx:id="Score" alignment="BOTTOM_RIGHT" prefHeight="192.0" prefWidth="170.0" spacing="5.0" style="-fx-background-color: transparent;">
+                     <VBox fx:id="Lines" alignment="BOTTOM_RIGHT" prefHeight="192.0" prefWidth="170.0" style="-fx-background-color: transparent;">
+                        <children>
+                           <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Lines" textAlignment="RIGHT" textFill="WHITE" />
+                           <Label fx:id="numLinesLabel" alignment="BOTTOM_RIGHT" prefHeight="41.0" prefWidth="85.0" styleClass="score-label" stylesheets="@/view/GameScreen.css" text="Label" />
+                        </children>
+                     </VBox>
+                     <VBox fx:id="Score" alignment="BOTTOM_RIGHT" prefHeight="192.0" prefWidth="170.0" style="-fx-background-color: transparent;">
                         <children>
                            <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Score" textAlignment="RIGHT" textFill="WHITE" />
                            <Label fx:id="score" alignment="BOTTOM_RIGHT" prefHeight="41.0" prefWidth="85.0" styleClass="score-label" stylesheets="@/view/GameScreen.css" text="Label" />
                         </children>
                      </VBox>
-                     <VBox alignment="BOTTOM_RIGHT" prefHeight="214.0" prefWidth="170.0" spacing="5.0" style="-fx-background-color: transparent;">
+                     <VBox alignment="BOTTOM_RIGHT" prefHeight="214.0" prefWidth="170.0" style="-fx-background-color: transparent;">
                         <children>
                            <Label fx:id="highScoreTitle" alignment="BOTTOM_RIGHT" styleClass="score-label" text="High&#10;Score" textAlignment="RIGHT" />
                            <Label fx:id="highScore" alignment="BOTTOM_RIGHT" prefWidth="85.0" styleClass="score-label" text="Label" textAlignment="RIGHT" />
                         </children>
                      </VBox>
+                     <VBox minHeight="20.0" />
                   </children>
                </VBox>
             </children>
@@ -58,20 +65,15 @@
                   <Label alignment="CENTER" layoutX="37.0" layoutY="5.0" styleClass="hold-next-label" text="Next" />
                </children>
             </Pane>
-            <VBox prefHeight="430.0" prefWidth="170.0">
+            <VBox alignment="BOTTOM_CENTER" prefHeight="430.0" prefWidth="170.0">
                <children>
-                  <VBox fx:id="Score1" alignment="BOTTOM_LEFT" prefHeight="192.0" prefWidth="170.0" spacing="5.0" style="-fx-background-color: transparent;">
+                  <VBox fx:id="Score11" alignment="BOTTOM_LEFT" prefHeight="192.0" prefWidth="170.0" style="-fx-background-color: transparent;">
                      <children>
-                        <Label alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@GameScreen.css" text="Lines" textAlignment="RIGHT" textFill="WHITE" />
-                        <Label fx:id="score1" alignment="BOTTOM_LEFT" prefHeight="41.0" prefWidth="85.0" styleClass="score-label" stylesheets="@GameScreen.css" text="Label" />
+                        <Label alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@GameScreen.css" text="Best&#10;Time" textFill="WHITE" wrapText="true" />
+                        <Label fx:id="bestTimeLabel" alignment="BOTTOM_LEFT" prefHeight="41.0" prefWidth="85.0" styleClass="score-label" stylesheets="@GameScreen.css" text="Label" />
                      </children>
                   </VBox>
-                  <VBox fx:id="Score11" alignment="BOTTOM_LEFT" prefHeight="192.0" prefWidth="170.0" spacing="5.0" style="-fx-background-color: transparent;">
-                     <children>
-                        <Label alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@GameScreen.css" text="Best Time" textAlignment="RIGHT" textFill="WHITE" />
-                        <Label fx:id="score11" alignment="BOTTOM_LEFT" prefHeight="41.0" prefWidth="85.0" styleClass="score-label" stylesheets="@GameScreen.css" text="Label" />
-                     </children>
-                  </VBox>
+                  <VBox minHeight="20.0" />
                </children>
             </VBox>
          </VBox>

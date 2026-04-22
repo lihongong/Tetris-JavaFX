@@ -10,30 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseSprintScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/ButtonTransitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/ButtonTransitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/LineMeterTube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/LineMeterTube.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintModesScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintModesScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/UiPart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/UiPart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +63,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Launcher.executor": "Run",
+    "Application.Launcher.executor": "Coverage",
     "Downloaded.Files.Path.Enabled": "false",
     "Gradle./Users/onglihong/MyProject/Tetris-JavaFX/build.gradle.executor": "Run",
     "Gradle.Build Tetris-JavaFX.executor": "Run",
@@ -104,7 +84,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "a839dca5",
+    "git-widget-placeholder": "ed4b49af",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Coding/My Project/Tetris/src/main/java/tetris",
@@ -197,7 +177,7 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Tetris$Launcher.ic" NAME="Launcher Coverage Results" MODIFIED="1775129445832" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+    <SUITE FILE_PATH="coverage/Tetris$Launcher.ic" NAME="Launcher Coverage Results" MODIFIED="1776895628505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>tetris.logic.*</FILTER>
     </SUITE>
   </component>

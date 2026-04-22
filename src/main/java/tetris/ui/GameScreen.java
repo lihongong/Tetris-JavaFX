@@ -48,6 +48,10 @@ public class GameScreen extends UiPart<VBox> {
     private ProgressBar timerBar;
     @FXML
     private StackPane tubeContainer;
+    @FXML
+    private Label numLinesLabel;
+    @FXML
+    private Label bestTimeLabel;
     private LineMeterTube lineMeterTube;
 
     // Graphic contexts
@@ -383,7 +387,7 @@ public class GameScreen extends UiPart<VBox> {
 
         activeBlurTimeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.3),
-                        new KeyValue(gaussianBlur.radiusProperty(), 10.0))
+                        new KeyValue(gaussianBlur.radiusProperty(), GAME_SCREEN_BLUR_AMOUNT))
         );
         activeBlurTimeline.play();
     }
@@ -405,7 +409,7 @@ public class GameScreen extends UiPart<VBox> {
 
         return activeBlurTimeline;
     }
-    public void hideTimer() {
+    public void setGameScreenForRelaxMode() {
         timer.setVisible(false);
         timerBar.setVisible(false);
 
