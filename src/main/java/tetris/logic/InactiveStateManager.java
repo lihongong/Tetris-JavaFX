@@ -3,6 +3,7 @@ package tetris.logic;
 import tetris.block.Mino;
 import tetris.block.MinoBlock;
 import tetris.ui.GameScreen;
+import tetris.util.GameMode;
 
 import static tetris.util.TetrisConstants.*;
 import static tetris.util.TetrisConstants.NUM_OF_COL;
@@ -30,11 +31,14 @@ public class InactiveStateManager {
             return;
         }
 
+        // doing this will make the currentMino = nextMino -> currentMino.isActive() is True
+        // Depends on isEffectsOn(), gameplayManager.update() will either run
+        // 1) activeStateManager.update(); OR 2) handleClearLineSpecialEffect();
         minoManager.setNewCurrentNextMino();
 
         gameState.enableSwapMino();
 
-        // TODO: combo and soundeffect
+        // TODO: block touch down soundeffect
     }
 
     public boolean checkGameOver() {
@@ -97,18 +101,30 @@ public class InactiveStateManager {
                 }
             }
         }
-        // after scanning through the board
+
+        // -------------------------------------------------------- :)
+        // After checking thru the board to check for lines cleared
+
+        // invoked even if no line is cleared
+        // passing 0 line clear into updateScore() will reset gameMetrics combo count
+        gameMetrics.updateScore(numLinesClear, gameState.isTSpin());
+
+        // update gameScreen score UI
+        gameScreen.updateScore(gameMetrics.getScore());
+
+        // if
         if (gotLineRemoval) {
             gameState.turnOnEffect();
-            // TODO: sound effect based on numLinesClear
+            // TODO: sound effect based on numLinesClear & combo sound effects
+
+            // TODO: if in SprintMode, make GameScreen increase the LineMeterTube Height !!!
+            if (gameState.getGameMode() == GameMode.SPRINT) {
+                // gameScreen.setSprintLineMeterTubeProgress();
+            }
         }
         if (gotLineRemoval && isPotentialTSpin) {
             gameState.setIsTSpin();
-            // TODO: t spin sound effect
+            // TODO: t spin sound effect -- is a add on sound to the default line clear effect :)
         }
-
-        gameMetrics.updateScore(numLinesClear, gameState.isTSpin());
-        gameScreen.updateScore(gameMetrics.getScore());
-
     }
 }

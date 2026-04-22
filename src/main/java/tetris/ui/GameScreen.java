@@ -47,6 +47,8 @@ public class GameScreen extends UiPart<VBox> {
     @FXML
     private ProgressBar timerBar;
 
+
+
     // Graphic contexts
     private GraphicsContext playingFieldGC; // Draw the grid background in the playing field
     private GraphicsContext nextBoxGC; // Draw the minos in the next box
@@ -132,7 +134,6 @@ public class GameScreen extends UiPart<VBox> {
 
         drawPlayingFieldGrid();
     }
-
 
     // =================================================
     // Drawing
@@ -223,7 +224,6 @@ public class GameScreen extends UiPart<VBox> {
             }
         }
 
-
         if (effectCounter >= BLOCK_FADING_DURATION && effectCounter < BLOCK_FALLING_DURATION + BLOCK_FADING_DURATION) {
 
             int workingCounter = effectCounter - BLOCK_FADING_DURATION;
@@ -233,7 +233,6 @@ public class GameScreen extends UiPart<VBox> {
                 int numLinesFall = numLinesFallList.get(i);
 
                 fallingBlock.drawFalling(blockGC, workingCounter, numLinesFall);
-
             }
         }
     }
@@ -408,13 +407,19 @@ public class GameScreen extends UiPart<VBox> {
     public void showCountUpTimer() {
         timer.setVisible(true);
         timerBar.setVisible(false);
+
+        this.renderLineMeterTube();
     }
     public void showCountDownTimerAndBar() {
         timer.setVisible(true);
         timerBar.setVisible(true);
     }
 
-    public void updateTime(int currentCounter) {
+    /**
+     * Shows the remaining time and time bar on Blitz mode, 2 minutes count down timer
+     * @param currentCounter is the game counter, 120 times per second (FPS)
+     */
+    public void updateRemainingTime(int currentCounter) {
         int numOfSecondsLeft = 120 - currentCounter / FPS;
         int minute = numOfSecondsLeft / 60;
         int second = numOfSecondsLeft % 60;
@@ -475,5 +480,9 @@ public class GameScreen extends UiPart<VBox> {
         }
 
         return String.format("rgb(%d,%d,%d)", (int) red, (int) green, (int) blue);
+    }
+
+    public void renderLineMeterTube() {
+
     }
 }

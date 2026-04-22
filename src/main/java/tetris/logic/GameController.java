@@ -21,6 +21,7 @@ public class GameController {
     private TimesUpScreen timesUpScreen;
     private StartMenuScreen startMenuScreen;
     private SelectMenuScreen selectMenuScreen;
+    private SprintModesScreen sprintModesScreen;
     // game state
     private TimeManager timeManager;
     private GameState gameState;
@@ -46,7 +47,8 @@ public class GameController {
     //public void initialize() {
     public GameController(GameScreen gameScreen, PauseMenuScreen pauseMenuScreen, GameOverScreen gameOverScreen,
                           TimesUpScreen timesUpScreen, StartMenuScreen startMenuScreen,
-                          SelectMenuScreen selectMenuScreen, MainWindow mainWindow) {
+                          SelectMenuScreen selectMenuScreen, SprintModesScreen sprintModesScreen,
+                          MainWindow mainWindow) {
 
         this.gameScreen = gameScreen;
         this.pauseMenuScreen = pauseMenuScreen;
@@ -54,6 +56,7 @@ public class GameController {
         this.timesUpScreen = timesUpScreen;
         this.startMenuScreen = startMenuScreen;
         this.selectMenuScreen = selectMenuScreen;
+        this.sprintModesScreen = sprintModesScreen;
 
         this.mainWindow = mainWindow;
 
@@ -115,12 +118,15 @@ public class GameController {
         if (gameState.isSprintOver()) {
             sprintGameLoop.pause();
 
-
+            // TODO: open sprint over screen
         }
         if (gameState.isGameOver()) {
             sprintGameLoop.pause();
 
             gameOverScreen.openGameOverScreenEffects(gameScreen);
+        } else {
+
+            gameplayManager.update();
         }
     }
 
@@ -137,7 +143,7 @@ public class GameController {
 
             gameOverScreen.openGameOverScreenEffects(gameScreen);
         } else {
-            gameScreen.updateTime(timeManager.getCurrentCounter());
+            gameScreen.updateRemainingTime(timeManager.getCurrentCounter());
             gameplayManager.update();
         }
     }
@@ -241,15 +247,18 @@ public class GameController {
         startGame();
     }
     public void sprintButton() {
+        // goes into Sprint Modes Menu
+
+        sprintModesScreen.openSprintModesScreen(selectMenuScreen);
+    }
+    public void clear20LinesButton() {
         // show count up timer in gameScreen
         gameScreen.showCountUpTimer();
 
         currentGameLoop = sprintGameLoop;
         gameState.setGameMode(GameMode.SPRINT);
-
-        //selectMenuScreen.showSprintModesScreen();
+        startGame();
     }
-    public void clear20LinesButton() {}
     public void clear40LinesButton() {}
     public void clear60LinesButton() {}
     public void sprintModesBackButton() {}
@@ -271,14 +280,12 @@ public class GameController {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         //       but do set "is transition effects on" flag to true to prevent other transition effects
         //       from popping in (e.g. can't pause when starting game screen)
-        selectMenuScreen.renderGameScreenFromSelectMenu(mainWindow, gameScreen, gameOverScreen, timesUpScreen,
-                                                        pauseMenuScreen);
+        selectMenuScreen.renderGameScreenFromSelectMenu(gameScreen);
 
         isIgnoreKeyInput = false; // allow key input when game start
         currentGameLoop.play(); // RUN THE GAME LOOP
 
         gameplayManager.restartGame();
-        gameScreen.updateTime(timeManager.getCurrentCounter());
     }
 
 

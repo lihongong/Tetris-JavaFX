@@ -91,13 +91,13 @@ public class MainWindow extends UiPart<StackPane> {
         // won't be smooth (Java just-in-time rendering problem :'(
         //this.gameRoot.getChildren().addAll(startMenuScreen.getRoot(), selectMenuScreen.getRoot());
         gameRoot.getChildren().addAll(
+                startMenuScreen.getRoot(),
+                selectMenuScreen.getRoot(),
+                sprintModesScreen.getRoot(),
                 gameScreen.getRoot(),
                 pauseMenuScreen.getRoot(),
                 gameOverScreen.getRoot(),
-                timesUpScreen.getRoot(),
-                selectMenuScreen.getRoot(),
-                sprintModesScreen.getRoot(),
-                startMenuScreen.getRoot()
+                timesUpScreen.getRoot()
         );
 
         for (Node n : gameRoot.getChildren()) {
@@ -110,7 +110,7 @@ public class MainWindow extends UiPart<StackPane> {
 
     public void setUpGame() {
         this.gameController = new GameController(gameScreen, pauseMenuScreen, gameOverScreen, timesUpScreen,
-                startMenuScreen, selectMenuScreen, this);
+                startMenuScreen, selectMenuScreen, sprintModesScreen, this);
         // set button handler
         pauseMenuScreen.setResumeRestartExitButtonHandler(gameController::resumeGame, gameController::restartGameInPauseMenu, gameController::exitButtonInPauseMenu);
 

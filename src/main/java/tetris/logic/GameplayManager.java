@@ -43,16 +43,15 @@ public class GameplayManager {
                 //***updateWhenMinoIsActiveOnly();
                 activeStateManager.update();
             } else {
-                // current mino is active (next round) but the effect is still going on
-                // don't proceed the game (by not calling updateWhenMinoIsActiveOnly()) until the effect is over
-                //System.out.println("HANDLING SPECIAL EFFECT");
+                // current mino is active (next round) but the effect is still going on -- clear line effects
+                // don't proceed the game (by not calling activeStateManager.update()) until the effect is over
+                // Handles the clear line special effects
                 handleClearLineSpecialEffect();
             }
         } else {
             // ****updateWhenMinoIsInactiveOnly();
             inactiveStateManager.update();
         }
-
 
         gameState.incrementCounter();
         //gameState.gameCounter = gameState.gameCounter + 1;

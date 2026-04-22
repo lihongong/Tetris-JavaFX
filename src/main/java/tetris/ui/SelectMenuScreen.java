@@ -16,6 +16,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
     private static final String FXML = "SelectMenu.fxml";
 
     private ButtonHandler relaxButtonHandler;
+    private ButtonHandler sprintButtonHandler;
     private ButtonHandler blitzButtonHandler;
     private ButtonHandler exitButtonHandler;
     @FXML
@@ -42,12 +43,17 @@ public class SelectMenuScreen extends UiPart<VBox> {
     public void setSelectMenuButtonsHandler(ButtonHandler relaxButtonHandler, ButtonHandler sprintButtonHandler,
                                             ButtonHandler blitzButtonHandler, ButtonHandler exitButtonHandler) {
         this.relaxButtonHandler = relaxButtonHandler;
+        this.sprintButtonHandler = sprintButtonHandler;
         this.blitzButtonHandler = blitzButtonHandler;
         this.exitButtonHandler = exitButtonHandler;
     }
     @FXML
     public void handleRelaxButton() {
         relaxButtonHandler.handle();
+    }
+    @FXML
+    public void handleSprintButton() {
+        sprintButtonHandler.handle();
     }
     @FXML
     public void handleBlitzButton() {
@@ -147,9 +153,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
      * Set random background for gameScreen. add gameScreen, gameOverScreen, timesUpScreen, pauseMenuScreen to MainWindow.
      * Fade in gameScreen and then remove Select Menu Screen at the end of effects
      */
-    public void renderGameScreenFromSelectMenu(MainWindow mainWindow, GameScreen gameScreen,
-                                               GameOverScreen gameOverScreen, TimesUpScreen timesUpScreen,
-                                               PauseMenuScreen pauseMenuScreen) {
+    public void renderGameScreenFromSelectMenu(GameScreen gameScreen) {
         if (this.isUiEffectsOn()) {
             return;
         }
