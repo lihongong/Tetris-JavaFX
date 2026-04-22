@@ -424,18 +424,15 @@ public class GameScreen extends UiPart<VBox> {
 
         double progress = 1.0 - 1.0 * currentCounter / (TWO_MINUTE_DURATION); // 2 minutes, progress goes from 1.0 to 0.0
         assert progress >= 0.0 && progress <= 1.0 : "Progress out of range: " + progress;
-
         timerBar.setProgress(progress);
 
         // set color of timer & timer bar
         String cssColor = getTimerBarColor(progress);
 
-        if (progress < (1.0 / 6)) { // 20 seconds left, starts blinking the timer number :)
-            if (second % 2 == 0) {
-                timer.setStyle("-fx-text-fill: " + cssColor + ";");
-            } else {
-                timer.setStyle("-fx-text-fill: white");
-            }
+        if (progress < (1.0 / 6) && second % 2 == 0) { // 20 seconds left, starts blinking the timer number :)
+            timer.setStyle("-fx-text-fill: " + cssColor + ";");
+        } else {
+            timer.setStyle("-fx-text-fill: white");
         }
         timerBar.setStyle("-fx-accent: " + cssColor + ";");
     }

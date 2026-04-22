@@ -33,7 +33,6 @@ public class ButtonTransitions {
         if (hoverRight != null) {
             hoverRight.stop();
         }
-        hoverRight.stop();
         hoverRight = new TranslateTransition(Duration.millis(350), button);
         hoverRight.setToX(0);
         hoverRight.play();

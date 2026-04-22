@@ -7,6 +7,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tetris.util.ButtonHandler;
@@ -29,6 +30,10 @@ public class SelectMenuScreen extends UiPart<VBox> {
     private Button blitzButton;
     @FXML
     private Button exitButton;
+    private TranslateTransition relaxButtonHoverAnimation;
+    private TranslateTransition sprintButtonHoverAnimation;
+    private TranslateTransition blitzButtonHoverAnimation;
+    private TranslateTransition exitButtonHoverAnimation;
 
     public SelectMenuScreen() {
         super(FXML);
@@ -51,6 +56,54 @@ public class SelectMenuScreen extends UiPart<VBox> {
     @FXML
     public void handleExitButton() {
         exitButtonHandler.handle();
+    }
+    @FXML
+    public void handleRelaxButtonMouseEnter(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            relaxButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(relaxButton, relaxButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleRelaxButtonMouseExit(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            relaxButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(relaxButton, relaxButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleSprintButtonMouseEnter(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            sprintButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(sprintButton, sprintButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleSprintButtonMouseExit(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            sprintButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(sprintButton, sprintButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleBlitzButtonMouseEnter(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            blitzButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(blitzButton, blitzButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleBlitzButtonMouseExit(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            blitzButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(blitzButton, blitzButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleExitButtonMouseEnter(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            exitButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(exitButton, exitButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleExitButtonMouseExit(MouseEvent me) {
+        if (!this.isUiEffectsOn()) {
+            exitButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(exitButton, exitButtonHoverAnimation);
+        }
     }
 
     /**
