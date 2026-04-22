@@ -257,14 +257,13 @@ public class PauseMenuScreen extends UiPart<VBox> {
         pausedLabelFadeOut.setToValue(fadeOutTo);
 
         // Fade in the Select Menu Screen
-        FadeTransition fadeInSelectMenuScreen = new FadeTransition(Duration.seconds(0.3), selectMenuScreen.getRoot());
-        fadeInSelectMenuScreen.setFromValue(0.0);
-        fadeInSelectMenuScreen.setToValue(1.0);
+        ParallelTransition selectMenuButtonSlidingInEffects = selectMenuScreen.openSelectMenuEffects(animateDuration);
 
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
         ParallelTransition combined = new ParallelTransition(slide1, slide2, slide3, fadeOut1, fadeOut2, fadeOut3,
-                                                        pausedLabelFadeOut, fadeInSelectMenuScreen, gameScreenUnblur);
+                                                             pausedLabelFadeOut, gameScreenUnblur,
+                                                             selectMenuButtonSlidingInEffects);
 
         combined.setOnFinished(e -> {
             // handle nodes

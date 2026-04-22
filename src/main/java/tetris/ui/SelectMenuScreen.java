@@ -69,18 +69,22 @@ public class SelectMenuScreen extends UiPart<VBox> {
         // add start menu screen
         mainWindow.addNodesToRoot(startMenuScreen.getRoot());
 
+        ParallelTransition combined = this.slideOutButtons();
+
         FadeTransition fadeInStartMenuScreen = new FadeTransition(Duration.seconds(0.4), startMenuScreen.getRoot());
         fadeInStartMenuScreen.setFromValue(0.0);
         fadeInStartMenuScreen.setToValue(1.0);
 
-        fadeInStartMenuScreen.setOnFinished(e -> {
+        combined.getChildren().add(fadeInStartMenuScreen);
+
+        combined.setOnFinished(e -> {
             // remove select menu at the end
             mainWindow.removeNodesFromRoot(this.getRoot());
 
             this.setUiEffectsOff();
         });
 
-        fadeInStartMenuScreen.play();
+        combined.play();
     }
 
     /**
@@ -113,21 +117,35 @@ public class SelectMenuScreen extends UiPart<VBox> {
         fadeInGameScreen.setFromValue(0.0);
         fadeInGameScreen.setToValue(1.0);
 
-        fadeInGameScreen.setOnFinished(e -> {
+        // slide out the select menu buttons
+        ParallelTransition combined = this.slideOutButtons();
+
+        combined.getChildren().add(fadeInGameScreen);
+        combined.setOnFinished(e -> {
             // handle nodes
             mainWindow.removeNodesFromRoot(this.getRoot());
 
             this.setUiEffectsOff(); // prevent multiple animation happening at once
         });
-        fadeInGameScreen.play();
+        combined.play();
     }
 
-    public ParallelTransition slideInButtons() {
+    public ParallelTransition openSelectMenuEffects(float animateDuration) {
+        FadeTransition fadeInSelectMenu = new FadeTransition(Duration.seconds(animateDuration), this.getRoot());
+        fadeInSelectMenu.setFromValue(0.0);
+        fadeInSelectMenu.setToValue(1.0);
+
+        ParallelTransition combined = this.slideInButtons();
+        combined.getChildren().add(fadeInSelectMenu);
+        return combined;
+    }
+
+    private ParallelTransition slideInButtons() {
         int fromX = 500;
         int toX = 0;
         float fadeInFrom = 0.0f;
         float fadeInTo = 1.0f;
-        float animateDuration = 0.25f;
+        float animateDuration = 0.27f;
 
         TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), relaxButton);
         slide1.setFromX(fromX);
@@ -144,7 +162,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
         TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
         slide4.setFromX(fromX);
         slide4.setToX(toX);
-/*
+
         FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(animateDuration), relaxButton);
         fadeIn1.setFromValue(fadeInFrom);
         fadeIn1.setToValue(fadeInTo);
@@ -164,8 +182,49 @@ public class SelectMenuScreen extends UiPart<VBox> {
         FadeTransition titleLabelFadeIn = new FadeTransition(Duration.seconds(animateDuration), titleLabel);
         titleLabelFadeIn.setFromValue(fadeInFrom);
         titleLabelFadeIn.setToValue(fadeInTo);
-*/
-        return new ParallelTransition(slide1, slide2, slide3, slide4); //, fadeIn1, slide2, fadeIn2, slide3, fadeIn3, slide4,
-               // fadeIn4, titleLabelFadeIn);
+
+        return new ParallelTransition(slide1, slide2, slide3, slide4, fadeIn1, fadeIn2, fadeIn3, fadeIn4, titleLabelFadeIn);
+    }
+
+    private ParallelTransition slideOutButtons() {
+        int toX = 1200;
+        float fadeOutFrom = 1.0f;
+        float fadeOutTo = 0.2f;
+        float animateDuration = 0.3f;
+
+        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), relaxButton);
+        slide1.setToX(toX);
+
+        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), sprintButton);
+        slide2.setToX(toX);
+
+        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), blitzButton);
+        slide3.setToX(toX);
+
+        TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
+        slide4.setToX(toX);
+
+        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), relaxButton);
+        fadeOut1.setFromValue(fadeOutFrom);
+        fadeOut1.setToValue(fadeOutTo);
+
+        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), sprintButton);
+        fadeOut2.setFromValue(fadeOutFrom);
+        fadeOut2.setToValue(fadeOutTo);
+
+        FadeTransition fadeOut3 = new FadeTransition(Duration.seconds(animateDuration), blitzButton);
+        fadeOut3.setFromValue(fadeOutFrom);
+        fadeOut3.setToValue(fadeOutTo);
+
+        FadeTransition fadeOut4 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
+        fadeOut4.setFromValue(fadeOutFrom);
+        fadeOut4.setToValue(fadeOutTo);
+
+        FadeTransition titleLabelFadeOut = new FadeTransition(Duration.seconds(animateDuration), titleLabel);
+        titleLabelFadeOut.setFromValue(fadeOutFrom);
+        titleLabelFadeOut.setToValue(fadeOutTo);
+
+        return new ParallelTransition(slide1, slide2, slide3, slide4, fadeOut1, fadeOut2, fadeOut3,
+                fadeOut4, titleLabelFadeOut);
     }
 }

@@ -86,7 +86,26 @@ public class MainWindow extends UiPart<StackPane> {
         this.sprintModesScreen = new SprintModesScreen();
 
         this.startMenuScreen = new StartMenuScreen();
-        this.gameRoot.getChildren().add(startMenuScreen.getRoot());
+
+        // on app start up, selectMenuScreen will be added to mainWindow (not visible) or else the first start animation
+        // won't be smooth (Java just-in-time rendering problem :'(
+        //this.gameRoot.getChildren().addAll(startMenuScreen.getRoot(), selectMenuScreen.getRoot());
+        gameRoot.getChildren().addAll(
+                gameScreen.getRoot(),
+                pauseMenuScreen.getRoot(),
+                gameOverScreen.getRoot(),
+                timesUpScreen.getRoot(),
+                selectMenuScreen.getRoot(),
+                sprintModesScreen.getRoot(),
+                startMenuScreen.getRoot()
+        );
+
+        for (Node n : gameRoot.getChildren()) {
+            n.setVisible(false);
+        }
+
+        // 5. Show only the Start Menu
+        startMenuScreen.getRoot().setVisible(true);
     }
 
     public void setUpGame() {
