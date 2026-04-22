@@ -116,7 +116,7 @@ public class PauseMenuScreen extends UiPart<VBox> {
         float fadeInTo = 1.0f;
         float animateDuration = 0.1f;
 
-        this.getRoot().setVisible(true);
+        this.showNode(this.getRoot());
 
         TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), resumeButton);
         slide1.setFromX(fromX);
@@ -205,7 +205,7 @@ public class PauseMenuScreen extends UiPart<VBox> {
                                                              pausedLabelFadeOut, gameScreenUnblur);
 
         combined.setOnFinished(e -> {
-            this.getRoot().setVisible(false);
+            this.hideNode(this.getRoot());
             this.setUiEffectsOff(); // prevent multiple animation happening at once
 
             if (runnable != null) {
@@ -225,8 +225,8 @@ public class PauseMenuScreen extends UiPart<VBox> {
         }
         this.setUiEffectsOn();
 
-        // add SelectMenuScreen into mainWindow -> to prepare for transition into it
-        mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
+        // Make appear SelectMenuScreen
+        this.showNode(selectMenuScreen.getRoot());
 
         // Buttons and Title label Sliding & Fading animation
         int toX = 500;
@@ -267,8 +267,8 @@ public class PauseMenuScreen extends UiPart<VBox> {
 
         combined.setOnFinished(e -> {
             // handle nodes
-            mainWindow.removeNodesFromRoot(this.getRoot(), gameScreen.getRoot(),
-                    gameOverScreen.getRoot(), timesUpScreen.getRoot());
+            this.hideNode(this.getRoot(), gameScreen.getRoot(), gameOverScreen.getRoot(),
+                    timesUpScreen.getRoot());
 
             this.setUiEffectsOff(); // enable ui interaction again
         });

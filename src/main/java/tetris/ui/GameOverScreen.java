@@ -88,7 +88,7 @@ public class GameOverScreen extends UiPart<VBox> {
         gameScreen.setBlurEffects();
 
         // Game Over Screen Appears!!! :)
-        this.getRoot().setVisible(true);
+        this.showNode(this.getRoot());
 
         int fromX = 500;
         int toX = 0;
@@ -164,7 +164,7 @@ public class GameOverScreen extends UiPart<VBox> {
                                                              gameScreenRemoveBlur);
 
         combined.setOnFinished(e -> {
-            this.getRoot().setVisible(false); // "disappear GameOverScreen" as we restart the game again
+            this.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
 
             this.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
         });
@@ -185,8 +185,8 @@ public class GameOverScreen extends UiPart<VBox> {
         }
         this.setUiEffectsOn();
 
-        // add SelectMenuScreen into mainWindow -> to prepare for transition into it
-        mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
+        // make appear SelectMenuScreen -> to prepare for transition into it
+        this.showNode(selectMenuScreen.getRoot());
 
         // Buttons and Title label Sliding & Fading animation
         int toX = 500; // move 500 px
@@ -224,8 +224,7 @@ public class GameOverScreen extends UiPart<VBox> {
 
         combined.setOnFinished(e -> {
             // Hide/Remove Unused nodes from MainWindow
-            mainWindow.removeNodesFromRoot(pauseMenuScreen.getRoot(), gameScreen.getRoot(),
-                    this.getRoot(), timesUpScreen.getRoot());
+            this.hideNode(pauseMenuScreen.getRoot(), gameScreen.getRoot(), timesUpScreen.getRoot(), this.getRoot());
 
             this.setUiEffectsOff(); // enable ui interaction again
         });

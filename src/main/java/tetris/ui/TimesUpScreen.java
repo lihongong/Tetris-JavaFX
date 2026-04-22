@@ -80,13 +80,13 @@ public class TimesUpScreen extends UiPart<VBox> {
         // on enter -> nicer animation style
         // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
         // going on, e.g. Times Up Screen is Fading/Sliding in, immediately press R, the times up screen will immediately
-        // get faded out/ slide out -> more responsive tho :)
+        // get faded out/ slide out
 
         // blur the game screen in the background
         gameScreen.setBlurEffects();
 
         // Times Up Screen Appear!!! :)
-        this.getRoot().setVisible(true);
+        this.showNode(this.getRoot());
 
         int fromX = 500;
         int toX = 0;
@@ -162,7 +162,7 @@ public class TimesUpScreen extends UiPart<VBox> {
         // Hide root node AFTER animation completes
 
         combined.setOnFinished(e -> {
-            this.getRoot().setVisible(false); // disappear the times up screen as we restart the game
+            this.hideNode(this.getRoot()); // disappear the times up screen as we restart the game
 
             this.setUiEffectsOff(); // prevent multiple animation happening at once
         });
@@ -184,8 +184,8 @@ public class TimesUpScreen extends UiPart<VBox> {
         }
         this.setUiEffectsOn();
 
-        // add SelectMenuScreen into mainWindow -> to prepare for transition into it
-        mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
+        // Make appear SelectMenuScreen -> to prepare for transition into it
+        this.showNode(selectMenuScreen.getRoot());
 
         // Buttons and Title label Sliding & Fading animation
         int toX = 500; // move 500 px
@@ -222,9 +222,8 @@ public class TimesUpScreen extends UiPart<VBox> {
                                                              fadeInSelectMenuScreen, gameScreenUnblur);
 
         combined.setOnFinished(e -> {
-            // Hide/Remove Unused nodes from MainWindow
-            mainWindow.removeNodesFromRoot(pauseMenuScreen.getRoot(), gameScreen.getRoot(),
-                    gameOverScreen.getRoot(), this.getRoot());
+            // Hide/Remove Unused nodes
+            this.hideNode(gameScreen.getRoot(), pauseMenuScreen.getRoot(), gameOverScreen.getRoot(), this.getRoot());
 
             this.setUiEffectsOff(); // enable ui interaction again (disable it to prevent multiple animation at once)
         });

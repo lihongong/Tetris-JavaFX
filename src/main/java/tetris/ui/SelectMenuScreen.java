@@ -67,8 +67,10 @@ public class SelectMenuScreen extends UiPart<VBox> {
         this.setUiEffectsOn();
 
         // add start menu screen
-        mainWindow.addNodesToRoot(startMenuScreen.getRoot());
+        this.showNode(startMenuScreen.getRoot());
 
+        // transition
+        // select menu buttons slide out effects
         ParallelTransition combined = this.slideOutButtons();
 
         FadeTransition fadeInStartMenuScreen = new FadeTransition(Duration.seconds(0.4), startMenuScreen.getRoot());
@@ -78,8 +80,8 @@ public class SelectMenuScreen extends UiPart<VBox> {
         combined.getChildren().add(fadeInStartMenuScreen);
 
         combined.setOnFinished(e -> {
-            // remove select menu at the end
-            mainWindow.removeNodesFromRoot(this.getRoot());
+            // hide select menu at the end
+            this.hideNode(this.getRoot());
 
             this.setUiEffectsOff();
         });
@@ -104,14 +106,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
         gameScreen.setRandomBackGroundImage();
 
         // transition effects
-        mainWindow.addNodesToRoot(gameScreen.getRoot(), pauseMenuScreen.getRoot(),
-                gameOverScreen.getRoot(), timesUpScreen.getRoot());
-
+        // make GameScreen appear
+        this.showNode(gameScreen.getRoot());
         gameScreen.getRoot().setEffect(null); // clear the blur effects just in case.
-        // hides pause, game over, times up screen
-        pauseMenuScreen.getRoot().setVisible(false);
-        gameOverScreen.getRoot().setVisible(false);
-        timesUpScreen.getRoot().setVisible(false);
 
         FadeTransition fadeInGameScreen = new FadeTransition(Duration.seconds(1.0), gameScreen.getRoot());
         fadeInGameScreen.setFromValue(0.0);
@@ -123,7 +120,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
         combined.getChildren().add(fadeInGameScreen);
         combined.setOnFinished(e -> {
             // handle nodes
-            mainWindow.removeNodesFromRoot(this.getRoot());
+            this.hideNode(this.getRoot());
 
             this.setUiEffectsOff(); // prevent multiple animation happening at once
         });
@@ -131,6 +128,8 @@ public class SelectMenuScreen extends UiPart<VBox> {
     }
 
     public ParallelTransition openSelectMenuEffects(float animateDuration) {
+        this.showNode(this.getRoot());
+
         FadeTransition fadeInSelectMenu = new FadeTransition(Duration.seconds(animateDuration), this.getRoot());
         fadeInSelectMenu.setFromValue(0.0);
         fadeInSelectMenu.setToValue(1.0);
@@ -141,7 +140,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
     }
 
     private ParallelTransition slideInButtons() {
-        int fromX = 500;
+        int fromX = 1200;
         int toX = 0;
         float fadeInFrom = 0.0f;
         float fadeInTo = 1.0f;

@@ -39,17 +39,18 @@ public class StartMenuScreen extends UiPart<VBox> {
         // on app start up, selectMenuScreen will be added to mainWindow (not visible) or else the first start animation
         // won't be smooth (Java just-in-time rendering problem :'(
         // add SelectMenuScreen into mainWindow if it isn't in it already
-        if (mainWindow.getRoot().getChildren().contains(selectMenuScreen.getRoot())) {
+        /*if (mainWindow.getRoot().getChildren().contains(selectMenuScreen.getRoot())) {
             selectMenuScreen.getRoot().setVisible(true);
         } else {
             mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
-        }
+        }*/
+        this.showNode(selectMenuScreen.getRoot());
 
-        ParallelTransition combined = selectMenuScreen.openSelectMenuEffects(0.2f);
+        ParallelTransition combined = selectMenuScreen.openSelectMenuEffects(0.3f);
 
         // remove start menu screen at the end of effect
         combined.setOnFinished(e -> {
-            mainWindow.removeNodesFromRoot(this.getRoot());
+            this.hideNode(this.getRoot());
 
             this.setUiEffectsOff();
         });

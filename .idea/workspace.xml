@@ -11,10 +11,12 @@
   <component name="ChangeListManager">
     <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/StartMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/StartMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/UiPart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/UiPart.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

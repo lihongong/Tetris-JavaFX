@@ -82,6 +82,18 @@ public abstract class UiPart<T extends Node> {
         return requireNonNull(fxmlFileUrl);
     }
 
+    // We don't do mainWindow.getRoot().add(Screens) because it is slow and laggy sometimes
+    // Now, we add all the Screens in Mainwindow at launch, if screen is needed, set it to visible, else set not visible
+    public void hideNode(Node... nodes) {
+        for (Node node : nodes) {
+            node.setVisible(false);
+        }
+    }
+    public void showNode(Node node) {
+        node.toFront();
+        node.setVisible(true);
+    }
+
     public boolean isUiEffectsOn() {
         return isUiEffectsOn;
     }
