@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="mainLayout" alignment="CENTER" stylesheets="@SelectMenu.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="titleLabel" alignment="TOP_CENTER" contentDisplay="TOP" minHeight="150.0" minWidth="680.0" prefHeight="150.0" prefWidth="680.0" stylesheets="@SelectMenu.css" text="Lines To Clear" />
+        <HBox alignment="CENTER_RIGHT">
+            <children>
+                <VBox minWidth="800.0" />
+                <VBox fx:id="vbox" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="114.0" spacing="20.0">
+                    <children>
+                        <Button fx:id="clear20LinesButton" focusTraversable="false" minHeight="100.0" minWidth="800.0" mnemonicParsing="false" onAction="#handleClear20Button" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="20 LINES" />
+                        <Button fx:id="clear40LinesButton" focusTraversable="false" minHeight="100.0" minWidth="800.0" mnemonicParsing="false" onAction="#handleClear40Button" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="40 LINES" />
+                        <Button fx:id="clear60LinesButton" focusTraversable="false" minHeight="100.0" minWidth="800.0" mnemonicParsing="false" onAction="#handleClear60Button" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="60 LINES" />
+                  <Button fx:id="backButton" focusTraversable="false" minHeight="100.0" minWidth="800.0" mnemonicParsing="false" onAction="#handleBackButton" prefWidth="1600.0" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="BACK" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>

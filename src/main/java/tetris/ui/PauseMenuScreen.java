@@ -1,6 +1,7 @@
 package tetris.ui;
 
 import com.sun.tools.javac.Main;
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -13,6 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tetris.logic.GameState;
 import tetris.util.ButtonHandler;
+
+import java.sql.Time;
 
 public class PauseMenuScreen extends UiPart<VBox> {
     private static final String FXML = "PauseMenu.fxml";
@@ -57,164 +60,220 @@ public class PauseMenuScreen extends UiPart<VBox> {
     }
     @FXML
     public void handleResumeButtonMouseEnter(MouseEvent me) {
-        if (!this.getRoot().isDisable()) {
+        if (!this.isUiEffectsOn()) {
             resumeButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(resumeButton, resumeButtonHoverAnimation);
         }
     }
     @FXML
     public void handleResumeButtonMouseExit(MouseEvent me) {
-        if (!this.getRoot().isDisable()) {
+        if (!this.isUiEffectsOn()) {
             resumeButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(resumeButton, resumeButtonHoverAnimation);
         }
     }
     @FXML
     public void handleRestartButtonMouseEnter(MouseEvent me) {
-        if (!this.getRoot().isDisable()) {
+        if (!this.isUiEffectsOn()) {
             restartButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(restartButton, restartButtonHoverAnimation);
         }
     }
     @FXML
     public void handleRestartButtonMouseExit(MouseEvent me) {
-        if (!this.getRoot().isDisable()) {
+        if (!this.isUiEffectsOn()) {
             restartButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(restartButton, restartButtonHoverAnimation);
         }
     }
     @FXML
     public void handleExitButtonMouseEnter(MouseEvent me) {
-        if (!this.getRoot().isDisable()) {
+        if (!this.isUiEffectsOn()) {
             exitButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(exitButton, exitButtonHoverAnimation);
         }
     }
     @FXML
     public void handleExitButtonMouseExit(MouseEvent me) {
-        if (!this.getRoot().isDisable()) {
+        if (!this.isUiEffectsOn()) {
             exitButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(exitButton, exitButtonHoverAnimation);
         }
     }
 
-    public void openPauseMenuEffects(GameState gameState, GameScreen gameScreen) {
-
-        if (this.getRoot().isDisable()) {
+    public void openPauseMenuEffects(GameScreen gameScreen) {
+        // must still check for other still active effects -> prevent bug where the Pause Buttons sliding left while
+        // going right bug as mouse reenters it
+        if (this.isUiEffectsOn()) {
             return;
         }
-        this.getRoot().setDisable(true); // prevent multiple animation happening at once
+        // don't set effects is on so that when Pause Menu Buttons shows up, they will immediately respond when mouse
+        // on enter -> nicer animation style
+        // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
+        // going on, e.g. Pause Menu Screen is Fading/Sliding in, immediately press Esc, the pause screen will immediately
+        // get faded out/ slide out -> more responsive tho :)
 
+        // blur the game screen in the background
         gameScreen.setBlurEffects();
 
         int fromX = 500;
+        int toX = 0;
+        float fadeInFrom = 0.0f;
+        float fadeInTo = 1.0f;
+        float animateDuration = 0.1f;
 
         this.getRoot().setVisible(true);
 
-        TranslateTransition slide = new TranslateTransition(Duration.seconds(0.1), resumeButton);
-        slide.setFromX(fromX);
-        slide.setToX(0);
+        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), resumeButton);
+        slide1.setFromX(fromX);
+        slide1.setToX(toX);
 
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(0.1), restartButton);
+        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), restartButton);
         slide2.setFromX(fromX);
-        slide2.setToX(0);
+        slide2.setToX(toX);
 
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(0.1), exitButton);
+        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
         slide3.setFromX(fromX);
-        slide3.setToX(0);
+        slide3.setToX(toX);
 
-        FadeTransition fade = new FadeTransition(Duration.seconds(0.1), resumeButton);
-        fade.setFromValue(0.0);
-        fade.setToValue(1.0);
+        FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(animateDuration), resumeButton);
+        fadeIn1.setFromValue(fadeInFrom);
+        fadeIn1.setToValue(fadeInTo);
 
-        FadeTransition fade2 = new FadeTransition(Duration.seconds(0.1), restartButton);
-        fade2.setFromValue(0.0);
-        fade2.setToValue(1.0);
+        FadeTransition fadeIn2 = new FadeTransition(Duration.seconds(animateDuration), restartButton);
+        fadeIn2.setFromValue(fadeInFrom);
+        fadeIn2.setToValue(fadeInTo);
 
-        FadeTransition fade3 = new FadeTransition(Duration.seconds(0.1), exitButton);
-        fade3.setFromValue(0.0);
-        fade3.setToValue(1.0);
+        FadeTransition fadeIn3 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
+        fadeIn3.setFromValue(fadeInFrom);
+        fadeIn3.setToValue(fadeInTo);
 
-        FadeTransition pausedLabelFadeIn = new FadeTransition(Duration.seconds(0.1), pausedLabel);
-        pausedLabelFadeIn.setFromValue(0.0);
-        pausedLabelFadeIn.setToValue(1.0);
+        FadeTransition pausedLabelFadeIn = new FadeTransition(Duration.seconds(animateDuration), pausedLabel);
+        pausedLabelFadeIn.setFromValue(fadeInFrom);
+        pausedLabelFadeIn.setToValue(fadeInTo);
 
-        ParallelTransition combined = new ParallelTransition(slide, fade, slide2, fade2, slide3, fade3, pausedLabelFadeIn);
+        ParallelTransition combined = new ParallelTransition(slide1, fadeIn1, slide2, fadeIn2, slide3, fadeIn3,
+                                                             pausedLabelFadeIn);
 
         combined.setOnFinished(e -> {
-            //gameState.isTransitionEffectsOn = false;
-            this.getRoot().setDisable(false);
+            this.setUiEffectsOff();
+        });
+        combined.play();
+    }
+    /**
+     * Closes the pause menu screen when clicking the Resume or Restart button.
+     * Slides the buttons to the right and fade them out. Unblur the gameScreen.
+     * Run the runnable on animation finish.
+     * @param runnable is the code to be executed when effects ends, usually it is to resume the model when user click
+     *                 Resume button.
+     */
+    public void closePauseMenuEffects(GameScreen gameScreen, Runnable runnable) {
+        // prevent multiple animation happening at once
+        if (this.isUiEffectsOn()) {
+            return;
+        }
+        this.setUiEffectsOn();
+
+        int toX = 500;
+        float fadeOutFrom = 1.0f;
+        float fadeOutTo = 0.2f;
+        float animateDuration = 0.2f;
+
+        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), resumeButton);
+        slide1.setToX(toX); // Move 500px to the right
+
+        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), restartButton);
+        slide2.setToX(toX); // Move 500px to the right
+
+        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
+        slide3.setToX(toX); // Move 500px to the right
+
+        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), resumeButton);
+        fadeOut1.setFromValue(fadeOutFrom);
+        fadeOut1.setToValue(fadeOutTo);
+
+        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), restartButton);
+        fadeOut2.setFromValue(fadeOutFrom);
+        fadeOut2.setToValue(fadeOutTo);
+
+        FadeTransition fadeOut3 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
+        fadeOut3.setFromValue(fadeOutFrom);
+        fadeOut3.setToValue(fadeOutTo);
+
+        FadeTransition pausedLabelFadeOut = new FadeTransition(Duration.seconds(animateDuration), pausedLabel);
+        pausedLabelFadeOut.setFromValue(fadeOutFrom);
+        pausedLabelFadeOut.setToValue(fadeOutTo);
+
+        // unblur the gameScreen
+        Animation gameScreenUnblur = gameScreen.setRemoveEffects();
+
+        ParallelTransition combined = new ParallelTransition(slide1, slide2, slide3, fadeOut1, fadeOut2, fadeOut3,
+                                                             pausedLabelFadeOut, gameScreenUnblur);
+
+        combined.setOnFinished(e -> {
+            this.getRoot().setVisible(false);
+            this.setUiEffectsOff(); // prevent multiple animation happening at once
+
+            if (runnable != null) {
+                runnable.run();
+            }
         });
 
         combined.play();
-
-    }
-    public ParallelTransition closePauseMenuEffects(GameState gameState, GameScreen gameScreen) {
-        int fromX = 500;
-
-        TranslateTransition slide = new TranslateTransition(Duration.seconds(0.2), resumeButton);
-        //slide.setFromX(0);
-        slide.setToX(fromX); // Move 200px
-
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(0.2), restartButton);
-        //slide2.setFromX(0);
-        slide2.setToX(fromX); // Move 200px
-
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(0.2), exitButton);
-        //slide3.setFromX(0);
-        slide3.setToX(fromX); // Move 200px
-
-        FadeTransition fade = new FadeTransition(Duration.seconds(0.2), resumeButton);
-        fade.setFromValue(1.0);
-        fade.setToValue(0.2);
-
-        FadeTransition fade2 = new FadeTransition(Duration.seconds(0.2), restartButton);
-        fade2.setFromValue(1.0);
-        fade2.setToValue(0.2);
-
-        FadeTransition fade3 = new FadeTransition(Duration.seconds(0.2), exitButton);
-        fade3.setFromValue(1.0);
-        fade3.setToValue(0.2);
-
-        FadeTransition pausedLabelFadeOut = new FadeTransition(Duration.seconds(0.2), pausedLabel);
-        pausedLabelFadeOut.setFromValue(1.0);
-        pausedLabelFadeOut.setToValue(0.2);
-
-        ParallelTransition combined = new ParallelTransition(slide, slide2, fade, fade2, slide3, fade3, pausedLabelFadeOut);
-        // Hide root node AFTER animation completes
-        return combined;
-
     }
 
-    public ParallelTransition exitPauseMenuEffects(GameState gameState) {
+    public void exitPauseMenuEffects(MainWindow mainWindow, SelectMenuScreen selectMenuScreen,
+                                     GameScreen gameScreen, TimesUpScreen timesUpScreen,
+                                     GameOverScreen gameOverScreen) {
+        // prevent multiple animation happening at once
+        if (this.isUiEffectsOn()) {
+            return;
+        }
+        this.setUiEffectsOn();
 
-        int fromX = 500;
+        // add SelectMenuScreen into mainWindow -> to prepare for transition into it
+        mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
 
-        TranslateTransition slide = new TranslateTransition(Duration.seconds(0.3), resumeButton);
-        //slide.setFromX(0);
-        slide.setToX(fromX); // Move 200px
+        // Buttons and Title label Sliding & Fading animation
+        int toX = 500;
+        float fadeOutFrom = 1.0f;
+        float fadeOutTo = 0.2f;
+        float animateDuration = 0.3f;
 
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(0.3), restartButton);
-        //slide2.setFromX(0);
-        slide2.setToX(fromX); // Move 200px
+        // Slide out Resume, Restart & Exit Buttons
+        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), resumeButton);
+        slide1.setToX(toX); // Move 500px to the right
+        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), restartButton);
+        slide2.setToX(toX); // Move 500px to the right
+        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
+        slide3.setToX(toX); // Move 500px to the right
 
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(0.3), exitButton);
-        //slide3.setFromX(0);
-        slide3.setToX(fromX); // Move 200px
+        // Fade out Resume, Restart, Exit, Paused Label
+        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), resumeButton);
+        fadeOut1.setFromValue(fadeOutFrom);
+        fadeOut1.setToValue(fadeOutTo);
+        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), restartButton);
+        fadeOut2.setFromValue(fadeOutFrom);
+        fadeOut2.setToValue(fadeOutTo);
+        FadeTransition fadeOut3 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
+        fadeOut3.setFromValue(fadeOutFrom);
+        fadeOut3.setToValue(fadeOutTo);
+        FadeTransition pausedLabelFadeOut = new FadeTransition(Duration.seconds(animateDuration), pausedLabel);
+        pausedLabelFadeOut.setFromValue(fadeOutFrom);
+        pausedLabelFadeOut.setToValue(fadeOutTo);
 
-        FadeTransition fade = new FadeTransition(Duration.seconds(0.3), resumeButton);
-        fade.setFromValue(1.0);
-        fade.setToValue(0.2);
+        // Fade in the Select Menu Screen
+        FadeTransition fadeInSelectMenuScreen = new FadeTransition(Duration.seconds(0.3), selectMenuScreen.getRoot());
+        fadeInSelectMenuScreen.setFromValue(0.0);
+        fadeInSelectMenuScreen.setToValue(1.0);
 
-        FadeTransition fade2 = new FadeTransition(Duration.seconds(0.3), restartButton);
-        fade2.setFromValue(1.0);
-        fade2.setToValue(0.2);
+        Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
-        FadeTransition fade3 = new FadeTransition(Duration.seconds(0.3), exitButton);
-        fade3.setFromValue(1.0);
-        fade3.setToValue(0.2);
+        ParallelTransition combined = new ParallelTransition(slide1, slide2, slide3, fadeOut1, fadeOut2, fadeOut3,
+                                                        pausedLabelFadeOut, fadeInSelectMenuScreen, gameScreenUnblur);
 
-        FadeTransition pausedLabelFadeOut = new FadeTransition(Duration.seconds(0.3), pausedLabel);
-        pausedLabelFadeOut.setFromValue(1.0);
-        pausedLabelFadeOut.setToValue(0.2);
+        combined.setOnFinished(e -> {
+            // handle nodes
+            mainWindow.removeNodesFromRoot(this.getRoot(), gameScreen.getRoot(),
+                    gameOverScreen.getRoot(), timesUpScreen.getRoot());
 
-        ParallelTransition combined = new ParallelTransition(slide, slide2, fade, fade2, slide3, fade3, pausedLabelFadeOut);
-        // Hide root node AFTER animation completes
+            this.setUiEffectsOff(); // enable ui interaction again
+        });
 
-        return combined;
+        combined.play();
     }
 }

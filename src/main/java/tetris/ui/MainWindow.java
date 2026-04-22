@@ -20,15 +20,17 @@ public class MainWindow extends UiPart<StackPane> {
     private KeyInputController keyInputController;
     private GameController gameController;
 
-    // other ui parts
+    // UI Screens
+    private StartMenuScreen startMenuScreen;
+    private SelectMenuScreen selectMenuScreen;
+    private SprintModesScreen sprintModesScreen;
+
     private GameScreen gameScreen;
-    //private GameOverUI gameOverScreen;
     private PauseMenuScreen pauseMenuScreen;
     private GameOverScreen gameOverScreen;
     private TimesUpScreen timesUpScreen;
     private SprintOverScreen sprintOverScreen;
-    private StartMenuScreen startMenuScreen;
-    private SelectMenuScreen selectMenuScreen;
+
     @FXML
     private StackPane gameRoot; // stack different layers (gameplay, pause menu, game over screen)
 
@@ -41,15 +43,11 @@ public class MainWindow extends UiPart<StackPane> {
 
     private void config(Stage primaryStage) {
         try {
-            /*
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML));
-            loader.setController(this);
-            Parent root = loader.load();*/
             Parent root = getRoot();
 
             this.primaryStage = primaryStage;
             this.mainScene = new Scene(root);
-            mainScene.setFill(Color.TRANSPARENT);
+            mainScene.setFill(Color.BLACK);
             primaryStage.setScene(mainScene);
 
         } catch (Exception e) {
@@ -74,7 +72,6 @@ public class MainWindow extends UiPart<StackPane> {
     }
 
     public void fillInnerParts() {
-
         this.gameScreen = new GameScreen();
         //this.gameRoot.getChildren().add(gameScreen.getRoot());
 
@@ -84,20 +81,12 @@ public class MainWindow extends UiPart<StackPane> {
 
         this.gameOverScreen = new GameOverScreen();
         this.timesUpScreen = new TimesUpScreen();
-        //this.gameRoot.getChildren().add(gameOverScreen.getRoot());
-        //gameOverScreen.getRoot().setVisible(false); // initially, game over screen isn't visible
+
+        this.selectMenuScreen = new SelectMenuScreen();
+        this.sprintModesScreen = new SprintModesScreen();
 
         this.startMenuScreen = new StartMenuScreen();
         this.gameRoot.getChildren().add(startMenuScreen.getRoot());
-
-        this.selectMenuScreen = new SelectMenuScreen();
-        //this.gameRoot.getChildren().add(selectMenuScreen.getRoot());
-
-
-        //gameScreen.getRoot().prefWidthProperty().bind(getRoot().widthProperty());
-        //gameScreen.getRoot().prefHeightProperty().bind(getRoot().heightProperty());
-        //pauseMenuScreen.getRoot().prefWidthProperty().bind(getRoot().widthProperty());
-        //pauseMenuScreen.getRoot().prefHeightProperty().bind(getRoot().heightProperty());
     }
 
     public void setUpGame() {
@@ -107,12 +96,12 @@ public class MainWindow extends UiPart<StackPane> {
         pauseMenuScreen.setResumeRestartExitButtonHandler(gameController::resumeGame, gameController::restartGameInPauseMenu, gameController::exitButtonInPauseMenu);
 
         gameOverScreen.setRestartExitButtonHandler(gameController::restartGameInGameOver, gameController::exitButtonInGameOver);
-        timesUpScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInGameOver);
+        timesUpScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInTimesUp);
         //sprintOverScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInGameOver);
 
         startMenuScreen.setStartButtonHandler(gameController::startButtonInStartMenu);
-
         selectMenuScreen.setSelectMenuButtonsHandler(gameController::relaxButton, gameController::sprintButton, gameController::blitzButton, gameController::exitButtonInSelectMenu);
+        sprintModesScreen.setSprintModesButtonsHandler(gameController::clear20LinesButton, gameController::clear40LinesButton, gameController::clear60LinesButton, gameController::sprintModesBackButton);
 
         GameState gameState = gameController.getGameState();
         new KeyInputController(mainScene, gameState, gameController);

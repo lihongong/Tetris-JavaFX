@@ -1,6 +1,7 @@
 package tetris.ui;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import tetris.Tetris;
 
 import java.io.IOException;
@@ -14,10 +15,12 @@ import static java.util.Objects.requireNonNull;
  * Represents a distinct part of the UI. e.g. Windows, dialogs, panels, status bars, etc.
  * It contains a scene graph with a root node of type {@code T}.
  */
-public abstract class UiPart<T> {
+public abstract class UiPart<T extends Node> {
     /** Resource folder where FXML files are stored. */
     public static final String FXML_FILE_FOLDER = "/view/";
     private final FXMLLoader fxmlLoader = new FXMLLoader();
+
+    private static boolean isUiEffectsOn = false;
 
     // Only calls loadFxmlFile(url, root) with the root if the root is a Stage. If not, just call loadFxmlFile(url, null);
     // loadFxmlFile will call setRoot(root)
@@ -78,4 +81,16 @@ public abstract class UiPart<T> {
         URL fxmlFileUrl = Tetris.class.getResource(fxmlFileNameWithFolder);
         return requireNonNull(fxmlFileUrl);
     }
+
+    public boolean isUiEffectsOn() {
+        return isUiEffectsOn;
+    }
+    public void setUiEffectsOn() {
+        isUiEffectsOn = true;
+    }
+    public void setUiEffectsOff() {
+        isUiEffectsOn = false;
+    }
+
+
 }

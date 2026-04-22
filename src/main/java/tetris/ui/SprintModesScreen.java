@@ -1,14 +1,16 @@
 package tetris.ui;
 
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import tetris.util.ButtonHandler;
 
-public class SprintDifficultyScreen extends UiPart<VBox> {
+public class SprintModesScreen extends UiPart<VBox> {
 
-    private static final String FXML = "SprintDifficultyMenu.fxml";
+    private static final String FXML = "SprintModesMenu.fxml";
 
     private ButtonHandler clear20LinesButtonHandler;
     private ButtonHandler clear40LinesButtonHandler;
@@ -27,11 +29,11 @@ public class SprintDifficultyScreen extends UiPart<VBox> {
     @FXML
     private Button backButton;
 
-    public SprintDifficultyScreen() {
+    public SprintModesScreen() {
         super(FXML);
     }
 
-    public void setSprintDifficultyButtonsHandler(ButtonHandler clear20LinesButtonHandler,
+    public void setSprintModesButtonsHandler(ButtonHandler clear20LinesButtonHandler,
                                                   ButtonHandler clear40LinesButtonHandler,
                                                   ButtonHandler clear60LinesButtonHandler,
                                                   ButtonHandler backButtonHandler) {
@@ -57,4 +59,21 @@ public class SprintDifficultyScreen extends UiPart<VBox> {
     public void handleBackButton() {
         //backButtonHandler.handle();
     }
+
+    /**
+     * Renders the Sprint Modes Screen (different # lines to clear)
+     */
+    public void showSprintModesScreen(MainWindow mainWindow, SelectMenuScreen selectMenuScreen) {
+        if (this.isUiEffectsOn()) {
+            return;
+        }
+        this.setUiEffectsOn();
+
+        mainWindow.addNodesToRoot(this.getRoot());
+
+        FadeTransition fadeInSprintModeScreen = new FadeTransition(Duration.seconds(1.0), this.getRoot());
+        fadeInSprintModeScreen.setFromValue(0.0);
+        fadeInSprintModeScreen.setToValue(1.0);
+    }
+
 }

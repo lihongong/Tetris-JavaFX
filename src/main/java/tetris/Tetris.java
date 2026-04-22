@@ -1,6 +1,7 @@
 package tetris;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -17,12 +18,15 @@ public class Tetris extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
+            loadFonts();
+
             this.mainWindow = new MainWindow(primaryStage);
-            mainWindow.show();
             mainWindow.fillInnerParts();
             mainWindow.setUpGame();
 
-            loadFonts();
+            Platform.runLater(() -> {
+                mainWindow.show();
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
