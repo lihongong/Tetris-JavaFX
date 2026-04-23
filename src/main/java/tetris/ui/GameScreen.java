@@ -39,19 +39,26 @@ public class GameScreen extends UiPart<VBox> {
     @FXML
     private Pane holdMinoBox;
     @FXML
+    private Label numLinesLabelInDefault;
+    @FXML
     private Label score;
     @FXML
     private Label highScore;
+    @FXML
+    private Label numLinesLabelInSprint;
+    @FXML
+    private Label bestTimeLabel;
+    @FXML
+    private VBox relaxBlitzMetrics;
+    @FXML
+    private VBox sprintModeMetrics;
     @FXML
     private Label timer;
     @FXML
     private ProgressBar timerBar;
     @FXML
     private StackPane tubeContainer;
-    @FXML
-    private Label numLinesLabel;
-    @FXML
-    private Label bestTimeLabel;
+
     private LineMeterTube lineMeterTube;
 
     // Graphic contexts
@@ -412,20 +419,29 @@ public class GameScreen extends UiPart<VBox> {
     public void setGameScreenForRelaxMode() {
         timer.setVisible(false);
         timerBar.setVisible(false);
-
-        this.hideLineMeterTube();
+        // hide lineMeterTube
+        this.tubeContainer.setVisible(false);
+        // hide and show the left sidebar in game screen
+        sprintModeMetrics.setVisible(false);
+        relaxBlitzMetrics.setVisible(true);
     }
-    public void showCountUpTimerAndTube() {
+    public void setGameScreenForSprintMode() {
         timer.setVisible(true);
         timerBar.setVisible(false);
-
-        this.showLineMeterTube();
+        // show lineMeterTube -- FOR SPRINT MODE
+        this.tubeContainer.setVisible(true);
+        // hide and show the left sidebar in game screen
+        sprintModeMetrics.setVisible(true);
+        relaxBlitzMetrics.setVisible(false);
     }
-    public void showCountDownTimerAndBar() {
+    public void setGameScreenForBlitzMode() {
         timer.setVisible(true);
         timerBar.setVisible(true);
-
-        this.hideLineMeterTube();
+        // hide lineMeterTube
+        this.tubeContainer.setVisible(false);
+        // hide and show the left sidebar in game screen
+        sprintModeMetrics.setVisible(false);
+        relaxBlitzMetrics.setVisible(true);
     }
 
     /**
@@ -516,12 +532,5 @@ public class GameScreen extends UiPart<VBox> {
         }
 
         return String.format("rgb(%d,%d,%d)", (int) red, (int) green, (int) blue);
-    }
-
-    public void showLineMeterTube() {
-        this.tubeContainer.setVisible(true);
-    }
-    public void hideLineMeterTube() {
-        this.tubeContainer.setVisible(false);
     }
 }

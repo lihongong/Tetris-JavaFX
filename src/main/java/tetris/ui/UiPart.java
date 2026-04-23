@@ -84,7 +84,7 @@ public abstract class UiPart<T extends Node> {
 
     // We don't do mainWindow.getRoot().add(Screens) because it is slow and laggy sometimes
     // Now, we add all the Screens in Mainwindow at launch time and hide the unused screens
-    public void hideNode(Node... nodes) {
+    public static void hideNode(Node... nodes) {
         for (Node node : nodes) {
             node.setVisible(false);
         }

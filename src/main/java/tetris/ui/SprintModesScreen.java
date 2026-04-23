@@ -78,10 +78,10 @@ public class SprintModesScreen extends UiPart<VBox> {
     }
 
     public void fromSprintModesToGameScreen (GameScreen gameScreen) {
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         // set background image for gameplay
         gameScreen.setRandomBackGroundImage();
@@ -102,18 +102,18 @@ public class SprintModesScreen extends UiPart<VBox> {
         combined.getChildren().add(fadeInGameScreen);
         combined.setOnFinished(e -> {
             // handle nodes
-            this.hideNode(this.getRoot());
+            UiPart.hideNode(this.getRoot());
 
-            this.setUiEffectsOff(); // prevent multiple animation happening at once
+            UiPart.setUiEffectsOff(); // prevent multiple animation happening at once
         });
         combined.play();
     }
 
     public void fromSprintModesToSelectMenu(SelectMenuScreen selectMenuScreen) {
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         ParallelTransition fadeInSelectMenuScreen = selectMenuScreen.openSelectMenuEffects(0.3f);
 
@@ -121,9 +121,9 @@ public class SprintModesScreen extends UiPart<VBox> {
 
         combined.getChildren().add(fadeInSelectMenuScreen);
         combined.setOnFinished(e -> {
-            this.hideNode(this.getRoot());
+            UiPart.hideNode(this.getRoot());
 
-            this.setUiEffectsOff();
+            UiPart.setUiEffectsOff();
         });
 
         combined.play();

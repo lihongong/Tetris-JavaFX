@@ -11,6 +11,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tetris.util.ButtonHandler;
+import tetris.util.UiAnimation;
+
+import java.util.ArrayList;
 
 public class SelectMenuScreen extends UiPart<VBox> {
     private static final String FXML = "SelectMenu.fxml";
@@ -65,49 +68,49 @@ public class SelectMenuScreen extends UiPart<VBox> {
     }
     @FXML
     public void handleRelaxButtonMouseEnter(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             relaxButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(relaxButton, relaxButtonHoverAnimation);
         }
     }
     @FXML
     public void handleRelaxButtonMouseExit(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             relaxButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(relaxButton, relaxButtonHoverAnimation);
         }
     }
     @FXML
     public void handleSprintButtonMouseEnter(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             sprintButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(sprintButton, sprintButtonHoverAnimation);
         }
     }
     @FXML
     public void handleSprintButtonMouseExit(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             sprintButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(sprintButton, sprintButtonHoverAnimation);
         }
     }
     @FXML
     public void handleBlitzButtonMouseEnter(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             blitzButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(blitzButton, blitzButtonHoverAnimation);
         }
     }
     @FXML
     public void handleBlitzButtonMouseExit(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             blitzButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(blitzButton, blitzButtonHoverAnimation);
         }
     }
     @FXML
     public void handleExitButtonMouseEnter(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             exitButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(exitButton, exitButtonHoverAnimation);
         }
     }
     @FXML
     public void handleExitButtonMouseExit(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             exitButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(exitButton, exitButtonHoverAnimation);
         }
     }
@@ -119,10 +122,10 @@ public class SelectMenuScreen extends UiPart<VBox> {
     public void fromSelectMenuToStartMenu(StartMenuScreen startMenuScreen) {
         // prevent multiple click on Buttons and cause bugs :(((
         // e.g. multiple startMenuScreen instances added into mainWindow
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         // add start menu screen
         this.showNode(startMenuScreen.getRoot());
@@ -131,17 +134,14 @@ public class SelectMenuScreen extends UiPart<VBox> {
         // select menu buttons slide out effects
         ParallelTransition combined = this.slideOutButtons();
 
-        FadeTransition fadeInStartMenuScreen = new FadeTransition(Duration.seconds(0.4), startMenuScreen.getRoot());
-        fadeInStartMenuScreen.setFromValue(0.0);
-        fadeInStartMenuScreen.setToValue(1.0);
+        FadeTransition fadeInStartMenuScreen = UiAnimation.fadeIn(0.0f, 1.0f, 0.4f, startMenuScreen.getRoot());
 
         combined.getChildren().add(fadeInStartMenuScreen);
-
         combined.setOnFinished(e -> {
             // hide select menu at the end
-            this.hideNode(this.getRoot());
+            UiPart.hideNode(this.getRoot());
 
-            this.setUiEffectsOff();
+            UiPart.setUiEffectsOff();
         });
 
         combined.play();
@@ -153,10 +153,10 @@ public class SelectMenuScreen extends UiPart<VBox> {
      * Fade in gameScreen and then remove Select Menu Screen at the end of effects
      */
     public void fromSelectMenuToGameScreen(GameScreen gameScreen) {
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         // set background image for gameplay
         gameScreen.setRandomBackGroundImage();
@@ -165,30 +165,26 @@ public class SelectMenuScreen extends UiPart<VBox> {
         // make GameScreen appear
         this.showNode(gameScreen.getRoot());
         gameScreen.getRoot().setEffect(null); // clear the blur effects just in case.
-
         float animateDuration = 0.8f; // Fade into Game Screen Duration
-        FadeTransition fadeInGameScreen = new FadeTransition(Duration.seconds(animateDuration), gameScreen.getRoot());
-        fadeInGameScreen.setFromValue(0.0);
-        fadeInGameScreen.setToValue(1.0);
+        FadeTransition fadeInGameScreen = UiAnimation.fadeIn(0.0f, 1.0f, animateDuration, gameScreen.getRoot());
 
         // slide out the select menu buttons
         ParallelTransition combined = this.slideOutButtons();
-
         combined.getChildren().add(fadeInGameScreen);
         combined.setOnFinished(e -> {
             // handle nodes
-            this.hideNode(this.getRoot());
+            UiPart.hideNode(this.getRoot());
 
-            this.setUiEffectsOff(); // prevent multiple animation happening at once
+            UiPart.setUiEffectsOff(); // prevent multiple animation happening at once
         });
         combined.play();
     }
 
     public void fromSelectMenuToSprintModes(SprintModesScreen sprintModesScreen) {
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         ParallelTransition fadeInSprintModeScreen = sprintModesScreen.openSprintModesScreen(0.3f);
 
@@ -196,9 +192,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
 
         combined.getChildren().add(fadeInSprintModeScreen);
         combined.setOnFinished(e -> {
-            this.hideNode(this.getRoot());
+            UiPart.hideNode(this.getRoot());
 
-            this.setUiEffectsOff();
+            UiPart.setUiEffectsOff();
         });
 
         combined.play();
@@ -206,14 +202,13 @@ public class SelectMenuScreen extends UiPart<VBox> {
 
     /**
      * Util method to help other screen generate the effects of opening the Select Menu Screen from their screen
+     * Don't need use isEffectOn() flag as the screens that use this method should coordinate themselves.
      * @return a {@code ParallelTransition} that contains the fade in and sliding out of buttons effects
      */
     public ParallelTransition openSelectMenuEffects(float animateDuration) {
         this.showNode(this.getRoot());
 
-        FadeTransition fadeInSelectMenu = new FadeTransition(Duration.seconds(animateDuration), this.getRoot());
-        fadeInSelectMenu.setFromValue(0.0);
-        fadeInSelectMenu.setToValue(1.0);
+        FadeTransition fadeInSelectMenu = UiAnimation.fadeIn(0.0f, 1.0f, animateDuration, this.getRoot());
 
         ParallelTransition combined = this.slideInButtons();
 
@@ -228,43 +223,14 @@ public class SelectMenuScreen extends UiPart<VBox> {
         float fadeInTo = 1.0f;
         float animateDuration = 0.27f;
 
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), relaxButton);
-        slide1.setFromX(fromX);
-        slide1.setToX(toX);
-
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), sprintButton);
-        slide2.setFromX(fromX);
-        slide2.setToX(toX);
-
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), blitzButton);
-        slide3.setFromX(fromX);
-        slide3.setToX(toX);
-
-        TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
-        slide4.setFromX(fromX);
-        slide4.setToX(toX);
-
-        FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(animateDuration), relaxButton);
-        fadeIn1.setFromValue(fadeInFrom);
-        fadeIn1.setToValue(fadeInTo);
-
-        FadeTransition fadeIn2 = new FadeTransition(Duration.seconds(animateDuration), sprintButton);
-        fadeIn2.setFromValue(fadeInFrom);
-        fadeIn2.setToValue(fadeInTo);
-
-        FadeTransition fadeIn3 = new FadeTransition(Duration.seconds(animateDuration), blitzButton);
-        fadeIn3.setFromValue(fadeInFrom);
-        fadeIn3.setToValue(fadeInTo);
-
-        FadeTransition fadeIn4 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
-        fadeIn4.setFromValue(fadeInFrom);
-        fadeIn4.setToValue(fadeInTo);
-
-        FadeTransition titleLabelFadeIn = new FadeTransition(Duration.seconds(animateDuration), titleLabel);
-        titleLabelFadeIn.setFromValue(fadeInFrom);
-        titleLabelFadeIn.setToValue(fadeInTo);
-
-        return new ParallelTransition(slide1, slide2, slide3, slide4, fadeIn1, fadeIn2, fadeIn3, fadeIn4, titleLabelFadeIn);
+        ArrayList<TranslateTransition> slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration, relaxButton,
+                                                                          sprintButton, blitzButton, exitButton);
+        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration, relaxButton,
+                                                                   sprintButton, blitzButton, exitButton, titleLabel);
+        ParallelTransition combined = new ParallelTransition();
+        combined.getChildren().addAll(slideInTrans);
+        combined.getChildren().addAll(fadeInTrans);
+        return combined;
     }
 
     private ParallelTransition slideOutButtons() {

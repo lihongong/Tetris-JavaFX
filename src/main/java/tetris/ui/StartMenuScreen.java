@@ -29,30 +29,25 @@ public class StartMenuScreen extends UiPart<VBox> {
         startButtonHandler.handle();
     }
 
-    public void startMenuStartEffect(MainWindow mainWindow, SelectMenuScreen selectMenuScreen) {
+    public void fromStartMenuToSelectMenu(SelectMenuScreen selectMenuScreen) {
         // prevent multiple click on Start Button and cause bugs :(((
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         // on app start up, selectMenuScreen will be added to mainWindow (not visible) or else the first start animation
         // won't be smooth (Java just-in-time rendering problem :'(
         // add SelectMenuScreen into mainWindow if it isn't in it already
-        /*if (mainWindow.getRoot().getChildren().contains(selectMenuScreen.getRoot())) {
-            selectMenuScreen.getRoot().setVisible(true);
-        } else {
-            mainWindow.addNodesToRoot(selectMenuScreen.getRoot());
-        }*/
         this.showNode(selectMenuScreen.getRoot());
 
         ParallelTransition combined = selectMenuScreen.openSelectMenuEffects(0.3f);
 
         // remove start menu screen at the end of effect
         combined.setOnFinished(e -> {
-            this.hideNode(this.getRoot());
+            UiPart.hideNode(this.getRoot());
 
-            this.setUiEffectsOff();
+            UiPart.setUiEffectsOff();
         });
 
         combined.play();

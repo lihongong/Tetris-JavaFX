@@ -13,6 +13,9 @@ import javafx.util.Duration;
 import tetris.logic.GameController;
 import tetris.logic.GameState;
 import tetris.util.ButtonHandler;
+import tetris.util.UiAnimation;
+
+import java.util.ArrayList;
 
 public class TimesUpScreen extends UiPart<VBox> {
     private static final String FXML = "TimesUpScreen.fxml";
@@ -45,25 +48,25 @@ public class TimesUpScreen extends UiPart<VBox> {
     }
     @FXML
     public void handleRestartButtonMouseEnter(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             restartButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(restartButton, restartButtonHoverAnimation);
         }
     }
     @FXML
     public void handleRestartButtonMouseExit(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             restartButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(restartButton, restartButtonHoverAnimation);
         }
     }
     @FXML
     public void handleExitButtonMouseEnter(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             exitButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(exitButton, exitButtonHoverAnimation);
         }
     }
     @FXML
     public void handleExitButtonMouseExit(MouseEvent me) {
-        if (!this.isUiEffectsOn()) {
+        if (!UiPart.isUiEffectsOn()) {
             exitButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(exitButton, exitButtonHoverAnimation);
         }
     }
@@ -73,10 +76,10 @@ public class TimesUpScreen extends UiPart<VBox> {
      */
     public void openTimesUpScreenEffects(GameScreen gameScreen) {
         // prevent multiple animation happening at once
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        // don't set effects is on so that when Pause Menu Buttons shows up, they will immediately respond when mouse
+        // don't set effects is on so that when Times up Buttons shows up, they will immediately respond when mouse
         // on enter -> nicer animation style
         // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
         // going on, e.g. Times Up Screen is Fading/Sliding in, immediately press R, the times up screen will immediately
@@ -93,31 +96,17 @@ public class TimesUpScreen extends UiPart<VBox> {
         float fadeInFrom = 0.0f;
         float fadeInTo = 1.0f;
         float animateDuration = 0.1f;
-
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), restartButton);
-        slide1.setFromX(fromX);
-        slide1.setToX(toX);
-
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
-        slide2.setFromX(fromX);
-        slide2.setToX(toX);
-
-        FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(animateDuration), restartButton);
-        fadeIn1.setFromValue(fadeInFrom);
-        fadeIn1.setToValue(fadeInTo);
-
-        FadeTransition fadeIn2 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
-        fadeIn2.setFromValue(fadeInFrom);
-        fadeIn2.setToValue(fadeInTo);
-
-        FadeTransition timesUpLabelFadeIn = new FadeTransition(Duration.seconds(animateDuration), timesUpLabel);
-        timesUpLabelFadeIn.setFromValue(fadeInFrom);
-        timesUpLabelFadeIn.setToValue(fadeInTo);
-
-        ParallelTransition combined = new ParallelTransition(slide1, fadeIn1, slide2, fadeIn2, timesUpLabelFadeIn);
+        // may change for times up opening effect!!!
+        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideIn(fromX, toX, animateDuration,
+                restartButton, exitButton);
+        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration,
+                restartButton, exitButton, timesUpLabel);
+        ParallelTransition combined = new ParallelTransition();
+        combined.getChildren().addAll(slidingInTrans);
+        combined.getChildren().addAll(fadeInTrans);
 
         combined.setOnFinished(e -> {
-            this.setUiEffectsOff();
+            UiPart.setUiEffectsOff();
         });
         combined.play();
     }
@@ -127,62 +116,47 @@ public class TimesUpScreen extends UiPart<VBox> {
      */
     public void closeTimesUpScreenEffects(GameScreen gameScreen) {
         // prevent multiple animation happening at once
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         int toX = 500;
         float fadeOutFrom = 1.0f;
         float fadeOutTo = 0.2f;
         float animateDuration = 0.2f;
 
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), restartButton);
-        slide1.setToX(toX); // Move 500px to the right
-
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
-        slide2.setToX(toX); // Move 500px to the right
-
-        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), restartButton);
-        fadeOut1.setFromValue(fadeOutFrom);
-        fadeOut1.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
-        fadeOut2.setFromValue(fadeOutFrom);
-        fadeOut2.setToValue(fadeOutTo);
-
-        FadeTransition timesUpLabelFadeOut = new FadeTransition(Duration.seconds(animateDuration), timesUpLabel);
-        timesUpLabelFadeOut.setFromValue(fadeOutFrom);
-        timesUpLabelFadeOut.setToValue(fadeOutTo);
-
+        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideOut(toX, animateDuration,
+                restartButton, exitButton);
+        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
+                restartButton, exitButton, timesUpLabel);
         // unblur the gameScreen
-        Animation gameScreenRemoveBlur = gameScreen.setRemoveEffects();
+        Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
-        ParallelTransition combined = new ParallelTransition(slide1, fadeOut1, slide2, fadeOut2, timesUpLabelFadeOut, gameScreenRemoveBlur);
-        // Hide root node AFTER animation completes
+        ParallelTransition combined = new ParallelTransition();
+        combined.getChildren().addAll(slidingInTrans);
+        combined.getChildren().addAll(fadeInTrans);
+        combined.getChildren().addAll(gameScreenUnblur);
 
         combined.setOnFinished(e -> {
-            this.hideNode(this.getRoot()); // disappear the times up screen as we restart the game
+            UiPart.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
 
-            this.setUiEffectsOff(); // prevent multiple animation happening at once
+            UiPart.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
         });
 
         combined.play();
     }
-
     /**
      * Add Select Menu Screen to MainWindow and fade in Select Menu Screen.
      * Slide out the buttons from the center to the right, fade out the buttons & label.
      * On animation finish, remove {@code GameScreen, PauseMenuScreen, GameOverScreen, TimesUpScreen} from {@code MainWindow}.
      */
-    public void exitTimesUpScreenEffects(MainWindow mainWindow, SelectMenuScreen selectMenuScreen,
-                                                       GameScreen gameScreen, PauseMenuScreen pauseMenuScreen,
-                                                       GameOverScreen gameOverScreen) {
+    public void fromTimesUpScreenToSelectMenu(SelectMenuScreen selectMenuScreen, GameScreen gameScreen) {
         // prevent multiple animation happening at once
-        if (this.isUiEffectsOn()) {
+        if (UiPart.isUiEffectsOn()) {
             return;
         }
-        this.setUiEffectsOn();
+        UiPart.setUiEffectsOn();
 
         // Make appear SelectMenuScreen -> to prepare for transition into it
         this.showNode(selectMenuScreen.getRoot());
@@ -194,36 +168,27 @@ public class TimesUpScreen extends UiPart<VBox> {
         float animateDuration = 0.3f;
 
         // Slide out restart & Exit Buttons
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), restartButton);
-        slide1.setToX(toX); // Move 500px from center to the right
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
-        slide2.setToX(toX); // Move 500px from center to the right
-
+        ArrayList<TranslateTransition> slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
         // Fade out Restart, Exit, Game Over Label
-        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), restartButton);
-        fadeOut1.setFromValue(fadeOutFrom);
-        fadeOut1.setToValue(fadeOutTo);
-        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
-        fadeOut2.setFromValue(fadeOutFrom);
-        fadeOut2.setToValue(fadeOutTo);
-        FadeTransition fadeOutTimesUpLabel = new FadeTransition(Duration.seconds(animateDuration), timesUpLabel);
-        fadeOutTimesUpLabel.setFromValue(fadeOutFrom);
-        fadeOutTimesUpLabel.setToValue(fadeOutTo);
+        ArrayList<FadeTransition> fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
+                restartButton, exitButton, timesUpLabel);
+        // unblur the gameScreen - just in case
+        Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
         // Fade in the Select Menu Screen
         ParallelTransition selectMenuButtonSlidingInEffects = selectMenuScreen.openSelectMenuEffects(animateDuration);
 
-        // unblur the gameScreen - just in case
-        Animation gameScreenUnblur = gameScreen.setRemoveEffects();
         // combine all animation :)
-        ParallelTransition combined = new ParallelTransition(slide1, fadeOut1, slide2, fadeOut2, fadeOutTimesUpLabel,
-                                                             selectMenuButtonSlidingInEffects, gameScreenUnblur);
+        ParallelTransition combined = new ParallelTransition();
+        combined.getChildren().addAll(slideOutTrans);
+        combined.getChildren().addAll(fadeOutTrans);
+        combined.getChildren().addAll(gameScreenUnblur, selectMenuButtonSlidingInEffects);
 
         combined.setOnFinished(e -> {
             // Hide/Remove Unused nodes
-            this.hideNode(gameScreen.getRoot(), pauseMenuScreen.getRoot(), gameOverScreen.getRoot(), this.getRoot());
+            UiPart.hideNode(gameScreen.getRoot(), this.getRoot());
 
-            this.setUiEffectsOff(); // enable ui interaction again (disable it to prevent multiple animation at once)
+            UiPart.setUiEffectsOff(); // enable ui interaction again (disable it to prevent multiple animation at once)
         });
 
         combined.play();

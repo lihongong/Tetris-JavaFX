@@ -206,26 +206,26 @@ public class GameController {
         this.isIgnoreKeyInput = false;
 
         // transition effects -- handled by game over screen
-        gameOverScreen.exitGameOverScreenEffects(mainWindow, selectMenuScreen, gameScreen,
-                                                 pauseMenuScreen, timesUpScreen);
-
+        if (gameState.getGameMode() == GameMode.SPRINT) {
+            gameOverScreen.fromGameOverScreenToSprintMenu(sprintModesScreen, gameScreen);
+        } else {
+            gameOverScreen.fromGameOverScreenToSelectMenu(selectMenuScreen, gameScreen);
+        }
     }
     public void exitButtonInTimesUp() {
         this.isIgnoreKeyInput = false;
 
-        // transition effects -- handled by times up screen
-        timesUpScreen.exitTimesUpScreenEffects(mainWindow, selectMenuScreen, gameScreen,
-                pauseMenuScreen, gameOverScreen);
-
+        // transition effects -- handled by times up screen (DONT NEED CARE ABT SPRINT MODE CASE)
+        timesUpScreen.fromTimesUpScreenToSelectMenu(selectMenuScreen, gameScreen);
     }
     public void exitButtonInPauseMenu() {
         this.isIgnoreKeyInput = true;
 
         // transition effects -- handled by pause menu screen :)
         if (gameState.getGameMode() == GameMode.SPRINT) {
-            pauseMenuScreen.exitPauseMenuFromSprint(sprintModesScreen, gameScreen, timesUpScreen, gameOverScreen);
+            pauseMenuScreen.fromPauseMenuToSprintModes(sprintModesScreen, gameScreen);
         } else {
-            pauseMenuScreen.exitPauseMenuFromRelaxBlitz(selectMenuScreen, gameScreen, timesUpScreen, gameOverScreen);
+            pauseMenuScreen.fromPauseMenuToSelectMenu(selectMenuScreen, gameScreen);
         }
     }
 
@@ -238,7 +238,7 @@ public class GameController {
         this.isIgnoreKeyInput = true; // don't allow key input
 
         // transition effects
-        startMenuScreen.startMenuStartEffect(mainWindow, selectMenuScreen);
+        startMenuScreen.fromStartMenuToSelectMenu(selectMenuScreen);
     }
 
     public void exitButtonInSelectMenu() {
@@ -250,7 +250,7 @@ public class GameController {
 
     public void relaxButton() {
         // hide timer in gameScreen
-        gameScreen.hideTimer();
+        gameScreen.setGameScreenForRelaxMode();
 
         currentGameLoop = relaxGameLoop;
         gameState.setGameMode(GameMode.RELAX);
@@ -260,7 +260,7 @@ public class GameController {
     }
     public void blitzButton() {
         // set timer and timer bar in gameScreen to visible
-        gameScreen.showCountDownTimerAndBar();
+        gameScreen.setGameScreenForBlitzMode();
 
         currentGameLoop = blitzGameLoop;
         gameState.setGameMode(GameMode.BLITZ);
@@ -287,7 +287,7 @@ public class GameController {
     }
     public void startSprintGame() {
         // show count up timer in gameScreen
-        gameScreen.showCountUpTimerAndTube();
+        gameScreen.setGameScreenForSprintMode();
 
         currentGameLoop = sprintGameLoop;
         gameState.setGameMode(GameMode.SPRINT);

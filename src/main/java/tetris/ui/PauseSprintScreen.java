@@ -200,8 +200,8 @@ public class PauseSprintScreen extends UiPart<VBox> {
                 pausedLabelFadeOut, gameScreenUnblur);
 
         combined.setOnFinished(e -> {
-            this.hideNode(this.getRoot());
-            this.setUiEffectsOff(); // prevent multiple animation happening at once
+            UiPart.hideNode(this.getRoot());
+            UiPart.setUiEffectsOff(); // prevent multiple animation happening at once
 
             if (runnable != null) {
                 runnable.run();
@@ -262,10 +262,10 @@ public class PauseSprintScreen extends UiPart<VBox> {
 
         combined.setOnFinished(e -> {
             // handle nodes
-            this.hideNode(this.getRoot(), gameScreen.getRoot(), gameOverScreen.getRoot(),
+            UiPart.hideNode(this.getRoot(), gameScreen.getRoot(), gameOverScreen.getRoot(),
                     timesUpScreen.getRoot());
 
-            this.setUiEffectsOff(); // enable ui interaction again
+            UiPart.setUiEffectsOff(); // enable ui interaction again
         });
 
         combined.play();
