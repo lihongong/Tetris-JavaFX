@@ -1,6 +1,7 @@
 package tetris.logic;
 
 import tetris.util.GameMode;
+import tetris.util.SprintMode;
 
 import static tetris.util.TetrisConstants.*;
 
@@ -15,19 +16,15 @@ public class GameState {
     private boolean isGameOver;
     private boolean isSprintOver;
 
-
     // game counter
     private int deactivateCounter;
     private int autoDropCounter;
-    //private int gameCounter;
     private int effectCounter;
 
     // game modes and goals
     private GameMode gameMode;
+    private SprintMode sprintMode;
     private TimeManager timeManager;
-    private int sprintGoal;
-
-
 
     public GameState(TimeManager timeManager) {
         this.timeManager = timeManager;
@@ -42,7 +39,6 @@ public class GameState {
 
         deactivateCounter = 0;
         autoDropCounter = 0;
-        //gameCounter = 0;
         effectCounter = 0;
 
     }
@@ -96,10 +92,8 @@ public class GameState {
     public void setGameOver() {
         isGameOver = true;
     }
-    public void checkSprintOver(int numLines) {
+    public void checkSprintOver(int numLines, int sprintGoal) {
         this.isSprintOver = numLines >= sprintGoal;
-        System.out.println("numline: " + numLines + ", sprintgoal: " + sprintGoal);
-        System.out.println("checksprintOver " + isSprintOver);
     }
     public boolean isSprintOver() {
         return isSprintOver;
@@ -111,6 +105,7 @@ public class GameState {
 
         isPaused = false;
         isGameOver = false;
+        isSprintOver = false;
 
         allowSwapMino = true;
     }
@@ -161,21 +156,26 @@ public class GameState {
 
 
     // game modes
-
     public void setGameMode(GameMode gameMode) {
+        if (gameMode != GameMode.SPRINT) {
+            sprintMode = SprintMode.NONE;
+        }
         this.gameMode = gameMode;
     }
     public GameMode getGameMode() {
         return gameMode;
     }
-
-    public void setSprintGoal(int newSprintGoal) {
-        this.sprintGoal = newSprintGoal;
+    public void setSprintMode(SprintMode sprintMode) {
+        this.sprintMode = sprintMode;
     }
-    public int getSprintGoal() {
-        return this.sprintGoal;
+    public SprintMode getSprintMode() {
+        return sprintMode;
     }
 
-
-
+    // ========================
+    // Time
+    // ========================
+    public int getGameCounterVal() {
+        return this.timeManager.getCurrentCounter();
+    }
 }

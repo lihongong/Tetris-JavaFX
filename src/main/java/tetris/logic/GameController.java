@@ -4,11 +4,13 @@ import javafx.animation.*;
 import javafx.util.Duration;
 import tetris.ui.*;
 import tetris.util.GameMode;
+import tetris.util.SprintMode;
 
 import static tetris.util.TetrisConstants.FPS;
 import static tetris.util.TetrisConstants.SPRINT_MODE_A_CAP;
 import static tetris.util.TetrisConstants.SPRINT_MODE_B_CAP;
 import static tetris.util.TetrisConstants.SPRINT_MODE_C_CAP;
+import static tetris.util.TetrisConstants.TWO_MINUTE_DURATION;
 
 public class GameController {
 
@@ -117,35 +119,36 @@ public class GameController {
     public void sprintUpdate() {
         assert sprintGameLoop == currentGameLoop;
 
+        // note: line meter tube is updated under inactiveStateManager.handleRemoveLine()
+        gameScreen.updateStopWatch(timeManager.getCurrentCounter());
+
         if (gameState.isSprintOver()) {
             sprintGameLoop.pause();
 
             // TODO: open sprint over screen
-        }
-        if (gameState.isGameOver()) {
+        } else if (gameState.isGameOver()) {
             sprintGameLoop.pause();
 
             gameOverScreen.openGameOverScreenEffects(gameScreen);
         } else {
-            gameScreen.updateStopWatch(timeManager.getCurrentCounter()); // note: line meter tube is updated under inactiveStateManager.handleRemoveLine()
+            //gameScreen.updateStopWatch(timeManager.getCurrentCounter());
             gameplayManager.update();
         }
     }
 
     public void blitzUpdate() {
         assert blitzGameLoop == currentGameLoop;
+        gameScreen.updateRemainingTime(timeManager.getCurrentCounter());
 
         if (timeManager.isTimesUp()) {
             blitzGameLoop.pause();
 
             timesUpScreen.openTimesUpScreenEffects(gameScreen);
-        }
-        if (gameState.isGameOver()) {
+        } else if (gameState.isGameOver()) {
             blitzGameLoop.pause();
 
             gameOverScreen.openGameOverScreenEffects(gameScreen);
         } else {
-            gameScreen.updateRemainingTime(timeManager.getCurrentCounter());
             gameplayManager.update();
         }
     }
@@ -205,6 +208,7 @@ public class GameController {
     public void exitButtonInGameOver() {
         this.isIgnoreKeyInput = false;
 
+        gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by game over screen
         if (gameState.getGameMode() == GameMode.SPRINT) {
             gameOverScreen.fromGameOverScreenToSprintMenu(sprintModesScreen, gameScreen);
@@ -215,12 +219,14 @@ public class GameController {
     public void exitButtonInTimesUp() {
         this.isIgnoreKeyInput = false;
 
+        gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by times up screen (DONT NEED CARE ABT SPRINT MODE CASE)
         timesUpScreen.fromTimesUpScreenToSelectMenu(selectMenuScreen, gameScreen);
     }
     public void exitButtonInPauseMenu() {
         this.isIgnoreKeyInput = true;
 
+        gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by pause menu screen :)
         if (gameState.getGameMode() == GameMode.SPRINT) {
             pauseMenuScreen.fromPauseMenuToSprintModes(sprintModesScreen, gameScreen);
@@ -253,7 +259,7 @@ public class GameController {
         gameScreen.setGameScreenForRelaxMode();
 
         currentGameLoop = relaxGameLoop;
-        gameState.setGameMode(GameMode.RELAX);
+        gameState.setGameMode(GameMode.RELAX); // will also set sprintMode to NONE
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
         startGame();
@@ -263,7 +269,7 @@ public class GameController {
         gameScreen.setGameScreenForBlitzMode();
 
         currentGameLoop = blitzGameLoop;
-        gameState.setGameMode(GameMode.BLITZ);
+        gameState.setGameMode(GameMode.BLITZ); // will also set sprintMode to NONE
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
         startGame();
@@ -273,33 +279,38 @@ public class GameController {
         // goes into Sprint Modes Menu
         selectMenuScreen.fromSelectMenuToSprintModes(sprintModesScreen);
     }
+    public void sprintModesBackButton() {
+        sprintModesScreen.fromSprintModesToSelectMenu(selectMenuScreen);
+    }
     public void clearALinesButton() {
-        gameState.setSprintGoal(SPRINT_MODE_A_CAP);
+        gameState.setSprintMode(SprintMode.SPRINT_A);
+        gameplayManager.setSprintGoal(SPRINT_MODE_A_CAP);
         startSprintGame();
     }
     public void clearBLinesButton() {
-        gameState.setSprintGoal(SPRINT_MODE_B_CAP);
+        gameState.setSprintMode(SprintMode.SPRINT_B);
+        gameplayManager.setSprintGoal(SPRINT_MODE_B_CAP);
         startSprintGame();
     }
     public void clearCLinesButton() {
-        gameState.setSprintGoal(SPRINT_MODE_C_CAP);
+        gameState.setSprintMode(SprintMode.SPRINT_C);
+        gameplayManager.setSprintGoal(SPRINT_MODE_C_CAP);
         startSprintGame();
     }
     public void startSprintGame() {
         // show count up timer in gameScreen
+        gameState.setGameMode(GameMode.SPRINT);
+
         gameScreen.setGameScreenForSprintMode();
 
         currentGameLoop = sprintGameLoop;
-        gameState.setGameMode(GameMode.SPRINT);
 
         sprintModesScreen.fromSprintModesToGameScreen(gameScreen);
-        startGame();
-    }
-    public void sprintModesBackButton() {
-        sprintModesScreen.fromSprintModesToSelectMenu(selectMenuScreen);
-    }
+        isIgnoreKeyInput = false; // allow key input when game start
+        currentGameLoop.play(); // RUN THE GAME LOOP
 
-
+        gameplayManager.restartGame();
+    }
     /**
      * Control the UI so that it is prepared for the gameplay
      * Also set up the game model and timer UI

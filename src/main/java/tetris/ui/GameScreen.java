@@ -17,6 +17,7 @@ import javafx.util.Duration;
 import tetris.block.Block;
 import tetris.block.Mino;
 import tetris.block.MinoBlock;
+import tetris.util.GameMode;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -145,9 +146,9 @@ public class GameScreen extends UiPart<VBox> {
         numLinesFallList = new ArrayList<>();
 
         // score label
-        updateScore(0);
+        updateScoreAndLines(0, 0);
         updateHighScore(0);
-
+        updateBestTime(Integer.MAX_VALUE);
         drawPlayingFieldGrid();
     }
 
@@ -367,13 +368,51 @@ public class GameScreen extends UiPart<VBox> {
     }
 
     // =================================================
-    // Metrics UI
+    // Metrics UI -- NUMBERS ~~~~~~
     // =================================================
-    public void updateScore(int currentScore) {
+
+    public void updateLines(int numLinesClear) {
+        this.numLinesLabelInSprint.setText("" + numLinesClear);
+    }
+    public void updateScoreAndLines(int currentScore, int numLinesClear) {
         this.score.setText("" + currentScore);
+        this.numLinesLabelInDefault.setText("" + numLinesClear);
     }
     public void updateHighScore(int newHighScore) {
         this.highScore.setText("" + newHighScore);
+    }
+    public void updateBestTime(int newBestTimeInCounterVal) {
+        if (newBestTimeInCounterVal == Integer.MAX_VALUE) {
+            bestTimeLabel.setText("--:--:--");
+            return;
+        }
+        int centisecond = (100 * newBestTimeInCounterVal / FPS) % 100; // two decimal places of a second
+        int second = (newBestTimeInCounterVal / FPS) % 60;             // mod 60 seconds
+        int minute = (newBestTimeInCounterVal / (FPS * 60)) % 60;      // mod 60 minutes
+        int hour = (newBestTimeInCounterVal / (FPS * 3600)) % 24;      // mod 24 hrs
+
+        String minuteString = String.format("%02d", minute);
+        String secondString = String.format("%02d", second);
+        String centisecondString = String.format("%02d", centisecond);
+        if (hour == 0) {
+            bestTimeLabel.setText(minuteString + ":" + secondString + ":" + centisecondString);
+        } else {
+            String hourString = String.format("%02d", hour);
+            bestTimeLabel.setText(hourString + ":" + minuteString + ":" + secondString + ":" + centisecondString);
+        }
+    }
+
+    // Invoked by InactiveStateManager -- every line clear, invoke once
+    public void updateGameMetricsForSprintMode(int numLinesClear) {
+        assert !relaxBlitzMetrics.isVisible() && sprintModeMetrics.isVisible();
+
+        this.numLinesLabelInSprint.setText("" + numLinesClear);
+    }
+    // Invoked by InactiveStateManager -- every line clear, invoke once
+    public void updateGameMetricsForDefault(int numLinesClear, int currentScore) {
+        assert relaxBlitzMetrics.isVisible() && !sprintModeMetrics.isVisible();
+
+        this.updateScoreAndLines(currentScore, numLinesClear);
     }
 
     //public void updateNumLinesClear
@@ -381,13 +420,27 @@ public class GameScreen extends UiPart<VBox> {
     // =================================================
     // Restart game & Pause menu
     // =================================================
-    public void restartGame() {
+    public void restartGame(int highScore) {
+        blockGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
+        shadowGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
+        holdBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
+        nextBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
+
+        this.updateScoreAndLines(0, 0);
+        this.updateHighScore(highScore);
+    }
+    public void restartGameForSprint(int bestTimeInCounterVal, boolean isSprintOver) {
         blockGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
         shadowGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
         holdBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
         nextBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
 
         lineMeterTube.setTubeProgress(0, 1); // set it to zero progress
+
+        this.updateBestTime(bestTimeInCounterVal);
+
+        this.updateLines(0);
+
     }
     public void setBlurEffects() {
         this.getRoot().setEffect(gaussianBlur);
@@ -443,6 +496,10 @@ public class GameScreen extends UiPart<VBox> {
         sprintModeMetrics.setVisible(false);
         relaxBlitzMetrics.setVisible(true);
     }
+
+    // =======================================
+    // Update game TIME UI
+    // =======================================
 
     /**
      * Shows the stop watch timer for Sprint mode. Shows HOURS (if nonzero) : MINUTES : SECONDS : CENTISECONDS

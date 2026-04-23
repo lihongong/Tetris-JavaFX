@@ -110,7 +110,8 @@ public class InactiveStateManager {
         gameMetrics.updateScore(numLinesClear, gameState.isTSpin());
 
         // update gameScreen score UI
-        gameScreen.updateScore(gameMetrics.getScore());
+
+        // gameScreen.updateScore(gameMetrics.getScore());
 
         // if
         if (gotLineRemoval) {
@@ -119,9 +120,15 @@ public class InactiveStateManager {
 
             // TODO: if in SprintMode, make GameScreen increase the LineMeterTube Height !!!
             if (gameState.getGameMode() == GameMode.SPRINT) {
-                gameState.checkSprintOver(gameMetrics.getNumLinesClear());
-                gameScreen.setSprintLineMeterTubeProgress(gameMetrics.getNumLinesClear(), gameState.getSprintGoal());
+                gameState.checkSprintOver(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
+
+                gameScreen.setSprintLineMeterTubeProgress(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
+                gameScreen.updateGameMetricsForSprintMode(gameMetrics.getNumLinesClear());
+            } else {
+                gameScreen.updateGameMetricsForDefault(gameMetrics.getNumLinesClear(), gameMetrics.getScore());
             }
+
+            //gameScreen.updateGameMetricsSideBar(gameState.getGameMode(), gameMetrics.getScore());
         }
         if (gotLineRemoval && isPotentialTSpin) {
             gameState.setIsTSpin();

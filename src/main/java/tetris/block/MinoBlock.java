@@ -155,11 +155,8 @@ public class MinoBlock extends Block {
      */
     public void drawFalling(GraphicsContext gc, int workingCounter, int numLinesFall) {
         assert workingCounter < BLOCK_FALLING_DURATION;
-        assert workingCounter >= 0;
 
-        if (workingCounter < 0) {
-            System.out.println("falling counter smaller than  0 !!!!!!!!!!!!!!!!");
-        }
+        assert workingCounter >= 0: "falling counter smaller than  0 !!!!!!!!!!!!!!!!";
 
         int finalPixelY = row * BLOCK_SIZE;
 
@@ -168,7 +165,7 @@ public class MinoBlock extends Block {
 
         drawRemove(gc);
 
-        pixelY = finalPixelY - fallHeight + ((workingCounter * fallHeight) / BLOCK_FALLING_DURATION - 1); // finalPixelY + (workingCounter - BLOCK_FALLING_DURATION) * fallHeight / BLOCK_FALLING_DURATION;
+        pixelY = finalPixelY - fallHeight + ((workingCounter * fallHeight) / BLOCK_FALLING_DURATION); // finalPixelY + (workingCounter - BLOCK_FALLING_DURATION) * fallHeight / BLOCK_FALLING_DURATION;
         if (workingCounter == BLOCK_FALLING_DURATION - 1) {
             pixelY = finalPixelY; // snap
         }

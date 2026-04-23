@@ -146,10 +146,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
 
         combined.play();
     }
-
     /**
      * Renders the gameScreen from SelectMenuScreen.
-     * Set random background for gameScreen. add gameScreen, gameOverScreen, timesUpScreen, pauseMenuScreen to MainWindow.
+     * Set random background for gameScreen.
      * Fade in gameScreen and then remove Select Menu Screen at the end of effects
      */
     public void fromSelectMenuToGameScreen(GameScreen gameScreen) {
@@ -179,7 +178,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
         });
         combined.play();
     }
-
+    /**
+     * Renders the Sprint Mode from SelectMenuScreen.
+     */
     public void fromSelectMenuToSprintModes(SprintModesScreen sprintModesScreen) {
         if (UiPart.isUiEffectsOn()) {
             return;
@@ -216,6 +217,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
         return combined;
     }
 
+    /**
+     * Animation for Buttons & Label ONLY
+     */
     private ParallelTransition slideInButtons() {
         int fromX = 1200;
         int toX = 0;
@@ -232,7 +236,6 @@ public class SelectMenuScreen extends UiPart<VBox> {
         combined.getChildren().addAll(fadeInTrans);
         return combined;
     }
-
     private ParallelTransition slideOutButtons() {
         int toX = 1200;
         float fadeOutFrom = 1.0f;

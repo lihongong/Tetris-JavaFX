@@ -1,6 +1,9 @@
 package tetris.logic;
 
 import tetris.util.GameMode;
+import tetris.util.SprintMode;
+
+import static tetris.util.TetrisConstants.SPRINT_MODE_A_CAP;
 
 public class GameMetrics {
     private final int BASIC_SCORE = 10;
@@ -9,15 +12,21 @@ public class GameMetrics {
     private int numLinesClear;
     private int relaxHighScore;
     private int blitzHighScore;
-    private int sprintFastestTime;
+    private int sprintGoal;
+    private int sprintBestTimeA;
+    private int sprintBestTimeB;
+    private int sprintBestTimeC;
     private int combo;
 
     public GameMetrics() {
         this.score = 0;
         this.relaxHighScore = 0;
         this.blitzHighScore = 0;
-        this.sprintFastestTime = 0;
         this.combo = 0;
+
+        this.sprintBestTimeA = Integer.MAX_VALUE;
+        this.sprintBestTimeB = Integer.MAX_VALUE;
+        this.sprintBestTimeC = Integer.MAX_VALUE;
     }
 
     public void updateScore(int numLinesClear, boolean isTSpin) {
@@ -42,17 +51,17 @@ public class GameMetrics {
     public int getScore() {
         return score;
     }
-    public void resetScore() {
+    public void resetScoreAndLines() {
         score = 0;
+        numLinesClear = 0;
     }
     public int getHighScore(GameMode gameMode) {
         if (gameMode == GameMode.RELAX) {
             return relaxHighScore;
         } else if (gameMode == GameMode.BLITZ) {
             return blitzHighScore;
-        } else {
-            return sprintFastestTime;
         }
+        return -1;
     }
     public void setHighScore(GameMode gameMode) {
         if (gameMode == GameMode.RELAX) {
@@ -63,13 +72,39 @@ public class GameMetrics {
             if (score > blitzHighScore) {
                 blitzHighScore = score;
             }
-        } else {
-            if (score > sprintFastestTime) {
-                sprintFastestTime = score;
-            }
         }
     }
     public int getNumLinesClear() {
         return this.numLinesClear;
+    }
+    public void setBestTime(int currentTimeToFinish, SprintMode sprintMode) {
+        if (sprintMode == SprintMode.SPRINT_A) {
+            if (currentTimeToFinish < sprintBestTimeA) {
+                sprintBestTimeA = currentTimeToFinish;
+            }
+        } else if (sprintMode == SprintMode.SPRINT_B) {
+            if (currentTimeToFinish < sprintBestTimeB) {
+                sprintBestTimeB = currentTimeToFinish;
+            }
+        } else {
+            if (currentTimeToFinish < sprintBestTimeC) {
+                sprintBestTimeC = currentTimeToFinish;
+            }
+        }
+    }
+    public int getBestTime(SprintMode sprintMode) {
+        if (sprintMode == SprintMode.SPRINT_A) {
+            return sprintBestTimeA;
+        } else if (sprintMode == SprintMode.SPRINT_B) {
+            return sprintBestTimeB;
+        } else {
+            return sprintBestTimeC;
+        }
+    }
+    public void setSprintGoal(int sprintGoal) {
+        this.sprintGoal = sprintGoal;
+    }
+    public int getSprintGoal() {
+        return sprintGoal;
     }
 }

@@ -34,7 +34,10 @@ public class StartMenuScreen extends UiPart<VBox> {
         if (UiPart.isUiEffectsOn()) {
             return;
         }
-        UiPart.setUiEffectsOn();
+        // don't set effects is on so that when Select Menu Buttons shows up, they will immediately respond when mouse
+        // on enter -> nicer animation style
+        // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
+        // going on. P.S. The "nice" effect can't be achieved for "GameScreen/SprintMode->SelectMenu" with this method only
 
         // on app start up, selectMenuScreen will be added to mainWindow (not visible) or else the first start animation
         // won't be smooth (Java just-in-time rendering problem :'(
