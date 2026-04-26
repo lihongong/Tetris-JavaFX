@@ -10,17 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tetris/util/SprintMode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/block/MinoBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/block/MinoBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameplayManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameplayManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/StartMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/StartMenuScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +83,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "04b5e247",
+    "git-widget-placeholder": "aa80b731",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Coding/My Project/Tetris/src/main/java/tetris",

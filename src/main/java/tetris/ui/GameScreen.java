@@ -233,14 +233,14 @@ public class GameScreen extends UiPart<VBox> {
     // =================================================
 
     public void handleClearLineSpecialEffect(int effectCounter) {
-
+        // 0 - 6: 7 frames
         if (effectCounter >= 0 && effectCounter < BLOCK_FADING_DURATION) {
             int workingCounter = effectCounter;
             for (MinoBlock fadingBlock : fadingBlocks) {
                 fadingBlock.drawFading(blockGC, workingCounter);
             }
         }
-
+        // 7 - 14: 8 frames
         if (effectCounter >= BLOCK_FADING_DURATION && effectCounter < BLOCK_FALLING_DURATION + BLOCK_FADING_DURATION) {
 
             int workingCounter = effectCounter - BLOCK_FADING_DURATION;
@@ -250,6 +250,16 @@ public class GameScreen extends UiPart<VBox> {
                 int numLinesFall = numLinesFallList.get(i);
 
                 fallingBlock.drawFalling(blockGC, workingCounter, numLinesFall);
+            }
+        }
+        // during last frame of falling -- remove all falling block and re-add them,
+        // prevent left, right adjacent block from having gaps after falling
+        if (effectCounter == BLOCK_FALLING_DURATION + BLOCK_FADING_DURATION - 1) {
+            for (MinoBlock fallingBlock : fallingBlocks) {
+                fallingBlock.drawRemove(blockGC);
+            }
+            for (MinoBlock fallingBlock : fallingBlocks) {
+                fallingBlock.drawAdd(blockGC);
             }
         }
     }

@@ -160,7 +160,6 @@ public class MinoBlock extends Block {
 
         int finalPixelY = row * BLOCK_SIZE;
 
-
         int fallHeight = numLinesFall * BLOCK_SIZE;
 
         drawRemove(gc);
@@ -171,6 +170,7 @@ public class MinoBlock extends Block {
         }
         drawAdd(gc);
     }
+
 
 
 
