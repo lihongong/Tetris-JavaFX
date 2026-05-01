@@ -8,92 +8,97 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="mainLayout" alignment="CENTER" spacing="5.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+
+<VBox fx:id="root" alignment="CENTER" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox fx:id="timerSection" alignment="CENTER" minHeight="80.0" prefHeight="80.0">
+      <VBox fx:id="mainLayout" alignment="CENTER" spacing="5.0">
          <children>
-            <Label fx:id="timer" alignment="TOP_CENTER" minHeight="65.0" minWidth="300.0" styleClass="time-label" stylesheets="@game-screen.css" text="0:00" />
-            <ProgressBar fx:id="timerBar" prefHeight="8.0" prefWidth="141.0" progress="1.0" stylesheets="@game-screen.css" />
+            <VBox fx:id="timerSection" alignment="CENTER" minHeight="80.0" prefHeight="80.0">
+               <children>
+                  <Label fx:id="timer" alignment="TOP_CENTER" minHeight="65.0" minWidth="300.0" styleClass="time-label" stylesheets="@game-screen.css" text="0:00" />
+                  <ProgressBar fx:id="timerBar" prefHeight="8.0" prefWidth="141.0" progress="1.0" stylesheets="@game-screen.css" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" stylesheets="@/view/game-screen.css">
+               <VBox fx:id="holdBoxMetricsSection" maxHeight="600.0" stylesheets="@game-screen.css">
+                  <children>
+                     <Pane fx:id="holdMinoBox" prefHeight="170.0" prefWidth="170.0" stylesheets="@game-screen.css">
+                        <children>
+                           <Label alignment="CENTER" layoutX="39.0" layoutY="5.0" styleClass="hold-next-label" text="Hold" />
+                        </children>
+                     </Pane>
+                     <StackPane prefHeight="400.0" prefWidth="170.0">
+                        <children>
+                           <VBox fx:id="relaxBlitzMetrics" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="100.0" spacing="30.0">
+                              <children>
+                                 <VBox fx:id="LinesInDefault" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
+                                    <children>
+                                       <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Lines" textAlignment="RIGHT" textFill="WHITE" />
+                                       <Label fx:id="numLinesLabelInDefault" alignment="BOTTOM_RIGHT" styleClass="score-label" stylesheets="@/view/game-screen.css" text="Label" textAlignment="RIGHT" />
+                                    </children>
+                                 </VBox>
+                                 <VBox fx:id="Score" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
+                                    <children>
+                                       <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Score" textAlignment="RIGHT" textFill="WHITE" />
+                                       <Label fx:id="score" alignment="BOTTOM_RIGHT" styleClass="score-label" stylesheets="@/view/game-screen.css" text="Label" textAlignment="RIGHT" />
+                                    </children>
+                                    <padding>
+                                       <Insets bottom="10.0" />
+                                    </padding>
+                                 </VBox>
+                                 <VBox alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
+                                    <children>
+                                       <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="High&#10;Score" textAlignment="RIGHT" />
+                                       <Label fx:id="highScore" alignment="BOTTOM_RIGHT" styleClass="score-label" text="Label" textAlignment="RIGHT" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </VBox>
+                           <VBox fx:id="sprintModeMetrics" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="100.0" spacing="30.0">
+                              <children>
+                                 <VBox prefHeight="170.0" prefWidth="100.0" />
+                                 <VBox fx:id="LinesInSprint" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
+                                    <children>
+                                       <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Lines" textAlignment="RIGHT" textFill="WHITE" />
+                                       <Label fx:id="numLinesLabelInSprint" alignment="BOTTOM_RIGHT" styleClass="score-label" stylesheets="@/view/game-screen.css" text="Label" textAlignment="RIGHT" />
+                                    </children>
+                                    <padding>
+                                       <Insets bottom="10.0" />
+                                    </padding>
+                                 </VBox>
+                                 <VBox fx:id="BestTime" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
+                                    <children>
+                                       <Label alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@game-screen.css" text="Best&#10;Time" textAlignment="RIGHT" textFill="WHITE" wrapText="true" />
+                                       <Label fx:id="bestTimeLabel" alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@game-screen.css" text="Label" textAlignment="RIGHT" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </VBox>
+                        </children>
+                     </StackPane>
+                  </children>
+               </VBox>
+               <HBox fx:id="gameplaySection">
+                  <children>
+                     <StackPane minWidth="20.0" prefHeight="150.0" prefWidth="20.0" />
+                     <!-- Playing Field Pane with fixed size -->
+                     <Pane fx:id="playingField" maxHeight="600.0" maxWidth="300.0" minHeight="600.0" minWidth="300.0" prefHeight="600" prefWidth="300" stylesheets="@game-screen.css" />
+                     <StackPane fx:id="tubeContainer" alignment="BOTTOM_CENTER" minWidth="20.0" prefHeight="150.0" prefWidth="20.0" />
+                  </children>
+               </HBox>
+            
+               <!-- VBox for Hold and Next boxes stacked vertically -->
+               <VBox fx:id="nextBoxSection" maxHeight="600.0">
+                  <!-- Hold Box Pane -->
+                  <Pane fx:id="nextMinoBox" prefHeight="170.0" prefWidth="170.0" stylesheets="@game-screen.css">
+                     <children>
+                        <Label alignment="CENTER" layoutX="37.0" layoutY="5.0" styleClass="hold-next-label" text="Next" />
+                     </children>
+                  </Pane>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="430.0" prefWidth="170.0" />
+               </VBox>
+            </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER" stylesheets="@/view/game-screen.css">
-         <VBox fx:id="holdBoxMetricsSection" maxHeight="600.0" stylesheets="@game-screen.css">
-            <children>
-               <Pane fx:id="holdMinoBox" prefHeight="170.0" prefWidth="170.0" stylesheets="@game-screen.css">
-                  <children>
-                     <Label alignment="CENTER" layoutX="39.0" layoutY="5.0" styleClass="hold-next-label" text="Hold" />
-                  </children>
-               </Pane>
-               <StackPane prefHeight="400.0" prefWidth="170.0">
-                  <children>
-                     <VBox fx:id="relaxBlitzMetrics" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="100.0" spacing="30.0">
-                        <children>
-                           <VBox fx:id="LinesInDefault" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
-                              <children>
-                                 <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Lines" textAlignment="RIGHT" textFill="WHITE" />
-                                 <Label fx:id="numLinesLabelInDefault" alignment="BOTTOM_RIGHT" styleClass="score-label" stylesheets="@/view/game-screen.css" text="Label" textAlignment="RIGHT" />
-                              </children>
-                           </VBox>
-                           <VBox fx:id="Score" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
-                              <children>
-                                 <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Score" textAlignment="RIGHT" textFill="WHITE" />
-                                 <Label fx:id="score" alignment="BOTTOM_RIGHT" styleClass="score-label" stylesheets="@/view/game-screen.css" text="Label" textAlignment="RIGHT" />
-                              </children>
-                              <padding>
-                                 <Insets bottom="10.0" />
-                              </padding>
-                           </VBox>
-                           <VBox alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
-                              <children>
-                                 <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="High&#10;Score" textAlignment="RIGHT" />
-                                 <Label fx:id="highScore" alignment="BOTTOM_RIGHT" styleClass="score-label" text="Label" textAlignment="RIGHT" />
-                              </children>
-                           </VBox>
-                        </children>
-                     </VBox>
-                     <VBox fx:id="sprintModeMetrics" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="100.0" spacing="30.0">
-                        <children>
-                           <VBox prefHeight="170.0" prefWidth="100.0" />
-                           <VBox fx:id="LinesInSprint" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
-                              <children>
-                                 <Label alignment="BOTTOM_RIGHT" styleClass="score-label" text="Lines" textAlignment="RIGHT" textFill="WHITE" />
-                                 <Label fx:id="numLinesLabelInSprint" alignment="BOTTOM_RIGHT" styleClass="score-label" stylesheets="@/view/game-screen.css" text="Label" textAlignment="RIGHT" />
-                              </children>
-                              <padding>
-                                 <Insets bottom="10.0" />
-                              </padding>
-                           </VBox>
-                           <VBox fx:id="BestTime" alignment="BOTTOM_RIGHT" prefHeight="170.0" prefWidth="170.0" style="-fx-background-color: transparent;">
-                              <children>
-                                 <Label alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@game-screen.css" text="Best&#10;Time" textAlignment="RIGHT" textFill="WHITE" wrapText="true" />
-                                 <Label fx:id="bestTimeLabel" alignment="BOTTOM_LEFT" styleClass="score-label" stylesheets="@game-screen.css" text="Label" textAlignment="RIGHT" />
-                              </children>
-                           </VBox>
-                        </children>
-                     </VBox>
-                  </children>
-               </StackPane>
-            </children>
-         </VBox>
-         <HBox fx:id="gameplaySection">
-            <children>
-               <StackPane minWidth="20.0" prefHeight="150.0" prefWidth="20.0" />
-               <!-- Playing Field Pane with fixed size -->
-               <Pane fx:id="playingField" maxHeight="600.0" maxWidth="300.0" minHeight="600.0" minWidth="300.0" prefHeight="600" prefWidth="300" stylesheets="@game-screen.css" />
-               <StackPane fx:id="tubeContainer" alignment="BOTTOM_CENTER" minWidth="20.0" prefHeight="150.0" prefWidth="20.0" />
-            </children>
-         </HBox>
-      
-         <!-- VBox for Hold and Next boxes stacked vertically -->
-         <VBox fx:id="nextBoxSection" maxHeight="600.0">
-            <!-- Hold Box Pane -->
-            <Pane fx:id="nextMinoBox" prefHeight="170.0" prefWidth="170.0" stylesheets="@game-screen.css">
-               <children>
-                  <Label alignment="CENTER" layoutX="37.0" layoutY="5.0" styleClass="hold-next-label" text="Next" />
-               </children>
-            </Pane>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="430.0" prefWidth="170.0" />
-         </VBox>
-      </HBox>
    </children>
 </VBox>

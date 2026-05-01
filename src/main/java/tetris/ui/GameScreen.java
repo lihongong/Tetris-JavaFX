@@ -1,6 +1,7 @@
 package tetris.ui;
 
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
@@ -15,6 +16,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -22,7 +24,6 @@ import javafx.util.Duration;
 import tetris.block.Block;
 import tetris.block.Mino;
 import tetris.block.MinoBlock;
-import tetris.util.TetrisConstants;
 import tetris.util.UiAnimation;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class GameScreen extends UiPart<VBox> {
     private static final String backgroundImagePath = "/images/gameplay_backgrounds/";
     private BackgroundImageSelector backgroundImageSelector;
 
+    @FXML
+    private VBox root;
     @FXML
     private VBox mainLayout;
     @FXML
@@ -83,13 +86,12 @@ public class GameScreen extends UiPart<VBox> {
     private GraphicsContext shadowGC; // Draw the minos' shadow in the playing field
     private GraphicsContext specialEffectGC;
     private Timeline activeBlurTimeline;
+    private ParallelTransition zoomAnimation;
 
     // Keeps data for animation
     private ArrayList<MinoBlock> fadingBlocks;
     private ArrayList<MinoBlock> fallingBlocks;
     private ArrayList<Integer> numLinesFallList;
-
-    public Parent root;
 
     public GaussianBlur gaussianBlur = new GaussianBlur(10.0);
 
@@ -480,7 +482,7 @@ public class GameScreen extends UiPart<VBox> {
         return activeBlurTimeline;
     }
     public Animation setRemoveEffects() {
-        //this.getRoot().setEffect(null); // remove any blur
+        // remove any blur
         activeBlurTimeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.15),
                         new KeyValue(gaussianBlur.radiusProperty(), 0))
@@ -649,7 +651,7 @@ public class GameScreen extends UiPart<VBox> {
         return combined;
     }
     public ParallelTransition gameScreenUiFlyDownFromTop() {
-        resetUiPositionAfterGameOverAnimation();
+        resetUiPositionAfterAnimation();
         timerSection.setTranslateY(-800);
         holdBoxMetricsSection.setTranslateY(-800);
         gameplaySection.setTranslateY(-800);
@@ -660,14 +662,38 @@ public class GameScreen extends UiPart<VBox> {
     }
 
     public ParallelTransition zoomIn() {
-        ParallelTransition gameScreenZoomIn = UiAnimation.scale(1.0f, 5.0f, 6,
-                timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
-        return gameScreenZoomIn;
+        ScaleTransition gameScreenZoomIn = UiAnimation.scale(1.0f, 5.0f, 5.5f,
+                mainLayout);
+        FadeTransition gameScreenFadeOut = UiAnimation.fadeOut(1.0f, 0.0f, 5.5f,
+                mainLayout);
+        this.zoomAnimation = new ParallelTransition(gameScreenZoomIn, gameScreenFadeOut);
+
+        return this.zoomAnimation;
+    }
+    public Animation closeAndReopen() {
+        ColorAdjust dimEffect = new ColorAdjust();
+        root.setEffect(dimEffect);
+
+        Timeline darken = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(dimEffect.brightnessProperty(), 0)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(dimEffect.brightnessProperty(), -1))
+        );
+        darken.setOnFinished(e -> {
+            resetUiPositionAfterAnimation();
+            Timeline brighten = new Timeline(
+                    new KeyFrame(Duration.ZERO, new KeyValue(dimEffect.brightnessProperty(), -1)),
+                    new KeyFrame(Duration.seconds(1), new KeyValue(dimEffect.brightnessProperty(), 0))
+            );
+            brighten.play();
+        });
+        return darken;
     }
 
-
-    public void resetUiPositionAfterGameOverAnimation() {
-        resetNodes(timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
+    public void resetUiPositionAfterAnimation() {
+        if (zoomAnimation != null) {
+            zoomAnimation.stop();
+        }
+        resetNodes(mainLayout, timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
     }
     private void resetNodes(Node... nodes) {
         for (Node node : nodes) {
@@ -678,6 +704,13 @@ public class GameScreen extends UiPart<VBox> {
             node.setScaleY(1);
             node.setOpacity(1);
         }
+    }
+    public String getTimerString() {
+        return timer.getText();
+    }
+    public String getBestTimeString() {
+        // don't have to ask the model for the new best score
+        return bestTimeLabel.getText();
     }
 
 }

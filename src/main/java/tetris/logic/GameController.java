@@ -137,8 +137,9 @@ public class GameController {
 
         if (gameState.isSprintOver()) {
             Runnable pauseGameLoopAndSprintOverEffects = () -> {
-                System.out.println("here");
                 sprintGameLoop.pause();
+                keyInputController.disableKeyInput();
+
                 Runnable allowKeyInput = () -> {
                     keyInputController.enableKeyInput();
                 };
@@ -229,7 +230,7 @@ public class GameController {
         };
 
         // transition effects
-        sprintOverScreen.closeTimesUpScreenEffects(gameScreen, restartGameAfterEffects);
+        sprintOverScreen.closeSprintOverScreenEffects(gameScreen, restartGameAfterEffects);
     }
     public void restartGameInTimesUp() {
         // transition effects

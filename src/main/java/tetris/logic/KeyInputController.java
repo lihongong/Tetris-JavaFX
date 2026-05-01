@@ -123,8 +123,8 @@ public class KeyInputController {
 
                 if (gameState.isGameOver()) {
                     onlyPressKeyHandler(KeyCode.R, gameController::restartGameInGameOver);
-                    //gameState.restartGame();
-                    //gameState.playGameLoop(););
+                } else if (gameState.isSprintOver()) {
+                    onlyPressKeyHandler(KeyCode.R, gameController::restartGameInSprintOver);
                 } else if (gameState.isTimesUp()) {
                     onlyPressKeyHandler(KeyCode.R, gameController::restartGameInTimesUp);
                 } else if (gameState.isGamePaused()) {

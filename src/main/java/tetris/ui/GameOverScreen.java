@@ -181,11 +181,11 @@ public class GameOverScreen extends UiPart<VBox> {
         float animateDuration = 0.2f;
 
         ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
-        ParallelTransition fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, restartButton,
+        ParallelTransition fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, restartButton,
                                                              exitButton, gameOverLabel);
         // unblur the gameScreen
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
-        ParallelTransition buttonsAndLabelOutEffects = new ParallelTransition(slideOutTrans, fadeInTrans, gameScreenUnblur);
+        ParallelTransition buttonsAndLabelOutEffects = new ParallelTransition(slideOutTrans, fadeOutTrans, gameScreenUnblur);
 
         PauseTransition waitHalfSecond = new PauseTransition(Duration.seconds(0.5));
 
@@ -230,7 +230,7 @@ public class GameOverScreen extends UiPart<VBox> {
 
             UiPart.setUiEffectsOff(); // enable ui interaction again
 
-            gameScreen.resetUiPositionAfterGameOverAnimation();
+            gameScreen.resetUiPositionAfterAnimation();
 
             // allow select menu button to shift left on mouse enter once animation is over
             sprintModesScreen.setIsButtonMouseTransparent(false);
@@ -262,7 +262,7 @@ public class GameOverScreen extends UiPart<VBox> {
 
             UiPart.setUiEffectsOff(); // enable ui interaction again
 
-            gameScreen.resetUiPositionAfterGameOverAnimation();
+            gameScreen.resetUiPositionAfterAnimation();
 
             // allow select menu button to shift left on mouse enter once animation is over
             selectMenuScreen.setIsButtonMouseTransparent(false);
