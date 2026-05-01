@@ -7,15 +7,15 @@
 
 <VBox alignment="CENTER" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="pausedLabel" alignment="TOP_CENTER" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0" stylesheets="@PauseMenu.css" text="Paused" />
+      <Label fx:id="pausedLabel" alignment="TOP_CENTER" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0" stylesheets="@pause-menu.css" text="Paused" />
       <HBox alignment="CENTER_RIGHT">
          <children>
             <VBox HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="400.0" />
             <VBox fx:id="vbox" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="114.0" spacing="20.0">
                <children>
-                  <Button fx:id="resumeButton" focusTraversable="false" minHeight="100.0" minWidth="400.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleResumeButton" onMouseEntered="#handleResumeButtonMouseEnter" onMouseExited="#handleResumeButtonMouseExit" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="Resume" />
-                  <Button fx:id="restartButton" focusTraversable="false" minHeight="100.0" minWidth="400.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRestartButton" onMouseEntered="#handleRestartButtonMouseEnter" onMouseExited="#handleRestartButtonMouseExit" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="Restart" />
-                  <Button fx:id="exitButton" focusTraversable="false" minHeight="100.0" minWidth="400.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleExitButton" onMouseEntered="#handleExitButtonMouseEnter" onMouseExited="#handleExitButtonMouseExit" styleClass="left-aligned-button" stylesheets="@PauseMenu.css" text="Exit" />
+                  <Button fx:id="resumeButton" focusTraversable="false" minHeight="100.0" minWidth="400.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleResumeButton" onMouseEntered="#handleResumeButtonMouseEnter" onMouseExited="#handleResumeButtonMouseExit" styleClass="left-aligned-button" stylesheets="@global.css" text="Resume" />
+                  <Button fx:id="restartButton" focusTraversable="false" minHeight="100.0" minWidth="400.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRestartButton" onMouseEntered="#handleRestartButtonMouseEnter" onMouseExited="#handleRestartButtonMouseExit" styleClass="left-aligned-button" stylesheets="@global.css" text="Restart" />
+                  <Button fx:id="exitButton" focusTraversable="false" minHeight="100.0" minWidth="400.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleExitButton" onMouseEntered="#handleExitButtonMouseEnter" onMouseExited="#handleExitButtonMouseExit" styleClass="left-aligned-button" stylesheets="@global.css" text="Exit" />
                </children>
             </VBox>
          </children>

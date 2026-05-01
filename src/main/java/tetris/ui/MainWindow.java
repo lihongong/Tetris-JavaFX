@@ -110,7 +110,7 @@ public class MainWindow extends UiPart<StackPane> {
 
     public void setUpGame() {
         this.gameController = new GameController(gameScreen, pauseMenuScreen, gameOverScreen, timesUpScreen,
-                startMenuScreen, selectMenuScreen, sprintModesScreen, this);
+                startMenuScreen, selectMenuScreen, sprintModesScreen, mainScene);
         // set button handler
         pauseMenuScreen.setResumeRestartExitButtonHandler(gameController::resumeGame, gameController::restartGameInPauseMenu, gameController::exitButtonInPauseMenu);
 
@@ -123,7 +123,7 @@ public class MainWindow extends UiPart<StackPane> {
         sprintModesScreen.setSprintModesButtonsHandler(gameController::clearALinesButton, gameController::clearBLinesButton, gameController::clearCLinesButton, gameController::sprintModesBackButton);
 
         GameState gameState = gameController.getGameState();
-        new KeyInputController(mainScene, gameState, gameController);
+        //new KeyInputController(mainScene, gameState, gameController);
     }
 
     public void removeNodesFromRoot(Node... toBeRemovedNodes) {

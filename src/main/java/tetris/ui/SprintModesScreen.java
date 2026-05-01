@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tetris.util.ButtonHandler;
+import tetris.util.UiAnimation;
 
 public class SprintModesScreen extends UiPart<VBox> {
 
@@ -136,38 +137,11 @@ public class SprintModesScreen extends UiPart<VBox> {
         float fadeInTo = 1.0f;
         float animateDuration = 0.27f;
 
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), clear20LinesButton);
-        slide1.setFromX(fromX);
-        slide1.setToX(toX);
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), clear40LinesButton);
-        slide2.setFromX(fromX);
-        slide2.setToX(toX);
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), clear60LinesButton);
-        slide3.setFromX(fromX);
-        slide3.setToX(toX);
-        TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), backButton);
-        slide4.setFromX(fromX);
-        slide4.setToX(toX);
-        FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(animateDuration), clear20LinesButton);
-        fadeIn1.setFromValue(fadeInFrom);
-        fadeIn1.setToValue(fadeInTo);
-        FadeTransition fadeIn2 = new FadeTransition(Duration.seconds(animateDuration), clear40LinesButton);
-        fadeIn2.setFromValue(fadeInFrom);
-        fadeIn2.setToValue(fadeInTo);
-
-        FadeTransition fadeIn3 = new FadeTransition(Duration.seconds(animateDuration), clear60LinesButton);
-        fadeIn3.setFromValue(fadeInFrom);
-        fadeIn3.setToValue(fadeInTo);
-
-        FadeTransition fadeIn4 = new FadeTransition(Duration.seconds(animateDuration), backButton);
-        fadeIn4.setFromValue(fadeInFrom);
-        fadeIn4.setToValue(fadeInTo);
-
-        FadeTransition titleLabelFadeIn = new FadeTransition(Duration.seconds(animateDuration), titleLabel);
-        titleLabelFadeIn.setFromValue(fadeInFrom);
-        titleLabelFadeIn.setToValue(fadeInTo);
-
-        return new ParallelTransition(slide1, slide2, slide3, slide4, fadeIn1, fadeIn2, fadeIn3, fadeIn4, titleLabelFadeIn);
+        ParallelTransition slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration, clear20LinesButton,
+                                                              clear40LinesButton, clear60LinesButton, backButton);
+        ParallelTransition fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration, clear20LinesButton,
+                                                    clear40LinesButton, clear60LinesButton, backButton, titleLabel);
+        return new ParallelTransition(slideInTrans, fadeInTrans);
     }
 
     private ParallelTransition slideOutButtons() {
@@ -176,40 +150,12 @@ public class SprintModesScreen extends UiPart<VBox> {
         float fadeOutTo = 0.2f;
         float animateDuration = 0.3f;
 
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), clear20LinesButton);
-        slide1.setToX(toX);
+        ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration, clear20LinesButton,
+                                                                clear40LinesButton, clear60LinesButton, backButton);
+        ParallelTransition fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, clear20LinesButton,
+                                                    clear40LinesButton, clear60LinesButton, backButton, titleLabel);
 
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), clear40LinesButton);
-        slide2.setToX(toX);
-
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), clear60LinesButton);
-        slide3.setToX(toX);
-
-        TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), backButton);
-        slide4.setToX(toX);
-
-        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), clear20LinesButton);
-        fadeOut1.setFromValue(fadeOutFrom);
-        fadeOut1.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), clear40LinesButton);
-        fadeOut2.setFromValue(fadeOutFrom);
-        fadeOut2.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut3 = new FadeTransition(Duration.seconds(animateDuration), clear60LinesButton);
-        fadeOut3.setFromValue(fadeOutFrom);
-        fadeOut3.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut4 = new FadeTransition(Duration.seconds(animateDuration), backButton);
-        fadeOut4.setFromValue(fadeOutFrom);
-        fadeOut4.setToValue(fadeOutTo);
-
-        FadeTransition titleLabelFadeOut = new FadeTransition(Duration.seconds(animateDuration), titleLabel);
-        titleLabelFadeOut.setFromValue(fadeOutFrom);
-        titleLabelFadeOut.setToValue(fadeOutTo);
-
-        return new ParallelTransition(slide1, slide2, slide3, slide4, fadeOut1, fadeOut2, fadeOut3,
-                fadeOut4, titleLabelFadeOut);
+        return new ParallelTransition(slideOutTrans, fadeOutTrans);
     }
 
 }

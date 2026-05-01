@@ -12,9 +12,9 @@ import java.util.Set;
 public class KeyInputController {
 
     public GameState gameState;
-    public GameController gameController;
-    public GameplayManager gameplayManager;
-    public ActiveStateManager activeStateManager;
+    private GameController gameController;
+    private ActiveStateManager activeStateManager;
+    public boolean isIgnoreKeyInput;
 
     // For key press logic
     private final Set<KeyCode> pressedKeys;
@@ -44,16 +44,21 @@ public class KeyInputController {
             hasBeenHandled = false;
         }
     }
+    public void enableKeyInput() {
+        this.isIgnoreKeyInput = false;
+    }
+    public void disableKeyInput() {
+        this.isIgnoreKeyInput = true;
+    }
 
     /**
      * Initialises the keyboard input checker via {@code AnimationTimer}.
      */
-    public KeyInputController(Scene scene, GameState gameState, GameController gameController) {
+    public KeyInputController(Scene scene, GameState gameState, GameController gameController,
+                              ActiveStateManager activeStateManager) {
         this.gameState = gameState;
         this.gameController = gameController;
-        this.gameplayManager = gameController.getGameplayManager();
-        this.activeStateManager = gameplayManager.getActiveStateManager();
-
+        this.activeStateManager = activeStateManager;
 
         pressedKeys = new HashSet<>();
         keyStates = new HashMap<>();
@@ -112,7 +117,7 @@ public class KeyInputController {
         new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
-                if (gameController.isIgnoreKeyInput()) {
+                if (isIgnoreKeyInput) {
                     return;
                 }
 

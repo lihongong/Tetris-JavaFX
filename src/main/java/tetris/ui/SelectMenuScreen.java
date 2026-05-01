@@ -163,7 +163,7 @@ public class SelectMenuScreen extends UiPart<VBox> {
         // transition effects
         // make GameScreen appear
         this.showNode(gameScreen.getRoot());
-        gameScreen.getRoot().setEffect(null); // clear the blur effects just in case.
+        //gameScreen.getRoot().setEffect(null); // clear the blur effects just in case.
         float animateDuration = 0.8f; // Fade into Game Screen Duration
         FadeTransition fadeInGameScreen = UiAnimation.fadeIn(0.0f, 1.0f, animateDuration, gameScreen.getRoot());
 
@@ -227,14 +227,11 @@ public class SelectMenuScreen extends UiPart<VBox> {
         float fadeInTo = 1.0f;
         float animateDuration = 0.27f;
 
-        ArrayList<TranslateTransition> slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration, relaxButton,
+        ParallelTransition slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration, relaxButton,
                                                                           sprintButton, blitzButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration, relaxButton,
+        ParallelTransition fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration, relaxButton,
                                                                    sprintButton, blitzButton, exitButton, titleLabel);
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slideInTrans);
-        combined.getChildren().addAll(fadeInTrans);
-        return combined;
+        return new ParallelTransition(slideInTrans, fadeInTrans);
     }
     private ParallelTransition slideOutButtons() {
         int toX = 1200;
@@ -242,39 +239,10 @@ public class SelectMenuScreen extends UiPart<VBox> {
         float fadeOutTo = 0.2f;
         float animateDuration = 0.3f;
 
-        TranslateTransition slide1 = new TranslateTransition(Duration.seconds(animateDuration), relaxButton);
-        slide1.setToX(toX);
-
-        TranslateTransition slide2 = new TranslateTransition(Duration.seconds(animateDuration), sprintButton);
-        slide2.setToX(toX);
-
-        TranslateTransition slide3 = new TranslateTransition(Duration.seconds(animateDuration), blitzButton);
-        slide3.setToX(toX);
-
-        TranslateTransition slide4 = new TranslateTransition(Duration.seconds(animateDuration), exitButton);
-        slide4.setToX(toX);
-
-        FadeTransition fadeOut1 = new FadeTransition(Duration.seconds(animateDuration), relaxButton);
-        fadeOut1.setFromValue(fadeOutFrom);
-        fadeOut1.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(animateDuration), sprintButton);
-        fadeOut2.setFromValue(fadeOutFrom);
-        fadeOut2.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut3 = new FadeTransition(Duration.seconds(animateDuration), blitzButton);
-        fadeOut3.setFromValue(fadeOutFrom);
-        fadeOut3.setToValue(fadeOutTo);
-
-        FadeTransition fadeOut4 = new FadeTransition(Duration.seconds(animateDuration), exitButton);
-        fadeOut4.setFromValue(fadeOutFrom);
-        fadeOut4.setToValue(fadeOutTo);
-
-        FadeTransition titleLabelFadeOut = new FadeTransition(Duration.seconds(animateDuration), titleLabel);
-        titleLabelFadeOut.setFromValue(fadeOutFrom);
-        titleLabelFadeOut.setToValue(fadeOutTo);
-
-        return new ParallelTransition(slide1, slide2, slide3, slide4, fadeOut1, fadeOut2, fadeOut3,
-                fadeOut4, titleLabelFadeOut);
+        ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration, relaxButton, sprintButton,
+                                                                blitzButton, exitButton);
+        ParallelTransition fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, relaxButton,
+                                                              sprintButton, blitzButton, exitButton, titleLabel);
+        return new ParallelTransition(slideOutTrans, fadeOutTrans);
     }
 }

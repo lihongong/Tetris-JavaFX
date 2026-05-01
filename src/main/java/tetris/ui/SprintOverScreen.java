@@ -45,7 +45,8 @@ public class SprintOverScreen extends UiPart<VBox> {
     }
 
     public void openTimesUpScreenEffects(GameState gameState, GameScreen gameScreen) {
-        gameScreen.setBlurEffects();
+        //gameScreen.setBlurEffects();
+        Animation gameScreenBlur = gameScreen.getBlurEffects();
 
         setButtonOnMouseEntered(gameState);
 
@@ -73,7 +74,7 @@ public class SprintOverScreen extends UiPart<VBox> {
         timesUpLabelFadeIn.setFromValue(0.0);
         timesUpLabelFadeIn.setToValue(1.0);
 
-        ParallelTransition combined = new ParallelTransition(slide2, fade2, slide3, fade3, timesUpLabelFadeIn);
+        ParallelTransition combined = new ParallelTransition(slide2, fade2, slide3, fade3, timesUpLabelFadeIn, gameScreenBlur);
 
         combined.setOnFinished(e -> {
             // dont need istrans flag liao

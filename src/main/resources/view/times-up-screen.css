@@ -1,0 +1,7 @@
+.label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 60px; /* Adjusted from 40px to match design */
+    -fx-text-fill: #ff9827;
+    -fx-effect: dropshadow(three-pass-box, rgb(213,108,9), 2, 1.0, 0, 0);
+}

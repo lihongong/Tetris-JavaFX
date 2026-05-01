@@ -1,26 +1,28 @@
 package tetris.ui;
 
 import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import tetris.logic.GameState;
 import tetris.util.ButtonHandler;
 import tetris.util.UiAnimation;
 
-import java.util.ArrayList;
+import static tetris.util.TetrisConstants.GAME_OVER_LABEL_CENTER_Y;
+import static tetris.util.TetrisConstants.TIMES_UP_LABEL_CENTER_Y;
 
 public class GameOverScreen extends UiPart<VBox> {
     private static final String FXML = "GameOverScreen.fxml";
+    private static final String koString = "K O !";
+    private static final String gameOverString = "Game Over";
     private ButtonHandler restartButtonHandler;
     private ButtonHandler exitButtonHandler;
     @FXML
@@ -75,48 +77,98 @@ public class GameOverScreen extends UiPart<VBox> {
     /**
      * Shows the Game over Screen by Sliding in Buttons from the right to the center, fading in the Buttons & Label.
      * Blur the Game Screen.
+     * @param runnable enables the key input again.
      */
-    public void openGameOverScreenEffects(GameScreen gameScreen) {
-        // prevent multiple effects at once
+    public void openGameOverScreenEffects(GameScreen gameScreen, Runnable runnable) {
         if (UiPart.isUiEffectsOn()) {
             return;
         }
-        // don't set effects is on so that when Game Over Buttons shows up, they will immediately respond when mouse
-        // on enter -> nicer animation style
-        // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
-        // going on, e.g. Game Over Screen is Fading/Sliding in, immediately press R, the gae over screen will immediately
-        // get faded out/ slide out -> more responsive tho :)
+        UiPart.setUiEffectsOn();
 
-        // blur the gameScreen in the background
-        gameScreen.setBlurEffects();
-
-        // Game Over Screen Appears!!! :)
+        initGameOverScreenPhaseOne();
+        SequentialTransition phaseOneAnimation = gameOverAnimationPhaseOne(gameScreen);
+        phaseOneAnimation.setOnFinished(e -> {
+            initGameOverScreenPhaseTwo();
+            // Button and "Game Over" label slide into screen
+            gameOverAnimationPhaseTwo(gameScreen, runnable);
+        });
+        phaseOneAnimation.play();;
+    }
+    private void initGameOverScreenPhaseOne() {
+        // Times Up Screen Appear!!! :)
         this.showNode(this.getRoot());
 
+        gameOverLabel.setOpacity(1.0);
+        gameOverLabel.setText(koString);
+        gameOverLabel.setTranslateX(-10); // due to "!", the KO need to be adjusted so it looks centered
+        gameOverLabel.setTranslateY(GAME_OVER_LABEL_CENTER_Y); // place the KO! label at the middle of the gameScreen at first
+        restartButton.setOpacity(0); // hide buttons at first :)
+        exitButton.setOpacity(0);
+        // so that when sliding in animation finishes, the mouse will be detected by buttons as "enter" and animate
+        // the "pop left of the buttons", even when the mouse is already inside the button. This is because we disable
+        // animation when buttons are sliding in, so the buttons will already be "entered" but no "on enter" animation
+        // will happen
+        restartButton.setMouseTransparent(true);
+        exitButton.setMouseTransparent(true);
+    }
+    private SequentialTransition gameOverAnimationPhaseOne(GameScreen gameScreen) {
+        RotateTransition koRotate1 = UiAnimation.rotate(15, 0.1f, gameOverLabel);
+        ScaleTransition koLabelGrow = UiAnimation.scale(1.0f, 3.0f, 0.15f, gameOverLabel);
+        ParallelTransition koLabelShowUp = new ParallelTransition(koRotate1, koLabelGrow);
+
+        PauseTransition pauseAfterKOLabel = UiAnimation.pause(1.5f);
+
+        float animateDuration = 1.2f;
+        RotateTransition koRotate2 = UiAnimation.rotate(20, animateDuration, gameOverLabel);
+        TranslateTransition koFalling = UiAnimation.fall(TIMES_UP_LABEL_CENTER_Y, 900, animateDuration, gameOverLabel);
+
+        ParallelTransition gameScreenCollapsing = gameScreen.collapsingGameScreenEffects();
+
+        ParallelTransition collapsing = new ParallelTransition();
+        collapsing.getChildren().addAll(gameScreenCollapsing, koFalling, koRotate2);
+
+        PauseTransition pauseAfterCollapse = new PauseTransition(Duration.seconds(0.4));
+
+        return new SequentialTransition(koLabelShowUp, pauseAfterKOLabel, collapsing, pauseAfterCollapse);
+    }
+    private void initGameOverScreenPhaseTwo() {
+        // set up for "second stage" of game over screen
+        gameOverLabel.setText(gameOverString);
+        gameOverLabel.setTranslateY(0);
+        gameOverLabel.setRotate(0);
+        gameOverLabel.setScaleX(1.5);
+        gameOverLabel.setScaleY(1.5);
+    }
+    private void gameOverAnimationPhaseTwo(GameScreen gameScreen, Runnable runnable) {
         int fromX = 500;
         int toX = 0;
         float fadeInFrom = 0.0f;
         float fadeInTo = 1.0f;
-        float animateDuration = 0.1f;
+        float animateDuration = 0.3f;
 
-        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideIn(fromX, toX, animateDuration,
-                                                                            restartButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration,
-                                                                   restartButton, exitButton, gameOverLabel);
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slidingInTrans);
-        combined.getChildren().addAll(fadeInTrans);
+        Animation gameScreenBlur = gameScreen.getBlurEffects();
 
-        combined.setOnFinished(e -> {
+        ParallelTransition slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration,
+                restartButton, exitButton, gameOverLabel);
+        ParallelTransition fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration,
+                restartButton, exitButton, gameOverLabel);
+        ParallelTransition gameOverMenuShowUp = new ParallelTransition(slideInTrans, fadeInTrans, gameScreenBlur);
+
+        gameOverMenuShowUp.setOnFinished(e -> {
             UiPart.setUiEffectsOff();
+            restartButton.setMouseTransparent(false);
+            exitButton.setMouseTransparent(false);
+
+            runnable.run();
         });
-        combined.play();
+        gameOverMenuShowUp.play();
     }
     /**
      * Close the Game Over Screen when user click on Restart Button.
      * Slide the buttons to the right, Fade out the buttons & Title Label, Unblur Game Screen.
+     * @param runnable execute currentGameLoop.play()
      */
-    public void closeGameOverScreenEffects(GameScreen gameScreen) {
+    public void closeGameOverScreenEffects(GameScreen gameScreen, Runnable runnable) {
         // prevent multiple animation happening at once
         if (UiPart.isUiEffectsOn()) {
             return;
@@ -125,28 +177,30 @@ public class GameOverScreen extends UiPart<VBox> {
 
         int toX = 500;
         float fadeOutFrom = 1.0f;
-        float fadeOutTo = 0.2f;
+        float fadeOutTo = 0.0f;
         float animateDuration = 0.2f;
 
-        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideOut(toX, animateDuration,
-                                                                            restartButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
-                                                                   restartButton, exitButton, gameOverLabel);
+        ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
+        ParallelTransition fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, restartButton,
+                                                             exitButton, gameOverLabel);
         // unblur the gameScreen
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
+        ParallelTransition buttonsAndLabelOutEffects = new ParallelTransition(slideOutTrans, fadeInTrans, gameScreenUnblur);
 
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slidingInTrans);
-        combined.getChildren().addAll(fadeInTrans);
-        combined.getChildren().addAll(gameScreenUnblur);
+        PauseTransition waitHalfSecond = new PauseTransition(Duration.seconds(0.5));
 
-        combined.setOnFinished(e -> {
+        ParallelTransition gameScreenFallFromTop = gameScreen.gameScreenUiFlyDownFromTop();
+
+        SequentialTransition gameRestartTransition = new SequentialTransition(buttonsAndLabelOutEffects, waitHalfSecond,
+                                                           gameScreenFallFromTop);
+
+        gameRestartTransition.setOnFinished(e -> {
             UiPart.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
-
             UiPart.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
+            runnable.run();
         });
 
-        combined.play();
+        gameRestartTransition.play();
     }
     /**
      * Add Select Menu Screen to MainWindow and fade in Select Menu Screen.
@@ -175,6 +229,8 @@ public class GameOverScreen extends UiPart<VBox> {
             UiPart.hideNode(this.getRoot(), gameScreen.getRoot());
 
             UiPart.setUiEffectsOff(); // enable ui interaction again
+
+            gameScreen.resetUiPositionAfterGameOverAnimation();
         });
 
         combined.play();
@@ -202,6 +258,8 @@ public class GameOverScreen extends UiPart<VBox> {
             UiPart.hideNode(this.getRoot(), gameScreen.getRoot());
 
             UiPart.setUiEffectsOff(); // enable ui interaction again
+
+            gameScreen.resetUiPositionAfterGameOverAnimation();
         });
 
         combined.play();
@@ -211,18 +269,13 @@ public class GameOverScreen extends UiPart<VBox> {
         float fadeOutFrom = 1.0f;
         float fadeOutTo = 0.2f;
         // Slide out restart & Exit Buttons
-        ArrayList<TranslateTransition> slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
+        ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
         // Fade out Restart, Exit, Game Over Label
-        ArrayList<FadeTransition> fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
+        ParallelTransition fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
                                                                      restartButton, exitButton, gameOverLabel);
         // unblur the gameScreen - just in case
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
         // combine all animation :)
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slideOutTrans);
-        combined.getChildren().addAll(fadeOutTrans);
-        combined.getChildren().addAll(gameScreenUnblur);
-
-        return combined;
+        return new ParallelTransition(slideOutTrans, fadeOutTrans, gameScreenUnblur);
     }
 }

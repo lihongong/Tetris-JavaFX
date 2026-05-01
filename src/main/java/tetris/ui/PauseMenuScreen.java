@@ -109,35 +109,44 @@ public class PauseMenuScreen extends UiPart<VBox> {
         if (UiPart.isUiEffectsOn()) {
             return;
         }
-        // don't set effects is on so that when Pause Menu Buttons shows up, they will immediately respond when mouse
-        // on enter -> nicer animation style
-        // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
-        // going on, e.g. Pause Menu Screen is Fading/Sliding in, immediately press Esc, the pause screen will immediately
-        // get faded out/ slide out -> more responsive tho :)
+        UiPart.setUiEffectsOn();
+
+        // so that when sliding in animation finishes, the mouse will be detected by buttons as "enter" and animate
+        // the "pop left of the buttons", even when the mouse is already inside the button. This is because we disable
+        // animation when buttons are sliding in, so the buttons will already be "entered" but no "on enter" animation
+        // will happen
+        resumeButton.setMouseTransparent(true);
+        restartButton.setMouseTransparent(true);
+        exitButton.setMouseTransparent(true);
 
         // blur the game screen in the background
-        gameScreen.setBlurEffects();
-        // Pause menu screen appear!!!
-        this.showNode(this.getRoot());
+        Animation gameScreenBlur = gameScreen.getBlurEffects();
 
-        int fromX = 500;
+        int fromX = 700;
         int toX = 0;
         float fadeInFrom = 0.0f;
         float fadeInTo = 1.0f;
-        float animateDuration = 0.1f;
+        float animateDuration = 0.2f;
 
-        ArrayList<TranslateTransition> slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration,
-                                                                          resumeButton, restartButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration,
+        //ArrayList<TranslateTransition> slideInTrans = UiAnimation.slideInT(fromX, toX, animateDuration, resumeButton, restartButton, exitButton);
+        ParallelTransition slideInTrans = UiAnimation.slideIn(fromX, toX, animateDuration, resumeButton, restartButton, exitButton);
+
+        ParallelTransition fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration,
                                                                   resumeButton, restartButton, exitButton, pausedLabel);
 
-        ParallelTransition combined = new ParallelTransition();
+        ParallelTransition combined = new ParallelTransition(fadeInTrans, gameScreenBlur);
         combined.getChildren().addAll(slideInTrans);
-        combined.getChildren().addAll(fadeInTrans);
 
         combined.setOnFinished(e -> {
             UiPart.setUiEffectsOff();
+            resumeButton.setMouseTransparent(false);
+            restartButton.setMouseTransparent(false);
+            exitButton.setMouseTransparent(false);
         });
+
+        // Pause menu screen appear!!!
+        this.showNode(this.getRoot());
+
         combined.play();
     }
     /**
@@ -154,22 +163,19 @@ public class PauseMenuScreen extends UiPart<VBox> {
         }
         UiPart.setUiEffectsOn();
 
-        int toX = 500;
+        int toX = 1000;
         float fadeOutFrom = 1.0f;
         float fadeOutTo = 0.2f;
-        float animateDuration = 0.2f;
+        float animateDuration = 0.4f;
 
-        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideOut(toX, animateDuration,
-                                                                            resumeButton, restartButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
-                                                                  resumeButton, restartButton, exitButton, pausedLabel);
+        ParallelTransition slidingInTrans = UiAnimation.slideOut(toX, animateDuration, resumeButton, restartButton,
+                                                                 exitButton);
+        ParallelTransition fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, resumeButton,
+                                                             restartButton, exitButton, pausedLabel);
         // unblur the gameScreen
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slidingInTrans);
-        combined.getChildren().addAll(fadeInTrans);
-        combined.getChildren().addAll(gameScreenUnblur);
+        ParallelTransition combined = new ParallelTransition(slidingInTrans, fadeInTrans, gameScreenUnblur);
 
         combined.setOnFinished(e -> {
             UiPart.hideNode(this.getRoot());
@@ -242,18 +248,13 @@ public class PauseMenuScreen extends UiPart<VBox> {
         float fadeOutTo = 0.2f;
 
         // Slide out restart & Exit Buttons
-        ArrayList<TranslateTransition> slideOutTrans = UiAnimation.slideOut(toX, animateDuration,
+        ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration,
                                                                             resumeButton, restartButton, exitButton);
         // Fade out Restart, Exit, Game Over Label
-        ArrayList<FadeTransition> fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
+        ParallelTransition fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
                                                                 resumeButton, restartButton, exitButton, pausedLabel);
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slideOutTrans);
-        combined.getChildren().addAll(fadeOutTrans);
-        combined.getChildren().addAll(gameScreenUnblur);
-
-        return combined;
+        return new ParallelTransition(slideOutTrans, fadeOutTrans, gameScreenUnblur);
     }
 }

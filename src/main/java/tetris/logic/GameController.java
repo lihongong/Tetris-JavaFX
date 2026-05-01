@@ -1,6 +1,7 @@
 package tetris.logic;
 
 import javafx.animation.*;
+import javafx.scene.Scene;
 import javafx.util.Duration;
 import tetris.ui.*;
 import tetris.util.GameMode;
@@ -16,6 +17,7 @@ public class GameController {
 
     // model manager
     private GameplayManager gameplayManager;
+    private KeyInputController keyInputController;
 
     // ui
     private MainWindow mainWindow;
@@ -34,7 +36,7 @@ public class GameController {
     private Timeline sprintGameLoop;
     private Timeline blitzGameLoop;
 
-    private boolean isIgnoreKeyInput;
+    //private boolean isIgnoreKeyInput;
 
 
 
@@ -52,7 +54,7 @@ public class GameController {
     public GameController(GameScreen gameScreen, PauseMenuScreen pauseMenuScreen, GameOverScreen gameOverScreen,
                           TimesUpScreen timesUpScreen, StartMenuScreen startMenuScreen,
                           SelectMenuScreen selectMenuScreen, SprintModesScreen sprintModesScreen,
-                          MainWindow mainWindow) {
+                          Scene mainScene) {
 
         this.gameScreen = gameScreen;
         this.pauseMenuScreen = pauseMenuScreen;
@@ -62,15 +64,16 @@ public class GameController {
         this.selectMenuScreen = selectMenuScreen;
         this.sprintModesScreen = sprintModesScreen;
 
-        this.mainWindow = mainWindow;
-
         this.timeManager = new TimeManager();
         this.gameState = new GameState(timeManager);
 
         this.gameplayManager = new GameplayManager(gameState, gameScreen);
         setUpGameLoop();
 
-        this.isIgnoreKeyInput = true;
+        this.keyInputController = new KeyInputController(mainScene, gameState, this,
+                gameplayManager.getActiveStateManager());
+
+        //this.isIgnoreKeyInput = true;
     }
     private void setUpGameLoop() {
         // Create the game loop
@@ -108,9 +111,16 @@ public class GameController {
         assert relaxGameLoop == currentGameLoop;
 
         if (gameState.isGameOver()) {
+            // pause game loop
             relaxGameLoop.pause();
 
-            gameOverScreen.openGameOverScreenEffects(gameScreen);
+            // disable key input
+            keyInputController.disableKeyInput();
+            // only enable key input after animation is fully finished
+            Runnable allowKeyInput = () -> {
+                keyInputController.enableKeyInput();
+            };
+            gameOverScreen.openGameOverScreenEffects(gameScreen, allowKeyInput);
         } else {
             gameplayManager.update();
         }
@@ -129,7 +139,13 @@ public class GameController {
         } else if (gameState.isGameOver()) {
             sprintGameLoop.pause();
 
-            gameOverScreen.openGameOverScreenEffects(gameScreen);
+            // disable key input
+            keyInputController.disableKeyInput();
+            // only enable key input after animation is fully finished
+            Runnable allowKeyInput = () -> {
+                keyInputController.enableKeyInput();
+            };
+            gameOverScreen.openGameOverScreenEffects(gameScreen, allowKeyInput);
         } else {
             //gameScreen.updateStopWatch(timeManager.getCurrentCounter());
             gameplayManager.update();
@@ -147,12 +163,17 @@ public class GameController {
         } else if (gameState.isGameOver()) {
             blitzGameLoop.pause();
 
-            gameOverScreen.openGameOverScreenEffects(gameScreen);
+            // disable key input
+            keyInputController.disableKeyInput();
+            // only enable key input after animation is fully finished
+            Runnable allowKeyInput = () -> {
+                keyInputController.enableKeyInput();
+            };
+            gameOverScreen.openGameOverScreenEffects(gameScreen, allowKeyInput);
         } else {
             gameplayManager.update();
         }
     }
-
 
     public GameState getGameState() {
         return this.gameState;
@@ -179,12 +200,14 @@ public class GameController {
     }
 
     public void restartGameInGameOver() {
-        // transition effects
-        gameOverScreen.closeGameOverScreenEffects(gameScreen);
-
-        // restart model
-        currentGameLoop.play();
         gameplayManager.restartGame();
+        // restart model
+        Runnable restartGameAfterEffects = () -> {
+            currentGameLoop.play();
+        };
+
+        // transition effects
+        gameOverScreen.closeGameOverScreenEffects(gameScreen, restartGameAfterEffects);
     }
 
     public void restartGameInTimesUp() {
@@ -206,7 +229,7 @@ public class GameController {
     }
 
     public void exitButtonInGameOver() {
-        this.isIgnoreKeyInput = false;
+        keyInputController.disableKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by game over screen
@@ -217,14 +240,14 @@ public class GameController {
         }
     }
     public void exitButtonInTimesUp() {
-        this.isIgnoreKeyInput = false;
+        keyInputController.disableKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by times up screen (DONT NEED CARE ABT SPRINT MODE CASE)
         timesUpScreen.fromTimesUpScreenToSelectMenu(selectMenuScreen, gameScreen);
     }
     public void exitButtonInPauseMenu() {
-        this.isIgnoreKeyInput = true;
+        keyInputController.disableKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by pause menu screen :)
@@ -241,14 +264,14 @@ public class GameController {
 
     public void startButtonInStartMenu() {
         // NOTE: no check of "is transition effects on" so it feels more responsive
-        this.isIgnoreKeyInput = true; // don't allow key input
+        keyInputController.disableKeyInput(); // don't allow key input
 
         // transition effects
         startMenuScreen.fromStartMenuToSelectMenu(selectMenuScreen);
     }
 
     public void exitButtonInSelectMenu() {
-        this.isIgnoreKeyInput = true;
+        keyInputController.disableKeyInput();
 
         // transition effects
         selectMenuScreen.fromSelectMenuToStartMenu(startMenuScreen);
@@ -306,7 +329,7 @@ public class GameController {
         currentGameLoop = sprintGameLoop;
 
         sprintModesScreen.fromSprintModesToGameScreen(gameScreen);
-        isIgnoreKeyInput = false; // allow key input when game start
+        keyInputController.enableKeyInput(); // allow key input when game start
         currentGameLoop.play(); // RUN THE GAME LOOP
 
         gameplayManager.restartGame();
@@ -320,23 +343,10 @@ public class GameController {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         //       but do set "is transition effects on" flag to true to prevent other transition effects
         //       from popping in (e.g. can't pause when starting game screen)
-        isIgnoreKeyInput = false; // allow key input when game start
+        keyInputController.enableKeyInput(); // allow key input when game start
         currentGameLoop.play(); // RUN THE GAME LOOP
 
         gameplayManager.restartGame();
-    }
-
-
-
-
-
-
-    public GameplayManager getGameplayManager() {
-        return gameplayManager;
-    }
-
-    public boolean isIgnoreKeyInput() {
-        return isIgnoreKeyInput;
     }
 
 }

@@ -3,8 +3,12 @@ package tetris.ui;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,9 +21,9 @@ import javafx.util.Duration;
 import tetris.block.Block;
 import tetris.block.Mino;
 import tetris.block.MinoBlock;
-import tetris.util.GameMode;
+import tetris.util.TetrisConstants;
+import tetris.util.UiAnimation;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 import static tetris.util.TetrisConstants.*;
@@ -33,6 +37,14 @@ public class GameScreen extends UiPart<VBox> {
 
     @FXML
     private VBox mainLayout;
+    @FXML
+    private VBox timerSection;
+    @FXML
+    private VBox holdBoxMetricsSection;
+    @FXML
+    private HBox gameplaySection;
+    @FXML
+    private VBox nextBoxSection;
     @FXML
     private Pane playingField;
     @FXML
@@ -150,6 +162,10 @@ public class GameScreen extends UiPart<VBox> {
         updateHighScore(0);
         updateBestTime(Integer.MAX_VALUE);
         drawPlayingFieldGrid();
+
+        // set up blur effects
+        this.getRoot().setEffect(gaussianBlur);
+        gaussianBlur.setRadius(0); // no blur at start
     }
 
     // =================================================
@@ -452,14 +468,15 @@ public class GameScreen extends UiPart<VBox> {
         this.updateLines(0);
 
     }
-    public void setBlurEffects() {
+    public Animation getBlurEffects() {
         this.getRoot().setEffect(gaussianBlur);
+        gaussianBlur.setRadius(0);
 
         activeBlurTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.3),
+                new KeyFrame(Duration.seconds(0.1),
                         new KeyValue(gaussianBlur.radiusProperty(), GAME_SCREEN_BLUR_AMOUNT))
         );
-        activeBlurTimeline.play();
+        return activeBlurTimeline;
     }
     public Animation setRemoveEffects() {
         //this.getRoot().setEffect(null); // remove any blur
@@ -475,6 +492,7 @@ public class GameScreen extends UiPart<VBox> {
             if (gaussianBlur.getRadius() < 0.1) {
                 this.getRoot().setEffect(null);
             }
+            this.getRoot().setEffect(null);
         });
 
         return activeBlurTimeline;
@@ -523,6 +541,7 @@ public class GameScreen extends UiPart<VBox> {
         String minuteString = String.format("%02d", minute);
         String secondString = String.format("%02d", second);
         String centisecondString = String.format("%02d", centisecond);
+        timer.setStyle("-fx-text-fill: white");
         if (hour == 0) {
             timer.setText(minuteString + ":" + secondString + ":" + centisecondString);
         } else {
@@ -558,7 +577,6 @@ public class GameScreen extends UiPart<VBox> {
         } else {
             timer.setStyle("-fx-text-fill: white");
         }
-        timerBar.setStyle("-fx-accent: " + cssColor + ";");
     }
 
     /**
@@ -600,4 +618,57 @@ public class GameScreen extends UiPart<VBox> {
 
         return String.format("rgb(%d,%d,%d)", (int) red, (int) green, (int) blue);
     }
+
+    public ParallelTransition collapsingGameScreenEffects() {
+        float animateDuration = 1.4f;
+        ParallelTransition timerAndHoldFallingEffects = UiAnimation.fall(0, 800, animateDuration,
+                timerSection, holdBoxMetricsSection);
+
+        ParallelTransition gameAndNextFallingEffects = UiAnimation.fall(0, 800, 1.2f,
+                gameplaySection, nextBoxSection);
+
+        Duration duration = Duration.seconds(1.4);
+        RotateTransition leftSectionRotate = new RotateTransition(duration, holdBoxMetricsSection);
+        leftSectionRotate.setToAngle(-15);
+
+        TranslateTransition holdBoxFallToLeft = new TranslateTransition(duration, holdBoxMetricsSection);
+        holdBoxFallToLeft.setToX(-100);
+
+        RotateTransition middleSectionTilt = new RotateTransition(duration, gameplaySection);
+        middleSectionTilt.setToAngle(8);
+
+        RotateTransition rightSectionTile = new RotateTransition(duration, nextBoxSection);
+        rightSectionTile.setToAngle(20);
+
+        TranslateTransition nextBoxFallToRight = new TranslateTransition(duration, nextBoxSection);
+        nextBoxFallToRight.setToX(70);
+
+        ParallelTransition combined = new ParallelTransition(leftSectionRotate, holdBoxFallToLeft, middleSectionTilt,
+                rightSectionTile, nextBoxFallToRight, timerAndHoldFallingEffects, gameAndNextFallingEffects);
+        return combined;
+    }
+    public ParallelTransition gameScreenUiFlyDownFromTop() {
+        resetUiPositionAfterGameOverAnimation();
+        timerSection.setTranslateY(-800);
+        holdBoxMetricsSection.setTranslateY(-800);
+        gameplaySection.setTranslateY(-800);
+        nextBoxSection.setTranslateY(-800);
+        ParallelTransition fallingGameScreensParts = UiAnimation.fall(-800, 0, 1.4f,
+                timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
+        return fallingGameScreensParts;
+    }
+    public void resetUiPositionAfterGameOverAnimation() {
+        resetNodes(timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
+    }
+    private void resetNodes(Node... nodes) {
+        for (Node node : nodes) {
+            node.setTranslateX(0);
+            node.setTranslateY(0);
+            node.setRotate(0);
+            node.setScaleX(1);
+            node.setScaleY(1);
+            node.setOpacity(1);
+        }
+    }
+
 }

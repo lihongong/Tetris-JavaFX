@@ -4,12 +4,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="startMenuMainLayout" alignment="CENTER" stylesheets="@StartMenu.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="startMenuMainLayout" alignment="CENTER" stylesheets="@start-menu.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label stylesheets="@StartMenu.css" text="Tetris" />
+      <Label stylesheets="@start-menu.css" text="Tetris" />
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="466.0">
          <children>
-            <Button fx:id="playButton" focusTraversable="false" mnemonicParsing="false" onAction="#handleStartButton" prefHeight="100.0" prefWidth="300.0" styleClass="center-aligned-button" stylesheets="@StartMenu.css" text="Start" />
+            <Button fx:id="playButton" focusTraversable="false" mnemonicParsing="false" onAction="#handleStartButton" prefHeight="100.0" prefWidth="300.0" styleClass="center-aligned-button" stylesheets="@start-menu.css" text="Start" />
          </children>
       </VBox>
    </children>

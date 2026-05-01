@@ -3,6 +3,9 @@ package tetris.ui;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,12 +13,14 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import tetris.logic.GameController;
-import tetris.logic.GameState;
 import tetris.util.ButtonHandler;
 import tetris.util.UiAnimation;
 
 import java.util.ArrayList;
+
+import static tetris.util.TetrisConstants.BUTTON_OFF_SCREEN_POS;
+import static tetris.util.TetrisConstants.BUTTON_ON_SCREEN_POS;
+import static tetris.util.TetrisConstants.TIMES_UP_LABEL_CENTER_Y;
 
 public class TimesUpScreen extends UiPart<VBox> {
     private static final String FXML = "TimesUpScreen.fxml";
@@ -79,36 +84,65 @@ public class TimesUpScreen extends UiPart<VBox> {
         if (UiPart.isUiEffectsOn()) {
             return;
         }
-        // don't set effects is on so that when Times up Buttons shows up, they will immediately respond when mouse
-        // on enter -> nicer animation style
-        // SIDE EFFECT: Without setting isUiEffectOn as True, other animation can happen whilst the current effect is
-        // going on, e.g. Times Up Screen is Fading/Sliding in, immediately press R, the times up screen will immediately
-        // get faded out/ slide out
+        UiPart.setUiEffectsOn();
 
-        // blur the game screen in the background
-        gameScreen.setBlurEffects();
+        this.setInitScreen();
 
+        this.timesUpAnimation(gameScreen);
+    }
+    private void setInitScreen() {
         // Times Up Screen Appear!!! :)
         this.showNode(this.getRoot());
 
-        int fromX = 500;
-        int toX = 0;
-        float fadeInFrom = 0.0f;
-        float fadeInTo = 1.0f;
-        float animateDuration = 0.1f;
-        // may change for times up opening effect!!!
-        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideIn(fromX, toX, animateDuration,
-                restartButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeIn(fadeInFrom, fadeInTo, animateDuration,
-                restartButton, exitButton, timesUpLabel);
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slidingInTrans);
-        combined.getChildren().addAll(fadeInTrans);
+        timesUpLabel.setOpacity(1.0);
+        timesUpLabel.setScaleX(1.0);
+        timesUpLabel.setScaleY(1.0);
+        timesUpLabel.setTranslateY(TIMES_UP_LABEL_CENTER_Y); // place the times up label at the middle of the gameScreen at first
+        restartButton.setOpacity(0); // hide buttons at first :)
+        exitButton.setOpacity(0);
+        // so that when sliding in animation finishes, the mouse will be detected by buttons as "enter" and animate
+        // the "pop left of the buttons", even when the mouse is already inside the button. This is because we disable
+        // animation when buttons are sliding in, so the buttons will already be "entered" but no "on enter" animation
+        // will happen
+        restartButton.setMouseTransparent(true);
+        exitButton.setMouseTransparent(true);
+    }
+    private void timesUpAnimation(GameScreen gameScreen) {
+        // pop in Time's Up title
+        SequentialTransition poppingTimesUpTrans = UiAnimation.pop(0.5f, 1.3f, 1.0f, 0.13f, timesUpLabel);
+        // Pause for 1 sec
+        PauseTransition pauseAfterPopTitle = new PauseTransition(Duration.seconds(1));
 
-        combined.setOnFinished(e -> {
+        // move the "Time's Up" to the top
+        TranslateTransition moveTitleUp = new TranslateTransition(Duration.seconds(0.5), timesUpLabel);
+        moveTitleUp.setToY(0);
+
+        ScaleTransition scaleupTitle = UiAnimation.scale(1.0f, 1.5f, 0.5f, timesUpLabel);
+
+        Animation gameScreenBlur = gameScreen.getBlurEffects(); // blur game screen
+        // Move "Time's Up" to the top & Blur game screen
+        ParallelTransition moveTitleUpAndBlurGameScreen = new ParallelTransition(moveTitleUp, gameScreenBlur, scaleupTitle);
+        // Pause slightly
+        PauseTransition pauseAfterTitleMoveUp = new PauseTransition(Duration.seconds(0.2));
+
+        // slide & fade in buttons
+        float animateDuration = 0.3f;
+        ParallelTransition slidingInTrans = UiAnimation.slideIn(BUTTON_OFF_SCREEN_POS, BUTTON_ON_SCREEN_POS,
+                animateDuration, restartButton, exitButton);
+        ParallelTransition fadeInTrans = UiAnimation.fadeIn(0.0f, 1.0f,
+                animateDuration, restartButton, exitButton);
+        ParallelTransition buttonSlideFadeIn = new ParallelTransition(slidingInTrans, fadeInTrans);
+
+        // set animations in sequence
+        SequentialTransition timesUpAnimation = new SequentialTransition(poppingTimesUpTrans, pauseAfterPopTitle,
+                moveTitleUpAndBlurGameScreen, pauseAfterTitleMoveUp, buttonSlideFadeIn);
+
+        timesUpAnimation.setOnFinished(e -> {
             UiPart.setUiEffectsOff();
+            restartButton.setMouseTransparent(false);
+            exitButton.setMouseTransparent(false);
         });
-        combined.play();
+        timesUpAnimation.play();
     }
     /**
      * Close the Times Up Screen when user click on Restart Button.
@@ -121,30 +155,23 @@ public class TimesUpScreen extends UiPart<VBox> {
         }
         UiPart.setUiEffectsOn();
 
-        int toX = 500;
-        float fadeOutFrom = 1.0f;
-        float fadeOutTo = 0.2f;
         float animateDuration = 0.2f;
-
-        ArrayList<TranslateTransition> slidingInTrans = UiAnimation.slideOut(toX, animateDuration,
+        ParallelTransition slidingInTrans = UiAnimation.slideOut(BUTTON_OFF_SCREEN_POS, animateDuration,
                 restartButton, exitButton);
-        ArrayList<FadeTransition> fadeInTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
-                restartButton, exitButton, timesUpLabel);
+        ParallelTransition fadeInTrans = UiAnimation.fadeOut(1.0f, 0.0f,
+                animateDuration, restartButton, exitButton, timesUpLabel);
         // unblur the gameScreen
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slidingInTrans);
-        combined.getChildren().addAll(fadeInTrans);
-        combined.getChildren().addAll(gameScreenUnblur);
+        ParallelTransition gameRestartTransition = new ParallelTransition(slidingInTrans, fadeInTrans, gameScreenUnblur);
 
-        combined.setOnFinished(e -> {
+        gameRestartTransition.setOnFinished(e -> {
             UiPart.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
 
             UiPart.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
         });
 
-        combined.play();
+        gameRestartTransition.play();
     }
     /**
      * Add Select Menu Screen to MainWindow and fade in Select Menu Screen.
@@ -162,16 +189,13 @@ public class TimesUpScreen extends UiPart<VBox> {
         this.showNode(selectMenuScreen.getRoot());
 
         // Buttons and Title label Sliding & Fading animation
-        int toX = 500; // move 500 px
-        float fadeOutFrom = 1.0f;
-        float fadeOutTo = 0.2f;
-        float animateDuration = 0.3f;
-
         // Slide out restart & Exit Buttons
-        ArrayList<TranslateTransition> slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
+        float animateDuration = 0.3f;
+        ParallelTransition slideOutTrans = UiAnimation.slideOut(BUTTON_OFF_SCREEN_POS, animateDuration,
+                                                                            restartButton, exitButton);
         // Fade out Restart, Exit, Game Over Label
-        ArrayList<FadeTransition> fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration,
-                restartButton, exitButton, timesUpLabel);
+        ParallelTransition fadeOutTrans = UiAnimation.fadeOut(1.0f, 0.0f,
+                                                        animateDuration, restartButton, exitButton, timesUpLabel);
         // unblur the gameScreen - just in case
         Animation gameScreenUnblur = gameScreen.setRemoveEffects();
 
@@ -179,18 +203,14 @@ public class TimesUpScreen extends UiPart<VBox> {
         ParallelTransition selectMenuButtonSlidingInEffects = selectMenuScreen.openSelectMenuEffects(animateDuration);
 
         // combine all animation :)
-        ParallelTransition combined = new ParallelTransition();
-        combined.getChildren().addAll(slideOutTrans);
-        combined.getChildren().addAll(fadeOutTrans);
-        combined.getChildren().addAll(gameScreenUnblur, selectMenuButtonSlidingInEffects);
-
+        ParallelTransition combined = new ParallelTransition(slideOutTrans, fadeOutTrans, gameScreenUnblur,
+                                                             selectMenuButtonSlidingInEffects);
         combined.setOnFinished(e -> {
             // Hide/Remove Unused nodes
             UiPart.hideNode(gameScreen.getRoot(), this.getRoot());
 
             UiPart.setUiEffectsOff(); // enable ui interaction again (disable it to prevent multiple animation at once)
         });
-
         combined.play();
     }
 }

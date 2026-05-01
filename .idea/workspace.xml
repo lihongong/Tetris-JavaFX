@@ -10,9 +10,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/view/game-over-screen.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/view/global.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/view/times-up-screen.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/block/MinoBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/block/MinoBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/KeyInputController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/KeyInputController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseSprintScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintModesScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintModesScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintOverScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/game-screen.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/pause-menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/select-menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/sprint-mode-screen.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/StartMenu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/start-menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/StartMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/StartMenu.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,47 +88,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Launcher.executor": "Coverage",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Gradle./Users/onglihong/MyProject/Tetris-JavaFX/build.gradle.executor": "Run",
-    "Gradle.Build Tetris-JavaFX.executor": "Run",
-    "Gradle.Build Tetris.executor": "Run",
-    "Gradle.Tetris [:Launcher.main()].executor": "Run",
-    "Gradle.Tetris [:Tetris.main()].executor": "Run",
-    "Gradle.Tetris-JavaFX [:Launcher.main()].executor": "Run",
-    "Gradle.Tetris-JavaFX [:tetris.Launcher.main()].executor": "Run",
-    "Gradle.Tetris.executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "aa80b731",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "C:/Coding/My Project/Tetris/src/main/java/tetris",
-    "last_opened_file_path": "/Users/onglihong/MyProject/Tetris-JavaFX",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.42068964",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Launcher.executor&quot;: &quot;Coverage&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Gradle./Users/onglihong/MyProject/Tetris-JavaFX/build.gradle.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build Tetris-JavaFX.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build Tetris.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tetris [:Launcher.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tetris [:Tetris.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tetris-JavaFX [:Launcher.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tetris-JavaFX [:tetris.Launcher.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tetris.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;times-up-screen&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Coding/My Project/Tetris/src/main/java/tetris&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/onglihong/MyProject/Tetris-JavaFX&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.42068964&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="tetris.logic" />
@@ -154,6 +182,8 @@
       <workItem from="1776188237693" duration="385000" />
       <workItem from="1776214817206" duration="23379000" />
       <workItem from="1776794919390" duration="30857000" />
+      <workItem from="1777604672858" duration="2000" />
+      <workItem from="1777604694545" duration="9851000" />
     </task>
     <servers />
   </component>

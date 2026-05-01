@@ -72,7 +72,8 @@ public class GameMetrics {
             if (score > blitzHighScore) {
                 blitzHighScore = score;
             }
-        }
+        } // when sprint mode finishes, it will have its score too because we still call updateScore() in Sprint mode,
+          // but it won't update the high score
     }
     public int getNumLinesClear() {
         return this.numLinesClear;
