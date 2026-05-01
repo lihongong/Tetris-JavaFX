@@ -196,6 +196,9 @@ public class SelectMenuScreen extends UiPart<VBox> {
             UiPart.hideNode(this.getRoot());
 
             UiPart.setUiEffectsOff();
+
+            // allow select menu button to shift left on mouse enter once animation is over
+            sprintModesScreen.setIsButtonMouseTransparent(false);
         });
 
         combined.play();

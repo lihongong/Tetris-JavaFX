@@ -6,6 +6,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tetris.util.ButtonHandler;
@@ -31,6 +32,10 @@ public class SprintModesScreen extends UiPart<VBox> {
     private Button clear60LinesButton;
     @FXML
     private Button backButton;
+    private TranslateTransition clear20ButtonHoverAnimation;
+    private TranslateTransition clear40ButtonHoverAnimation;
+    private TranslateTransition clear60ButtonHoverAnimation;
+    private TranslateTransition backButtonHoverAnimation;
 
     public SprintModesScreen() {
         super(FXML);
@@ -62,11 +67,68 @@ public class SprintModesScreen extends UiPart<VBox> {
     public void handleBackButton() {
         backButtonHandler.handle();
     }
-
+    @FXML
+    public void handleClear20MouseEnter(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            clear20ButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(
+                    clear20LinesButton, clear20ButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleClear20MouseExit(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            clear20ButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(
+                    clear20LinesButton, clear20ButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleClear40MouseEnter(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            clear40ButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(
+                    clear40LinesButton, clear40ButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleClear40MouseExit(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            clear40ButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(
+                    clear40LinesButton, clear40ButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleClear60MouseEnter(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            clear60ButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(
+                    clear60LinesButton, clear60ButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleClear60MouseExit(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            clear60ButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(
+                    clear60LinesButton, clear60ButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleBackButtonMouseEnter(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            backButtonHoverAnimation = ButtonTransitions.buttonMouseEnterLeftSlide(
+                    backButton, backButtonHoverAnimation);
+        }
+    }
+    @FXML
+    public void handleBackButtonMouseExit(MouseEvent me) {
+        if (!UiPart.isUiEffectsOn()) {
+            backButtonHoverAnimation = ButtonTransitions.buttonMouseExitRightSlide(
+                    backButton, backButtonHoverAnimation);
+        }
+    }
     /**
      * Renders the Sprint Modes Screen (different # lines to clear)
      */
     public ParallelTransition openSprintModesScreen(float animateDuration) {
+        setIsButtonMouseTransparent(true);
+
         this.showNode(this.getRoot());
 
         FadeTransition fadeInSprintModeScreen = new FadeTransition(Duration.seconds(animateDuration), this.getRoot());
@@ -77,7 +139,12 @@ public class SprintModesScreen extends UiPart<VBox> {
         combined.getChildren().add(fadeInSprintModeScreen);
         return combined;
     }
-
+    public void setIsButtonMouseTransparent(boolean isTransparent) {
+        clear20LinesButton.setMouseTransparent(isTransparent);
+        clear40LinesButton.setMouseTransparent(isTransparent);
+        clear60LinesButton.setMouseTransparent(isTransparent);
+        backButton.setMouseTransparent(isTransparent);
+    }
     public void fromSprintModesToGameScreen (GameScreen gameScreen) {
         if (UiPart.isUiEffectsOn()) {
             return;
