@@ -76,6 +76,22 @@ public class GameplayManager {
         }
     }
 
+    public void lastClearLineEffect(Runnable runnable) {
+        gameScreen.handleClearLineSpecialEffect(gameState.getEffectCounter());
+        if (gameState.isTSpin()) {
+            gameScreen.handleTSpinSpecialEffect(gameState.getEffectCounter());
+        }
+        gameState.incrementEffectCounter();
+        if (gameState.hasReachSpecialEffectDuration()) {
+            // clear cached block in ui
+            gameScreen.clearEffect();
+            // reset all the flags
+            gameState.resetEffectFlags();
+
+            runnable.run();
+        }
+    }
+
     public ActiveStateManager getActiveStateManager() {
         return activeStateManager;
     }

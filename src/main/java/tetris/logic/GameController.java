@@ -7,6 +7,8 @@ import tetris.ui.*;
 import tetris.util.GameMode;
 import tetris.util.SprintMode;
 
+import javax.print.attribute.standard.RequestingUserName;
+
 import static tetris.util.TetrisConstants.FPS;
 import static tetris.util.TetrisConstants.SPRINT_MODE_A_CAP;
 import static tetris.util.TetrisConstants.SPRINT_MODE_B_CAP;
@@ -20,17 +22,17 @@ public class GameController {
     private KeyInputController keyInputController;
 
     // ui
-    private MainWindow mainWindow;
-    private GameScreen gameScreen;
-    private PauseMenuScreen pauseMenuScreen;
-    private GameOverScreen gameOverScreen;
-    private TimesUpScreen timesUpScreen;
-    private StartMenuScreen startMenuScreen;
-    private SelectMenuScreen selectMenuScreen;
-    private SprintModesScreen sprintModesScreen;
+    private final GameScreen gameScreen;
+    private final PauseMenuScreen pauseMenuScreen;
+    private final GameOverScreen gameOverScreen;
+    private final TimesUpScreen timesUpScreen;
+    private final SprintOverScreen sprintOverScreen;
+    private final StartMenuScreen startMenuScreen;
+    private final SelectMenuScreen selectMenuScreen;
+    private final SprintModesScreen sprintModesScreen;
     // game state
-    private TimeManager timeManager;
-    private GameState gameState;
+    private final TimeManager timeManager;
+    private final GameState gameState;
     private Timeline currentGameLoop;
     private Timeline relaxGameLoop;
     private Timeline sprintGameLoop;
@@ -52,14 +54,15 @@ public class GameController {
      */
     //public void initialize() {
     public GameController(GameScreen gameScreen, PauseMenuScreen pauseMenuScreen, GameOverScreen gameOverScreen,
-                          TimesUpScreen timesUpScreen, StartMenuScreen startMenuScreen,
-                          SelectMenuScreen selectMenuScreen, SprintModesScreen sprintModesScreen,
-                          Scene mainScene) {
+                          TimesUpScreen timesUpScreen, SprintOverScreen sprintOverScreen,
+                          StartMenuScreen startMenuScreen, SelectMenuScreen selectMenuScreen,
+                          SprintModesScreen sprintModesScreen, Scene mainScene) {
 
         this.gameScreen = gameScreen;
         this.pauseMenuScreen = pauseMenuScreen;
         this.gameOverScreen = gameOverScreen;
         this.timesUpScreen = timesUpScreen;
+        this.sprintOverScreen = sprintOverScreen;
         this.startMenuScreen = startMenuScreen;
         this.selectMenuScreen = selectMenuScreen;
         this.sprintModesScreen = sprintModesScreen;
@@ -133,9 +136,15 @@ public class GameController {
         gameScreen.updateStopWatch(timeManager.getCurrentCounter());
 
         if (gameState.isSprintOver()) {
-            sprintGameLoop.pause();
-
-            // TODO: open sprint over screen
+            Runnable pauseGameLoopAndSprintOverEffects = () -> {
+                System.out.println("here");
+                sprintGameLoop.pause();
+                Runnable allowKeyInput = () -> {
+                    keyInputController.enableKeyInput();
+                };
+                sprintOverScreen.openSprintOverScreenEffects(gameScreen, allowKeyInput);
+            };
+            gameplayManager.lastClearLineEffect(pauseGameLoopAndSprintOverEffects);
         } else if (gameState.isGameOver()) {
             sprintGameLoop.pause();
 
@@ -159,7 +168,13 @@ public class GameController {
         if (timeManager.isTimesUp()) {
             blitzGameLoop.pause();
 
-            timesUpScreen.openTimesUpScreenEffects(gameScreen);
+            // disable key input
+            keyInputController.disableKeyInput();
+            // only enable key input after animation is fully finished
+            Runnable allowKeyInput = () -> {
+                keyInputController.enableKeyInput();
+            };
+            timesUpScreen.openTimesUpScreenEffects(gameScreen, allowKeyInput);
         } else if (gameState.isGameOver()) {
             blitzGameLoop.pause();
 
@@ -175,10 +190,7 @@ public class GameController {
         }
     }
 
-    public GameState getGameState() {
-        return this.gameState;
-    }
-
+    // PAUSE AND RESUME
     public void pauseGame() {
         // prevent pausing before entrance animation to gameScreen is finish -> causing Pause Menu not to show up
         if (UiPart.isUiEffectsOn()) {
@@ -198,10 +210,10 @@ public class GameController {
         };
         pauseMenuScreen.closePauseMenuEffects(gameScreen, resumeGameAfterEffects);
     }
-
+    // RESTART
     public void restartGameInGameOver() {
-        gameplayManager.restartGame();
         // restart model
+        gameplayManager.restartGame();
         Runnable restartGameAfterEffects = () -> {
             currentGameLoop.play();
         };
@@ -209,7 +221,16 @@ public class GameController {
         // transition effects
         gameOverScreen.closeGameOverScreenEffects(gameScreen, restartGameAfterEffects);
     }
+    public void restartGameInSprintOver() {
+        // restart model
+        gameplayManager.restartGame();
+        Runnable restartGameAfterEffects = () -> {
+            currentGameLoop.play();
+        };
 
+        // transition effects
+        sprintOverScreen.closeTimesUpScreenEffects(gameScreen, restartGameAfterEffects);
+    }
     public void restartGameInTimesUp() {
         // transition effects
         timesUpScreen.closeTimesUpScreenEffects(gameScreen);
@@ -218,7 +239,6 @@ public class GameController {
         currentGameLoop.play();
         gameplayManager.restartGame();
     }
-
     public void restartGameInPauseMenu() {
         // transition effects
         pauseMenuScreen.closePauseMenuEffects(gameScreen, null);
@@ -227,7 +247,7 @@ public class GameController {
         currentGameLoop.play();
         gameplayManager.restartGame();
     }
-
+    // EXIT
     public void exitButtonInGameOver() {
         keyInputController.disableKeyInput();
 
@@ -238,6 +258,9 @@ public class GameController {
         } else {
             gameOverScreen.fromGameOverScreenToSelectMenu(selectMenuScreen, gameScreen);
         }
+    }
+    public void exitButtonInSprintOver() {
+
     }
     public void exitButtonInTimesUp() {
         keyInputController.disableKeyInput();
@@ -259,7 +282,7 @@ public class GameController {
     }
 
     // =============================
-    // Start & Select Menu Buttons
+    // Start & Select & Sprint Menu Buttons
     // =============================
 
     public void startButtonInStartMenu() {
@@ -349,4 +372,8 @@ public class GameController {
         gameplayManager.restartGame();
     }
 
+    // UTILS
+    public GameState getGameState() {
+        return this.gameState;
+    }
 }

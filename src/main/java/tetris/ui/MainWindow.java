@@ -81,6 +81,7 @@ public class MainWindow extends UiPart<StackPane> {
 
         this.gameOverScreen = new GameOverScreen();
         this.timesUpScreen = new TimesUpScreen();
+        this.sprintOverScreen = new SprintOverScreen();
 
         this.selectMenuScreen = new SelectMenuScreen();
         this.sprintModesScreen = new SprintModesScreen();
@@ -97,7 +98,8 @@ public class MainWindow extends UiPart<StackPane> {
                 gameScreen.getRoot(),
                 pauseMenuScreen.getRoot(),
                 gameOverScreen.getRoot(),
-                timesUpScreen.getRoot()
+                timesUpScreen.getRoot(),
+                sprintOverScreen.getRoot()
         );
 
         for (Node n : gameRoot.getChildren()) {
@@ -110,13 +112,13 @@ public class MainWindow extends UiPart<StackPane> {
 
     public void setUpGame() {
         this.gameController = new GameController(gameScreen, pauseMenuScreen, gameOverScreen, timesUpScreen,
-                startMenuScreen, selectMenuScreen, sprintModesScreen, mainScene);
+                sprintOverScreen, startMenuScreen, selectMenuScreen, sprintModesScreen, mainScene);
         // set button handler
         pauseMenuScreen.setResumeRestartExitButtonHandler(gameController::resumeGame, gameController::restartGameInPauseMenu, gameController::exitButtonInPauseMenu);
 
         gameOverScreen.setRestartExitButtonHandler(gameController::restartGameInGameOver, gameController::exitButtonInGameOver);
         timesUpScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInTimesUp);
-        //sprintOverScreen.setRestartExitButtonHandler(gameController::restartGameInTimesUp, gameController::exitButtonInGameOver);
+        sprintOverScreen.setRestartExitButtonHandler(gameController::restartGameInSprintOver, gameController::exitButtonInSprintOver);
 
         startMenuScreen.setStartButtonHandler(gameController::startButtonInStartMenu);
         selectMenuScreen.setSelectMenuButtonsHandler(gameController::relaxButton, gameController::sprintButton, gameController::blitzButton, gameController::exitButtonInSelectMenu);

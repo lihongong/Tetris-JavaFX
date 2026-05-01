@@ -35,6 +35,7 @@ public class TetrisConstants {
     public static final int NEXT_BOX_HEIGHT_WIDTH = 170;
     public static final int HOLD_BOX_HEIGHT_WIDTH = 170;
 
+    public static final int SPRINT_OVER_LABEL_CENTER_Y = 180;
     public static final int GAME_OVER_LABEL_CENTER_Y = 180;
     public static final int TIMES_UP_LABEL_CENTER_Y = 180; // At the middle of playing field
 
@@ -70,7 +71,7 @@ public class TetrisConstants {
     // =================================================
     // Scores and metrics
     // =================================================
-    public static final int SPRINT_MODE_A_CAP = 20;
+    public static final int SPRINT_MODE_A_CAP = 1;
     public static final int SPRINT_MODE_B_CAP = 40;
     public static final int SPRINT_MODE_C_CAP = 60;
 

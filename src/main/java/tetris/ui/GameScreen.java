@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -657,6 +658,14 @@ public class GameScreen extends UiPart<VBox> {
                 timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
         return fallingGameScreensParts;
     }
+
+    public ParallelTransition zoomIn() {
+        ParallelTransition gameScreenZoomIn = UiAnimation.scale(1.0f, 5.0f, 6,
+                timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
+        return gameScreenZoomIn;
+    }
+
+
     public void resetUiPositionAfterGameOverAnimation() {
         resetNodes(timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
     }

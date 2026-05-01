@@ -78,8 +78,9 @@ public class TimesUpScreen extends UiPart<VBox> {
     /**
      * Shows the Times Up Screen by Sliding in Buttons from the right to the center, fading in the Buttons & Label.
      * Blur the Game Screen.
+     * @param runnable re-enables key input
      */
-    public void openTimesUpScreenEffects(GameScreen gameScreen) {
+    public void openTimesUpScreenEffects(GameScreen gameScreen, Runnable runnable) {
         // prevent multiple animation happening at once
         if (UiPart.isUiEffectsOn()) {
             return;
@@ -88,7 +89,7 @@ public class TimesUpScreen extends UiPart<VBox> {
 
         this.setInitScreen();
 
-        this.timesUpAnimation(gameScreen);
+        this.timesUpAnimation(gameScreen, runnable);
     }
     private void setInitScreen() {
         // Times Up Screen Appear!!! :)
@@ -107,7 +108,7 @@ public class TimesUpScreen extends UiPart<VBox> {
         restartButton.setMouseTransparent(true);
         exitButton.setMouseTransparent(true);
     }
-    private void timesUpAnimation(GameScreen gameScreen) {
+    private void timesUpAnimation(GameScreen gameScreen, Runnable runnable) {
         // pop in Time's Up title
         SequentialTransition poppingTimesUpTrans = UiAnimation.pop(0.5f, 1.3f, 1.0f, 0.13f, timesUpLabel);
         // Pause for 1 sec
@@ -139,6 +140,9 @@ public class TimesUpScreen extends UiPart<VBox> {
 
         timesUpAnimation.setOnFinished(e -> {
             UiPart.setUiEffectsOff();
+
+            runnable.run();
+
             restartButton.setMouseTransparent(false);
             exitButton.setMouseTransparent(false);
         });

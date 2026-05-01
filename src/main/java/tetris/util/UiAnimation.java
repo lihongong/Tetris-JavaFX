@@ -135,6 +135,14 @@ public class UiAnimation {
         scaleTransition.setToY(toSize);
         return scaleTransition;
     }
+    public static ParallelTransition scale(float fromSize, float toSize, float animateDuration, Node... nodes) {
+        ParallelTransition output = new ParallelTransition();
+        for (Node node : nodes) {
+            ScaleTransition scaleTransition = scale(fromSize, toSize, animateDuration, node);
+            output.getChildren().add(scaleTransition);
+        }
+        return output;
+    }
     public static PauseTransition pause(float pauseDuration) {
         return new PauseTransition(Duration.seconds(pauseDuration));
     }
