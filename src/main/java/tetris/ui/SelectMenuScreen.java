@@ -207,6 +207,8 @@ public class SelectMenuScreen extends UiPart<VBox> {
      * @return a {@code ParallelTransition} that contains the fade in and sliding out of buttons effects
      */
     public ParallelTransition openSelectMenuEffects(float animateDuration) {
+        setIsButtonMouseTransparent(true);
+
         this.showNode(this.getRoot());
 
         FadeTransition fadeInSelectMenu = UiAnimation.fadeIn(0.0f, 1.0f, animateDuration, this.getRoot());
@@ -216,7 +218,12 @@ public class SelectMenuScreen extends UiPart<VBox> {
         combined.getChildren().add(fadeInSelectMenu);
         return combined;
     }
-
+    public void setIsButtonMouseTransparent(boolean isTransparent) {
+        relaxButton.setMouseTransparent(isTransparent);
+        sprintButton.setMouseTransparent(isTransparent);
+        blitzButton.setMouseTransparent(isTransparent);
+        exitButton.setMouseTransparent(isTransparent);
+    }
     /**
      * Animation for Buttons & Label ONLY
      */

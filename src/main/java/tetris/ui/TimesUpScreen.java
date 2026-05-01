@@ -210,6 +210,9 @@ public class TimesUpScreen extends UiPart<VBox> {
             UiPart.hideNode(gameScreen.getRoot(), this.getRoot());
 
             UiPart.setUiEffectsOff(); // enable ui interaction again (disable it to prevent multiple animation at once)
+
+            // allow select menu button to shift left on mouse enter once animation is over
+            selectMenuScreen.setIsButtonMouseTransparent(false);
         });
         combined.play();
     }

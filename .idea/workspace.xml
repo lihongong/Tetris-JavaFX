@@ -10,37 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/view/game-over-screen.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/view/global.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/view/times-up-screen.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/KeyInputController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/KeyInputController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameOverScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseMenuScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/PauseSprintScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GamePhase.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SelectMenuScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintModesScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintModesScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintOverScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/game-screen.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/pause-menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/select-menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/sprint-mode-screen.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/StartMenu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/start-menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/StartMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/StartMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/StartMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/StartMenuScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +156,7 @@
       <workItem from="1776214817206" duration="23379000" />
       <workItem from="1776794919390" duration="30857000" />
       <workItem from="1777604672858" duration="2000" />
-      <workItem from="1777604694545" duration="9851000" />
+      <workItem from="1777604694545" duration="11014000" />
     </task>
     <servers />
   </component>

@@ -260,6 +260,9 @@ public class GameOverScreen extends UiPart<VBox> {
             UiPart.setUiEffectsOff(); // enable ui interaction again
 
             gameScreen.resetUiPositionAfterGameOverAnimation();
+
+            // allow select menu button to shift left on mouse enter once animation is over
+            selectMenuScreen.setIsButtonMouseTransparent(false);
         });
 
         combined.play();
