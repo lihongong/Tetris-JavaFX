@@ -146,7 +146,7 @@ public class GameplayManager {
         }
 
         // !!!!!! gameScreen.restartGameForSprint(gameMetrics.getBestTime()); MUST COME BEFORE minoManager.restartMinoManager();
-        gameScreen.restartGameForSprint(gameMetrics.getBestTime(currSprintMode), isSprintOver);
+        gameScreen.restartGameForSprint(gameMetrics.getBestTime(currSprintMode), gameMetrics.getSprintGoal());
 
         // reset minos and draw them accordingly to their new position!
         minoManager.restartMinoManager();

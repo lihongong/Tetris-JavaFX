@@ -123,7 +123,7 @@ public class InactiveStateManager {
                 gameState.checkSprintOver(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
 
                 gameScreen.setSprintLineMeterTubeProgress(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
-                gameScreen.updateGameMetricsForSprintMode(gameMetrics.getNumLinesClear());
+                gameScreen.updateGameMetricsForSprintMode(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
             } else {
                 gameScreen.updateGameMetricsForDefault(gameMetrics.getNumLinesClear(), gameMetrics.getScore());
             }

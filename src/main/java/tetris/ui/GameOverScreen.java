@@ -86,7 +86,8 @@ public class GameOverScreen extends UiPart<VBox> {
         UiPart.setUiEffectsOn();
 
         initGameOverScreenPhaseOne();
-        SequentialTransition phaseOneAnimation = gameOverAnimationPhaseOne(gameScreen);
+
+        Animation phaseOneAnimation = gameOverAnimationPhaseOne(gameScreen);
         phaseOneAnimation.setOnFinished(e -> {
             initGameOverScreenPhaseTwo();
             // Button and "Game Over" label slide into screen
@@ -189,7 +190,7 @@ public class GameOverScreen extends UiPart<VBox> {
 
         PauseTransition waitHalfSecond = new PauseTransition(Duration.seconds(0.5));
 
-        ParallelTransition gameScreenFallFromTop = gameScreen.gameScreenUiFlyDownFromTop();
+        ParallelTransition gameScreenFallFromTop = gameScreen.flyDownFromTop();
 
         SequentialTransition gameRestartTransition = new SequentialTransition(buttonsAndLabelOutEffects, waitHalfSecond,
                                                            gameScreenFallFromTop);
@@ -235,7 +236,6 @@ public class GameOverScreen extends UiPart<VBox> {
             // allow select menu button to shift left on mouse enter once animation is over
             sprintModesScreen.setIsButtonMouseTransparent(false);
         });
-
         combined.play();
     }
 
@@ -267,7 +267,6 @@ public class GameOverScreen extends UiPart<VBox> {
             // allow select menu button to shift left on mouse enter once animation is over
             selectMenuScreen.setIsButtonMouseTransparent(false);
         });
-
         combined.play();
     }
     public ParallelTransition exitGameOverBaseEffects(GameScreen gameScreen, float animateDuration) {

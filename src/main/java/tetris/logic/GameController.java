@@ -261,7 +261,10 @@ public class GameController {
         }
     }
     public void exitButtonInSprintOver() {
+        keyInputController.disableKeyInput();
 
+        gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
+        sprintOverScreen.fromSprintOverToSprintMode(sprintModesScreen, gameScreen);
     }
     public void exitButtonInTimesUp() {
         keyInputController.disableKeyInput();
