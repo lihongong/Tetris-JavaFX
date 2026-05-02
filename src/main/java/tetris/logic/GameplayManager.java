@@ -92,10 +92,6 @@ public class GameplayManager {
         }
     }
 
-    public ActiveStateManager getActiveStateManager() {
-        return activeStateManager;
-    }
-
     public void restartGame() {
         if (gameState.getGameMode() == GameMode.SPRINT) {
             restartGameForSprint();
@@ -151,6 +147,9 @@ public class GameplayManager {
         // reset minos and draw them accordingly to their new position!
         minoManager.restartMinoManager();
     }
+    public void restartMinoManager() {
+        minoManager.restartMinoManager();
+    }
 
     public void exitGame() {
         if (gameState.getGameMode() == GameMode.SPRINT) {
@@ -196,6 +195,23 @@ public class GameplayManager {
         }
     }
 
+    // =====================================
+    // Getters and Setters
+    // =====================================
+
+    public ActiveStateManager getActiveStateManager() {
+        return activeStateManager;
+    }
+    public int getHighScore() {
+        return gameMetrics.getHighScore(gameState.getGameMode());
+    }
+    public int getBestTime() {
+        SprintMode currSprintMode = gameState.getSprintMode();
+        return gameMetrics.getBestTime(currSprintMode);
+    }
+    public int getSprintGoal() {
+        return gameMetrics.getSprintGoal();
+    }
     public void setSprintGoal(int sprintGoal) {
         this.gameMetrics.setSprintGoal(sprintGoal);
     }

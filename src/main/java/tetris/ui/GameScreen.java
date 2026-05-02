@@ -115,10 +115,6 @@ public class GameScreen extends UiPart<VBox> {
     }
 
     private void fillInnerParts() {
-        lineMeterTube = new LineMeterTube(20, 300);
-        tubeContainer.getChildren().add(lineMeterTube);
-        tubeContainer.setVisible(false); // hide it, only appear when Sprint Mode
-
         // Draw the grid background in the playing field
         Canvas playingFieldCanvas = new Canvas(PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT);
         playingFieldGC = playingFieldCanvas.getGraphicsContext2D();
@@ -151,6 +147,10 @@ public class GameScreen extends UiPart<VBox> {
         playingField.getChildren().add(shadowCanvas);
         playingField.getChildren().add(blockCanvas);
         playingField.getChildren().add(specialEffectCanvas);
+
+        lineMeterTube = new LineMeterTube(20, PLAYING_FIELD_HEIGHT);
+        tubeContainer.getChildren().add(lineMeterTube);
+        tubeContainer.setVisible(false); // hide it, only appear when Sprint Mode
 
         nextMinoBox.getChildren().add(nextBoxCanvas);
         holdMinoBox.getChildren().add(holdBoxCanvas);
@@ -461,7 +461,7 @@ public class GameScreen extends UiPart<VBox> {
         holdBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
         nextBoxGC.clearRect(LEFTMOST_PIXEL, TOPMOST_PIXEL, HOLD_BOX_HEIGHT_WIDTH, HOLD_BOX_HEIGHT_WIDTH);
 
-        lineMeterTube.setTubeProgress(0, 1); // set it to zero progress
+        lineMeterTube.resetTube(); // set it to zero progress
 
         // set up new game metrics value on game screen
         this.updateBestTime(bestTimeInCounterVal);

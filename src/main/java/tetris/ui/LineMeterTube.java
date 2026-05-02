@@ -20,28 +20,29 @@ public class LineMeterTube extends StackPane {
 
     private final double width;
     private final double maxHeight;
-    private final double triangleTipHeight = 20;
+    private final double triangleTipHeight;
 
     private LineTo baseRight, tip, baseLeft;
 
     public LineMeterTube(double width, double maxHeight) {
         this.width = width;
         this.maxHeight = maxHeight;
-
+        //this.pathMaxHeight = maxHeight +
+        this.triangleTipHeight = width * 0.3;
 
         this.setMaxSize(width, maxHeight);
         this.setMinSize(width, maxHeight);
         this.setPrefSize(width, maxHeight);
-        this.setStyle("-fx-border-color: #202020; -fx-border-width: 2; " +
+        this.setStyle("-fx-border-color: #202020; -fx-border-width: 3; " +
                 "-fx-background-color: rgba(255,255,255,0.05);"); //" -fx-border-radius: 5;"); // black tube
 
         // The inner filling (progress bar) -- Path element
         // Use 5 points to form the shape of the progress bar: bottom left, bottom right
-        MoveTo startPoint = new MoveTo(width, maxHeight);
-        baseRight = new LineTo(width, maxHeight);
+        MoveTo startPoint = new MoveTo(width-3, maxHeight);
+        baseRight = new LineTo(width-3, maxHeight);
         tip = new LineTo(width / 2, maxHeight);
-        baseLeft = new LineTo(0, maxHeight);
-        LineTo bottomLeft = new LineTo(0, maxHeight);
+        baseLeft = new LineTo(3, maxHeight);
+        LineTo bottomLeft = new LineTo(3, maxHeight);
 
         Path fillPath = new Path(startPoint, baseRight, tip, baseLeft, bottomLeft);
         fillPath.setFill(Color.CYAN);
@@ -56,8 +57,11 @@ public class LineMeterTube extends StackPane {
         double pathFillHeight = percentage * maxHeight;               //                |  |
                                                                       //                |__|
         // Calculate Y offset (Higher fill = Smaller Y value)
-        double tipY = maxHeight - pathFillHeight;
+        double tipY = Math.min(maxHeight, maxHeight - pathFillHeight + 6);
         double baseY = Math.min(maxHeight, tipY + triangleTipHeight); // the base is lower than the triangle tip
+        if (numLines == goal) { // fill up the tube full full (no more triangle tip)
+            baseY = 6;
+        }
 
         // Animate 3 points simultaneously to keep the triangle shape
         Timeline timeline = new Timeline(
@@ -68,6 +72,11 @@ public class LineMeterTube extends StackPane {
                 )
         );
         timeline.play();
+    }
+    public void resetTube() {
+        tip.setY(maxHeight);
+        baseLeft.setY(maxHeight);
+        baseRight.setY(maxHeight);
     }
 
 }

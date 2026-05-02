@@ -156,7 +156,8 @@ public class SprintOverScreen extends UiPart<VBox> {
         slideFadeIn.play();
     }
 
-    public void closeSprintOverScreenEffects(GameScreen gameScreen, Runnable runnable) {
+    public void closeSprintOverScreenEffects(GameScreen gameScreen, Runnable restartGameLoop,
+                                             Runnable restartGameplayManagerAndGameScreen) {
         // prevent multiple animation happening at once
         if (UiPart.isUiEffectsOn()) {
             return;
@@ -175,6 +176,7 @@ public class SprintOverScreen extends UiPart<VBox> {
         Animation gameScreenDarken = gameScreen.darken();
         gameScreenDarken.setOnFinished(e -> {
             if (gameScreenZoomInAnimation != null) gameScreenZoomInAnimation.stop();
+            restartGameplayManagerAndGameScreen.run();
             gameScreen.resetUiPositionAfterAnimation();
             gameScreen.brighten().play();
         });
@@ -183,7 +185,7 @@ public class SprintOverScreen extends UiPart<VBox> {
         gameRestartTransition.setOnFinished(e -> {
             UiPart.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
             UiPart.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
-            runnable.run();
+            restartGameLoop.run();
         });
         gameRestartTransition.play();
     }

@@ -215,6 +215,7 @@ public class GameController {
     public void restartGameInGameOver() {
         // restart model
         gameplayManager.restartGame();
+
         Runnable restartGameAfterEffects = () -> {
             currentGameLoop.play();
         };
@@ -223,14 +224,14 @@ public class GameController {
         gameOverScreen.closeGameOverScreenEffects(gameScreen, restartGameAfterEffects);
     }
     public void restartGameInSprintOver() {
-        // restart model
-        gameplayManager.restartGame();
-        Runnable restartGameAfterEffects = () -> {
-            currentGameLoop.play();
+        // restart model & game screen
+        Runnable restartGameplayManagerAndGameScreen = () -> {
+            gameplayManager.restartGame();
         };
-
+        Runnable restartGameLoopAfterEffects = () -> currentGameLoop.play();
         // transition effects
-        sprintOverScreen.closeSprintOverScreenEffects(gameScreen, restartGameAfterEffects);
+        sprintOverScreen.closeSprintOverScreenEffects(gameScreen, restartGameLoopAfterEffects,
+                                                      restartGameplayManagerAndGameScreen);
     }
     public void restartGameInTimesUp() {
         // transition effects
@@ -248,6 +249,7 @@ public class GameController {
         currentGameLoop.play();
         gameplayManager.restartGame();
     }
+
     // EXIT
     public void exitButtonInGameOver() {
         keyInputController.disableKeyInput();
@@ -352,6 +354,7 @@ public class GameController {
         gameState.setGameMode(GameMode.SPRINT);
 
         gameScreen.setGameScreenForSprintMode();
+        //gameScreen.restartGameForSprint(gameplayManager.getBestTime(), gameplayManager.getSprintGoal());
 
         currentGameLoop = sprintGameLoop;
 
