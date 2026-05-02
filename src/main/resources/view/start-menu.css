@@ -1,0 +1,23 @@
+.center-aligned-button {
+    -fx-alignment: center;
+    -fx-content-display: center;
+    -fx-padding: 0 0 0 10; /* Left padding of 10px */
+
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 32px; /* Adjusted from 40px to match design */
+    -fx-text-fill: black;
+}
+
+.label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 100px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+}
+
+#startMenuMainLayout {
+    -fx-background-image: url('../images/black.png');
+    -fx-background-size:1024px 432px;
+    -fx-background-repeat: repeat;
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="mainLayout" alignment="CENTER" stylesheets="@sprint-mode-screen.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="titleLabel" alignment="TOP_CENTER" contentDisplay="TOP" minHeight="150.0" minWidth="680.0" prefHeight="150.0" prefWidth="680.0" stylesheets="@select-menu.css" text="Lines To Clear" />
+        <HBox alignment="CENTER_RIGHT">
+            <children>
+                <VBox maxWidth="1.7976931348623157E308" minWidth="300.0" HBox.hgrow="ALWAYS" />
+                <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" minHeight="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button fx:id="clear20LinesButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleClear20Button" onMouseEntered="#handleClear20MouseEnter" onMouseExited="#handleClear20MouseExit" styleClass="left-aligned-button" stylesheets="@sprint-mode-screen.css" text="20 LINES" />
+                        <Button fx:id="clear40LinesButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleClear40Button" onMouseEntered="#handleClear40MouseEnter" onMouseExited="#handleClear40MouseExit" styleClass="left-aligned-button" stylesheets="@sprint-mode-screen.css" text="40 LINES" />
+                        <Button fx:id="clear60LinesButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleClear60Button" onMouseEntered="#handleClear60MouseEnter" onMouseExited="#handleClear60MouseExit" styleClass="left-aligned-button" stylesheets="@sprint-mode-screen.css" text="60 LINES" />
+                  <Button fx:id="backButton" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="500.0" mnemonicParsing="false" onAction="#handleBackButton" onMouseEntered="#handleBackButtonMouseEnter" onMouseExited="#handleBackButtonMouseExit" styleClass="left-aligned-button" stylesheets="@sprint-mode-screen.css" text="BACK" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>

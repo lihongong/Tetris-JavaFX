@@ -1,0 +1,6 @@
+.label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 60px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+}

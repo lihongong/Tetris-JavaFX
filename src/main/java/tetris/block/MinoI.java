@@ -1,7 +1,7 @@
 package tetris.block;
 
 import javafx.scene.paint.Color;
-import tetris.Controller;
+import tetris.logic.GameState;
 
 import static tetris.util.TetrisConstants.*;
 
@@ -67,7 +67,7 @@ public class MinoI extends Mino {
         return new MinoI();
     }
     @Override
-    public void tryRotatingMino(Block[][] inactiveBlockArray, Controller gameController) {
+    public void tryRotatingMino(Block[][] inactiveBlockArray, GameState gameState) {
         int altPosition = 0;
         boolean canRotate = true;
 
@@ -139,7 +139,7 @@ public class MinoI extends Mino {
 
             // Mino is pushed upwards, so need to reset deactivation
             if (altPosition == 7 || altPosition == 8) {
-                gameController.resetDeactivation();
+                gameState.resetDeactivation();
             }
         }
     }

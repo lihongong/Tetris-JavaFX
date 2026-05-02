@@ -2,7 +2,7 @@ package tetris.block;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import static tetris.util.TetrisConstants.*;
+import static tetris.util.TetrisConstants.BLOCK_SIZE;
 
 
 public abstract class Block {

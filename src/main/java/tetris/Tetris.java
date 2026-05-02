@@ -1,57 +1,44 @@
 package tetris;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
-
-import java.util.Arrays;
-
-import static tetris.util.TetrisConstants.FPS;
+import tetris.logic.GameState;
+import tetris.logic.KeyInputController;
+import tetris.logic.GameController;
+import tetris.ui.GameScreen;
+import tetris.ui.MainWindow;
+import tetris.ui.PauseMenuScreen;
 
 public class Tetris extends Application {
-
-    public static final int BLOCK_SIZE = 30;
-    public static final int MOVEMENT_SIZE = 30;
-    public static final int MAX_WIDTH = 30 * 10;
-    public static final int MAX_HEIGHT = 30 * 20;
-    public static int[][] grid = new int[MAX_WIDTH / BLOCK_SIZE][MAX_HEIGHT / BLOCK_SIZE];
-    private Timeline gameLoop;
-    private Controller gameController;
+    private MainWindow mainWindow;
 
     @Override
-    public void start(Stage stage) throws Exception {
-        for (int[] row : grid) {
-            Arrays.fill(row, 0);
-        }
-
+    public void start(Stage primaryStage) throws Exception {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Tetris.fxml"));
-            Parent root = loader.load();
-            this.gameController = loader.getController();
+            loadFonts();
 
-            Scene scene = new Scene(root);
-            scene.setFill(Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.show();
+            this.mainWindow = new MainWindow(primaryStage);
+            mainWindow.fillInnerParts();
+            mainWindow.setUpGame();
 
-            // Keyboard input handler
-            new KeyInputHandler(scene, gameController);
-
-            // Create the game loop
-            gameLoop = new Timeline(new KeyFrame(Duration.seconds(1.0 / FPS), e -> gameController.update()));
-            gameLoop.setCycleCount(Timeline.INDEFINITE); // repeat forever
-            gameLoop.play(); // start the loop
-
+            Platform.runLater(() -> {
+                mainWindow.show();
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Sets up fonts for css. JavaFX css doesn't reliably load fonts in css using @font-face, so it is better to load
+     * the fonts programmatically.
+     */
+    public void loadFonts() {
+        Font font = Font.loadFont(
+                getClass().getClassLoader().getResourceAsStream("fonts/Silkscreen_Regular.ttf"), 10
+        );
+    }
 }

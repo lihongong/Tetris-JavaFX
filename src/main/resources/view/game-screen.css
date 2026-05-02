@@ -1,0 +1,71 @@
+/* Define the font faces */
+
+/* Fonts are loaded programmatically in Tetris.java */
+
+.label {
+    -fx-font-family: 'Press Start 2P';
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.8), 2, 0.5, 0, 1);
+}
+
+.hold-next-label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 32px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+    -fx-alignment: center; /* Better than layoutX/Y for centering */
+}
+
+.score-label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 25px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+}
+
+.time-label {
+    -fx-font-family: 'Silkscreen';
+    -fx-font-weight: normal;
+    -fx-font-size: 50px; /* Adjusted from 40px to match design */
+    -fx-text-fill: white;
+}
+
+/* Style for the hold box */
+#holdMinoBox {
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Semi transparent hold box so the background image is slightly visible */
+    -fx-border-color: rgba(245, 170, 66, 0.3); /* Yellowish Orange border */
+    -fx-border-width: 4px;
+    -fx-border-radius: 0px;
+}
+
+/* Style for the next box */
+#nextMinoBox {
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Semi transparent next box so the background image is slightly visible */
+    -fx-border-color: rgba(66, 164, 245, 0.3); /* Light blue border */
+    -fx-border-width: 4px;
+    -fx-border-radius: 0px;
+}
+
+/* Style for the playing field */
+#playingField {
+    -fx-background-color: rgba(0, 0, 0, 0.75); /* Semi transparent playing field so the background image is slightly visible */
+    -fx-border-color: #2ecc71; /* Green border */
+    -fx-border-width: 0px;
+}
+/*
+#mainLayout {
+    -fx-background-image: url('../images/gameplay_backgrounds/1.png');
+    -fx-background-size: 1024px 432px;
+    -fx-background-repeat: repeat;
+    /*-fx-background-size: cover;
+}*/
+
+.progress-bar > .bar {
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0;
+}
+
+
+
+

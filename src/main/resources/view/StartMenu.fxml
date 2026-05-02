@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="startMenuMainLayout" alignment="CENTER" stylesheets="@start-menu.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label stylesheets="@start-menu.css" text="Tetris" />
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="466.0">
+         <children>
+            <Button fx:id="playButton" focusTraversable="false" mnemonicParsing="false" onAction="#handleStartButton" prefHeight="100.0" prefWidth="300.0" styleClass="center-aligned-button" stylesheets="@start-menu.css" text="Start" />
+         </children>
+      </VBox>
+   </children>
+</VBox>

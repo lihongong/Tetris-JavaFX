@@ -7,15 +7,18 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 
-import java.awt.*;
-
-import static tetris.util.TetrisConstants.*;
+import static tetris.util.TetrisConstants.BLOCK_FADING_DURATION;
+import static tetris.util.TetrisConstants.BLOCK_FALLING_DURATION;
+import static tetris.util.TetrisConstants.BLOCK_SIZE;
 
 public class MinoBlock extends Block {
     private Color color;
     private Color darkColor;
     private Color superDarkColor;
     private Color ultraDarkColor;
+    private Color outerGlow1;
+    private Color outerGlow2;
+    private Color outerGlow3;
     private int margin;
 
     public MinoBlock(Color color) {
@@ -50,6 +53,24 @@ public class MinoBlock extends Block {
                 (int) Math.round(blue * 255 / div3)
         );
 
+        this.outerGlow1 = Color.rgb(
+                (int) Math.round(red * 255 / 2f),
+                (int) Math.round(green * 255 / 2f),
+                (int) Math.round(blue * 255 / 2f)
+        );
+
+        this.outerGlow2 = Color.rgb(
+                (int) Math.round(red * 255 / 2.5f),
+                (int) Math.round(green * 255 / 2.5f),
+                (int) Math.round(blue * 255 / 2.5f)
+        );
+
+        this.outerGlow3 = Color.rgb(
+                (int) Math.round((red * 255) / 3f),
+                (int) Math.round(green * 255 / 3f),
+                (int) Math.round(blue * 255 / 3f)
+        );
+
         // Special handling for blue
         if (color.equals(Color.BLUE)) {
             this.color = Color.rgb(0, 120, 255);
@@ -78,11 +99,14 @@ public class MinoBlock extends Block {
             gc.setLineWidth(1.0);
 
             // Edge glow effect
-            gc.setFill(ultraDarkColor);
+            gc.setFill(outerGlow3);
             gc.fillRect(pixelX, pixelY, BLOCK_SIZE, BLOCK_SIZE);
 
-            gc.setFill(superDarkColor);
+            gc.setFill(outerGlow2);
             gc.fillRect(pixelX+1, pixelY+1, BLOCK_SIZE-2, BLOCK_SIZE-2);
+
+            gc.setFill(outerGlow1);
+            gc.fillRect(pixelX+2, pixelY+2, BLOCK_SIZE-4, BLOCK_SIZE-4);
 
             // Inner rectangle with gradient
             gc.setFill(gradient);
@@ -90,7 +114,7 @@ public class MinoBlock extends Block {
 
             // Outer rectangle border
             gc.setStroke(color);
-            gc.strokeRect(pixelX+2 + 0.5, pixelY+2 + 0.5, BLOCK_SIZE-4, BLOCK_SIZE-4);
+            gc.strokeRect(pixelX+3 + 0.5, pixelY+3 + 0.5, BLOCK_SIZE-6 - 0.5, BLOCK_SIZE-6 - 0.5);
 
             // Reset stroke width
             gc.setLineWidth(4.0);
@@ -131,25 +155,22 @@ public class MinoBlock extends Block {
      */
     public void drawFalling(GraphicsContext gc, int workingCounter, int numLinesFall) {
         assert workingCounter < BLOCK_FALLING_DURATION;
-        assert workingCounter >= 0;
 
-        if (workingCounter < 0) {
-            System.out.println("falling counter smaller than  0 !!!!!!!!!!!!!!!!");
-        }
+        assert workingCounter >= 0: "falling counter smaller than  0 !!!!!!!!!!!!!!!!";
 
         int finalPixelY = row * BLOCK_SIZE;
-
 
         int fallHeight = numLinesFall * BLOCK_SIZE;
 
         drawRemove(gc);
 
-        pixelY = finalPixelY - fallHeight + ((workingCounter * fallHeight) / BLOCK_FALLING_DURATION - 1); // finalPixelY + (workingCounter - BLOCK_FALLING_DURATION) * fallHeight / BLOCK_FALLING_DURATION;
+        pixelY = finalPixelY - fallHeight + ((workingCounter * fallHeight) / BLOCK_FALLING_DURATION); // finalPixelY + (workingCounter - BLOCK_FALLING_DURATION) * fallHeight / BLOCK_FALLING_DURATION;
         if (workingCounter == BLOCK_FALLING_DURATION - 1) {
             pixelY = finalPixelY; // snap
         }
         drawAdd(gc);
     }
+
 
 
 
