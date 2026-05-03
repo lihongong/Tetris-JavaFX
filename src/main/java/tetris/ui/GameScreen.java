@@ -77,6 +77,7 @@ public class GameScreen extends UiPart<VBox> {
     private StackPane tubeContainer;
 
     private LineMeterTube lineMeterTube;
+    private ComboOverlay comboOverlay;
 
     // Graphic contexts
     private GraphicsContext playingFieldGC; // Draw the grid background in the playing field
@@ -151,6 +152,9 @@ public class GameScreen extends UiPart<VBox> {
         lineMeterTube = new LineMeterTube(20, PLAYING_FIELD_HEIGHT);
         tubeContainer.getChildren().add(lineMeterTube);
         tubeContainer.setVisible(false); // hide it, only appear when Sprint Mode
+
+        comboOverlay = new ComboOverlay(PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT); // already invisible at first
+        playingField.getChildren().add(comboOverlay); // add combo overlay on top of all elements in playing field
 
         nextMinoBox.getChildren().add(nextBoxCanvas);
         holdMinoBox.getChildren().add(holdBoxCanvas);
@@ -250,6 +254,13 @@ public class GameScreen extends UiPart<VBox> {
     // =================================================
     // Effects
     // =================================================
+    public void popComboEffect(int combo) {
+        if (combo < 1) {
+            return;
+        }
+        comboOverlay.showComboAnimation(combo);
+
+    }
 
     public void handleClearLineSpecialEffect(int effectCounter) {
         // 0 - 6: 7 frames

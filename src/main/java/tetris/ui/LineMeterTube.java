@@ -57,15 +57,16 @@ public class LineMeterTube extends StackPane {
         double pathFillHeight = percentage * maxHeight;               //                |  |
                                                                       //                |__|
         // Calculate Y offset (Higher fill = Smaller Y value)
-        double tipY = Math.min(maxHeight, maxHeight - pathFillHeight + 6);
+        double tipY = Math.min(maxHeight, maxHeight - pathFillHeight);
         double baseY = Math.min(maxHeight, tipY + triangleTipHeight); // the base is lower than the triangle tip
         if (numLines == goal) { // fill up the tube full full (no more triangle tip)
+            tipY = 6;
             baseY = 6;
         }
 
         // Animate 3 points simultaneously to keep the triangle shape
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(300),
+                new KeyFrame(Duration.millis(150),
                         new KeyValue(tip.yProperty(), tipY),
                         new KeyValue(baseRight.yProperty(), baseY),
                         new KeyValue(baseLeft.yProperty(), baseY)

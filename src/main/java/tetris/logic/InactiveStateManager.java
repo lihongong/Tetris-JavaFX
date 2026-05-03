@@ -109,16 +109,11 @@ public class InactiveStateManager {
         // passing 0 line clear into updateScore() will reset gameMetrics combo count
         gameMetrics.updateScore(numLinesClear, gameState.isTSpin());
 
-        // update gameScreen score UI
-
-        // gameScreen.updateScore(gameMetrics.getScore());
-
-        // if
         if (gotLineRemoval) {
             gameState.turnOnEffect();
-            // TODO: sound effect based on numLinesClear & combo sound effects
-
-            // TODO: if in SprintMode, make GameScreen increase the LineMeterTube Height !!!
+            // TODO: sound effect based on numLinesClear & combo effects
+            gameScreen.popComboEffect(gameMetrics.getCombo());
+            // if in SprintMode, make GameScreen increase the LineMeterTube Height !!!
             if (gameState.getGameMode() == GameMode.SPRINT) {
                 gameState.checkSprintOver(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
 
