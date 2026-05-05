@@ -156,8 +156,8 @@ public class SprintOverScreen extends UiPart<VBox> {
         slideFadeIn.play();
     }
 
-    public void closeSprintOverScreenEffects(GameScreen gameScreen, Runnable restartGameLoop,
-                                             Runnable restartGameplayManagerAndGameScreen) {
+    public void closeSprintOverScreenEffects(GameScreen gameScreen, Runnable restartGameplayManagerAndGameScreen,
+                                             Runnable restartGameLoop) {
         // prevent multiple animation happening at once
         if (UiPart.isUiEffectsOn()) {
             return;
@@ -172,21 +172,23 @@ public class SprintOverScreen extends UiPart<VBox> {
         ParallelTransition slideOutTrans = UiAnimation.slideOut(toX, animateDuration, restartButton, exitButton);
         ParallelTransition fadeOutTrans = UiAnimation.fadeOut(fadeOutFrom, fadeOutTo, animateDuration, restartButton,
                 exitButton, timePanel);
-        // unblur the gameScreen
+
+        // darken and brighten game screen
         Animation gameScreenDarken = gameScreen.darken();
-        gameScreenDarken.setOnFinished(e -> {
+        gameScreenDarken.setOnFinished(e1 -> {
             if (gameScreenZoomInAnimation != null) gameScreenZoomInAnimation.stop();
             restartGameplayManagerAndGameScreen.run();
             gameScreen.resetUiPositionAfterAnimation();
-            gameScreen.brighten().play();
+            Animation gameScreenBrighten = gameScreen.brighten();
+            gameScreenBrighten.setOnFinished(e2 -> {
+                UiPart.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
+                UiPart.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
+                restartGameLoop.run();
+            });
+            gameScreenBrighten.play();
         });
-        ParallelTransition gameRestartTransition = new ParallelTransition(slideOutTrans, fadeOutTrans, gameScreenDarken);
 
-        gameRestartTransition.setOnFinished(e -> {
-            UiPart.hideNode(this.getRoot()); // "disappear GameOverScreen" as we restart the game again
-            UiPart.setUiEffectsOff(); // enable ui interaction again (prevent multiple animation at once)
-            restartGameLoop.run();
-        });
+        ParallelTransition gameRestartTransition = new ParallelTransition(slideOutTrans, fadeOutTrans, gameScreenDarken);
         gameRestartTransition.play();
     }
 

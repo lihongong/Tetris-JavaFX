@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="pausedLabel" alignment="TOP_CENTER" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0" stylesheets="@pause-menu.css" text="Paused" />
       <HBox alignment="CENTER_RIGHT">

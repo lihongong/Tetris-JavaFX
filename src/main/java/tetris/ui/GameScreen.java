@@ -77,6 +77,7 @@ public class GameScreen extends UiPart<VBox> {
     private StackPane tubeContainer;
 
     private LineMeterTube lineMeterTube;
+    private ComboOverlay comboOverlay;
 
     // Graphic contexts
     private GraphicsContext playingFieldGC; // Draw the grid background in the playing field
@@ -151,6 +152,9 @@ public class GameScreen extends UiPart<VBox> {
         lineMeterTube = new LineMeterTube(20, PLAYING_FIELD_HEIGHT);
         tubeContainer.getChildren().add(lineMeterTube);
         tubeContainer.setVisible(false); // hide it, only appear when Sprint Mode
+
+        comboOverlay = new ComboOverlay(PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT); // already invisible at first
+        playingField.getChildren().add(comboOverlay); // add combo overlay on top of all elements in playing field
 
         nextMinoBox.getChildren().add(nextBoxCanvas);
         holdMinoBox.getChildren().add(holdBoxCanvas);
@@ -250,6 +254,13 @@ public class GameScreen extends UiPart<VBox> {
     // =================================================
     // Effects
     // =================================================
+    public void popComboEffect(int combo) {
+        if (combo < 1) {
+            return;
+        }
+        comboOverlay.showComboAnimation(combo);
+
+    }
 
     public void handleClearLineSpecialEffect(int effectCounter) {
         // 0 - 6: 7 frames
@@ -550,7 +561,7 @@ public class GameScreen extends UiPart<VBox> {
 
     /**
      * Shows the remaining time and time bar on Blitz mode, 2 minutes count down timer
-     * @param currentCounter is the game counter, 120 times per second (FPS)
+     * @param currentCounter is the game counter, 120 times per second (FPS), is starting from 0 and counting up
      */
     public void updateRemainingTime(int currentCounter) {
         int numOfSecondsLeft = 120 - currentCounter / FPS;
@@ -567,7 +578,7 @@ public class GameScreen extends UiPart<VBox> {
         // set color of timer & timer bar
         String cssColor = getTimerBarColor(progress);
 
-        if (progress < (1.0 / 6) && second % 2 == 0) { // 20 seconds left, starts blinking the timer number :)
+        if (currentCounter >= WARNING_TIME && second % 2 == 0) { // 20 seconds left, starts blinking the timer number :)
             timer.setStyle("-fx-text-fill: " + cssColor + ";");
         } else {
             timer.setStyle("-fx-text-fill: white");

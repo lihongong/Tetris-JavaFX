@@ -14,7 +14,8 @@ public class KeyInputController {
     public GameState gameState;
     private GameController gameController;
     private ActiveStateManager activeStateManager;
-    public boolean isIgnoreKeyInput;
+    private boolean isIgnoreKeyInput;
+    private boolean isIgnoreGameplayInput;
 
     // For key press logic
     private final Set<KeyCode> pressedKeys;
@@ -44,11 +45,17 @@ public class KeyInputController {
             hasBeenHandled = false;
         }
     }
-    public void enableKeyInput() {
+    public void enableAllKeyInput() {
         this.isIgnoreKeyInput = false;
+        this.isIgnoreGameplayInput = false;
     }
-    public void disableKeyInput() {
+    public void enableSystemInputOnly() {
+        this.isIgnoreKeyInput = false;
+        this.isIgnoreGameplayInput = true;
+    }
+    public void disableAllKeyInput() {
         this.isIgnoreKeyInput = true;
+        this.isIgnoreGameplayInput = true;
     }
 
     /**
@@ -135,7 +142,7 @@ public class KeyInputController {
                         onlyPressKeyHandler(KeyCode.R, gameController::resumeGame);
                     }
 
-                } else {
+                } else if (!isIgnoreGameplayInput) {
                     // game is running
                     if (!pressedKeys.contains(KeyCode.RIGHT) || !pressedKeys.contains(KeyCode.LEFT)) {
                         holdableKeyHandler(KeyCode.LEFT, currentTime, activeStateManager::handleLeftPress);
@@ -154,7 +161,6 @@ public class KeyInputController {
                     } else if (pressedKeys.contains(KeyCode.SHIFT)) {
                         onlyPressKeyHandler(KeyCode.SHIFT, activeStateManager::handleHoldPress);
                     }
-
                 }
             }
         }.start();

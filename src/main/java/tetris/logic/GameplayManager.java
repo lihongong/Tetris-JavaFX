@@ -92,7 +92,7 @@ public class GameplayManager {
         }
     }
 
-    public void restartGame() {
+    public void restartGameplayManager() {
         if (gameState.getGameMode() == GameMode.SPRINT) {
             restartGameForSprint();
         } else {
@@ -169,7 +169,6 @@ public class GameplayManager {
         }
 
         GameMode gameMode = gameState.getGameMode();
-        // !!!!!! gameScreen.restartGame(gameMetrics.getHighScore(gameMode)); MUST COME BEFORE minoManager.restartMinoManager();
 
         gameMetrics.setHighScore(gameMode); // set high score first
         gameMetrics.resetScoreAndLines(); // then reset current score

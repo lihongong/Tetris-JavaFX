@@ -23,10 +23,8 @@ public class Tetris extends Application {
             this.mainWindow = new MainWindow(primaryStage);
             mainWindow.fillInnerParts();
             mainWindow.setUpGame();
+            mainWindow.show();
 
-            Platform.runLater(() -> {
-                mainWindow.show();
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package tetris.logic;
 
+import tetris.audio.AudioManager;
+import tetris.audio.SoundType;
 import tetris.block.Mino;
 import tetris.block.MinoBlock;
 import tetris.ui.GameScreen;
@@ -45,6 +47,8 @@ public class InputHandler {
 
     }
     public void handleHoldPress() {
+        // Sound effect for hold press
+        AudioManager.getInstance().playSfx(SoundType.HOLD);
 
         if (minoManager.isHoldMinoEmpty()) {
             minoManager.swapCurrentHoldNextMino();
@@ -52,11 +56,11 @@ public class InputHandler {
             minoManager.swapCurrentHoldMino();
         }
         gameState.disableSwapMino(); // only allow one swap per "round"
-
-        // Sound effect for Hold (Shift)
-        //TetrisPanel.soundEffect.play(11, false); // TODO: sound effect for hold
     }
     public void handleSpacePress() {
+        // Sound effect for Space press
+        AudioManager.getInstance().playSfx(SoundType.SPACE);
+
         Mino currentMino = minoManager.getCurrentMino();
         // Clear UI
         gameScreen.removeMinoInPlayingField(currentMino);
@@ -77,9 +81,6 @@ public class InputHandler {
         gameScreen.addMinoInPlayingField(currentMino);
 
         gameState.resetAutoDropCounter();
-
-        // Sound effect for Space
-        //TetrisPanel.soundEffect.play(12, false); TODO: sound effect for space
     }
     public void handleDownPress() {
         Mino currentMino = minoManager.getCurrentMino();

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="mainLayout" alignment="CENTER" stylesheets="@sprint-mode-screen.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="mainLayout" alignment="CENTER" stylesheets="@sprint-mode-screen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label fx:id="titleLabel" alignment="TOP_CENTER" contentDisplay="TOP" minHeight="150.0" minWidth="680.0" prefHeight="150.0" prefWidth="680.0" stylesheets="@select-menu.css" text="Lines To Clear" />
         <HBox alignment="CENTER_RIGHT">

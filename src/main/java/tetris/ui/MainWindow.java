@@ -1,5 +1,6 @@
 package tetris.ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -44,6 +45,9 @@ public class MainWindow extends UiPart<StackPane> {
     private void config(Stage primaryStage) {
         try {
             Parent root = getRoot();
+            // testing
+           // root.applyCss();
+            //root.layout();
 
             this.primaryStage = primaryStage;
             this.mainScene = new Scene(root);
@@ -69,15 +73,17 @@ public class MainWindow extends UiPart<StackPane> {
         primaryStage.setMinHeight((int) minHeight);
 
         primaryStage.setMaximized(true);
+        /*
+        Platform.runLater(() -> {
+            primaryStage.toFront();
+            primaryStage.requestFocus();
+        });*/
     }
 
     public void fillInnerParts() {
         this.gameScreen = new GameScreen();
-        //this.gameRoot.getChildren().add(gameScreen.getRoot());
 
         this.pauseMenuScreen = new PauseMenuScreen();
-        //this.gameRoot.getChildren().add(pauseMenuScreen.getRoot());
-        //pauseMenuScreen.getRoot().setVisible(false); // initially, pause screen isn't visible
 
         this.gameOverScreen = new GameOverScreen();
         this.timesUpScreen = new TimesUpScreen();
@@ -108,6 +114,10 @@ public class MainWindow extends UiPart<StackPane> {
 
         // 5. Show only the Start Menu
         startMenuScreen.getRoot().setVisible(true);
+/*
+        this.startMenuScreen = new StartMenuScreen();
+        gameRoot.getChildren().addAll(startMenuScreen.getRoot());
+        startMenuScreen.getRoot().setVisible(true);*/
     }
 
     public void setUpGame() {

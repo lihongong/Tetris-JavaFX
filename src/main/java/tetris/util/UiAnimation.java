@@ -28,16 +28,6 @@ public class UiAnimation {
         }
         return outputAnimations;
     }
-    public static ArrayList<TranslateTransition> slideInT(int fromX, int toX, float animateDuration, Node... nodes) {
-        ArrayList<TranslateTransition> outputAnimations = new ArrayList<>();
-        for (Node node : nodes) {
-            TranslateTransition slideInTrans = new TranslateTransition(Duration.seconds(animateDuration), node);
-            slideInTrans.setFromX(fromX);
-            slideInTrans.setToX(toX);
-            outputAnimations.add(slideInTrans);
-        }
-        return outputAnimations;
-    }
     public static ParallelTransition slideOut(int toX, float animateDuration, Node... nodes) {
         ParallelTransition outputAnimations = new ParallelTransition();
         for (Node node : nodes) {
@@ -48,25 +38,27 @@ public class UiAnimation {
         return outputAnimations;
     }
 
-    // fall
+    // fall -- Translate Y direction
     public static ParallelTransition fall(int fromY, int toY, float animateDuration, Node... nodes) {
         ParallelTransition outputAnimations = new ParallelTransition();
         for (Node node : nodes) {
-            TranslateTransition fallTrans = new TranslateTransition(Duration.seconds(animateDuration), node);
-            fallTrans.setFromY(fromY);
-            fallTrans.setToY(toY);
-            fallTrans.setInterpolator(Interpolator.SPLINE(0.4, 0.0, 1.0, 1.0));
+            TranslateTransition fallTrans = fall(fromY, toY, animateDuration, node);
             outputAnimations.getChildren().add(fallTrans);
         }
         return outputAnimations;
     }
     public static TranslateTransition fall(int fromY, int toY, float animateDuration, Node node) {
-        TranslateTransition fallTrans = new TranslateTransition(Duration.seconds(animateDuration), node);
-        fallTrans.setFromY(fromY);
-        fallTrans.setToY(toY);
+        TranslateTransition fallTrans = translateY(fromY, toY, animateDuration, node);
         fallTrans.setInterpolator(Interpolator.SPLINE(0.4, 0.0, 1.0, 1.0));
         return fallTrans;
     }
+    public static TranslateTransition translateY(int fromY, int toY, float animateDuration, Node node) {
+        TranslateTransition transY = new TranslateTransition(Duration.seconds(animateDuration), node);
+        transY.setFromY(fromY);
+        transY.setToY(toY);
+        return transY;
+    }
+
 
     // Fade
     public static ParallelTransition fadeIn(float fadeInFrom, float fadeInTo, float animateDuration, Node... nodes) {
