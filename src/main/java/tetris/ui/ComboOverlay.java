@@ -36,9 +36,31 @@ public class ComboOverlay extends StackPane {
 
         this.setVisible(false); // invisible at first
 
+        this.preventLaggy();
+    }
+    // Bake the text shape into GPU memory and cache it
+    private void preventLaggy() {
         // Prevent laggy first few combo overlay display
         this.setCache(true);
         this.setCacheHint(CacheHint.SPEED); // Prioritize smooth animation over crispness
+
+        // 1. Make it technically "on screen" but invisible to the user
+        this.setOpacity(1.0);
+        this.setVisible(true);
+
+        // 2. Cycle through common combo numbers to prime the cache
+        // This bakes the stroke and shadow for 0-9 into the GPU memory
+        String[] warmUpNumbers = {"0", "2", "3", "4", "5", "6", "7", "8", "9"};
+
+        for (String n : warmUpNumbers) {
+            comboNumber.setText(n);
+            this.applyCss();
+            this.layout();
+        }
+
+        // 3. Return to initial state
+        this.setVisible(false);
+        this.setOpacity(1.0);
     }
 
     public void showComboAnimation(int combo) {
