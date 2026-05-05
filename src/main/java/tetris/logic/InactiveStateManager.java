@@ -1,5 +1,7 @@
 package tetris.logic;
 
+import tetris.audio.AudioManager;
+import tetris.audio.SoundType;
 import tetris.block.Mino;
 import tetris.block.MinoBlock;
 import tetris.ui.GameScreen;
@@ -9,11 +11,11 @@ import static tetris.util.TetrisConstants.*;
 import static tetris.util.TetrisConstants.NUM_OF_COL;
 
 public class InactiveStateManager {
-    private GameState gameState;
-    private GameScreen gameScreen;
-    private MinoManager minoManager;
-    private MinoBlock[][] inactiveBlocksArray;
-    private GameMetrics gameMetrics;
+    private final GameState gameState;
+    private final GameScreen gameScreen;
+    private final MinoManager minoManager;
+    private final MinoBlock[][] inactiveBlocksArray;
+    private final GameMetrics gameMetrics;
 
     public InactiveStateManager(GameState gameState, GameScreen gameScreen, MinoManager minoManager, MinoBlock[][] inactiveBlocksArray, GameMetrics gameMetrics) {
         this.gameState = gameState;
@@ -113,6 +115,7 @@ public class InactiveStateManager {
             gameState.turnOnEffect();
             // TODO: sound effect based on numLinesClear & combo effects
             gameScreen.popComboEffect(gameMetrics.getCombo());
+
             // if in SprintMode, make GameScreen increase the LineMeterTube Height !!!
             if (gameState.getGameMode() == GameMode.SPRINT) {
                 gameState.checkSprintOver(gameMetrics.getNumLinesClear(), gameMetrics.getSprintGoal());
@@ -123,11 +126,28 @@ public class InactiveStateManager {
                 gameScreen.updateGameMetricsForDefault(gameMetrics.getNumLinesClear(), gameMetrics.getScore());
             }
 
-            //gameScreen.updateGameMetricsSideBar(gameState.getGameMode(), gameMetrics.getScore());
+            if (isPotentialTSpin) {
+                gameState.setIsTSpin();
+            }
+
+            // Clear line & Combo & Tspin Sound Effect -- if there is line clear
+            playClearSoundEffect(numLinesClear, gameMetrics.getCombo(), isPotentialTSpin);
         }
-        if (gotLineRemoval && isPotentialTSpin) {
-            gameState.setIsTSpin();
-            // TODO: t spin sound effect -- is a add on sound to the default line clear effect :)
+    }
+    private void playClearSoundEffect(int numLinesClear, int combo, boolean isTSpin) {
+        // clear 1-4 lines sound
+        SoundType lineRemoveSoundType = SoundType.fromLinesRemoved(numLinesClear);
+        if (lineRemoveSoundType != null) { // if numlines cleared is > 4 or < 0, play nothing (safety net)
+            AudioManager.getInstance().playSfx(lineRemoveSoundType);
+        }
+        // combo 1-7 sound
+        SoundType comboSoundType = SoundType.fromCombo(combo);
+        if (comboSoundType != null) {
+            AudioManager.getInstance().playSfx(comboSoundType);
+        }
+        // is TSpin sound
+        if (isTSpin) {
+            AudioManager.getInstance().playSfx(SoundType.T_SPIN);
         }
     }
 }

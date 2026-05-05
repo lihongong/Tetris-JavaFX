@@ -28,10 +28,6 @@ public class ComboOverlay extends StackPane {
         comboNumber = new Label("9");
         comboWording = new Label("COMBO!");
         comboWording.setTranslateY(comboWordingRelativeToNumberPositionY);
-        comboWording.setScaleX(2.0);
-        comboWording.setScaleY(2.0);
-        comboNumber.setScaleX(2.0);
-        comboNumber.setScaleY(2.0);
         this.getChildren().addAll(comboNumber, comboWording);
 
         this.setVisible(false); // invisible at first

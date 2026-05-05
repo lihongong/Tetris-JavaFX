@@ -324,6 +324,8 @@ public class GameController {
         gameState.setGameMode(GameMode.BLITZ); // will also set sprintMode to NONE
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
+
+
         startGame();
     }
 

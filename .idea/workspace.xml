@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/ComboOverlay.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tetris/audio/AudioManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tetris/audio/SoundType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/LineMeterTube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/LineMeterTube.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/UiAnimation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/sound/AudioManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/ComboOverlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/ComboOverlay.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +33,11 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Tetris" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Tetris" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
               </path>
             </expand>
             <select />
@@ -89,6 +95,7 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.42068964",
