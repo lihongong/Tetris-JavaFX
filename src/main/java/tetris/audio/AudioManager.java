@@ -6,6 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class AudioManager {
     // SFX: Use AudioClip for low-latency, overlapping sounds
@@ -13,19 +14,11 @@ public class AudioManager {
     // BGM: Use MediaPlayer for long tracks, looping, and volume control
     private final Map<SoundType, Media> bgmLibrary = new HashMap<>();
     private MediaPlayer musicPlayer;
-    /*private final String[] sfxFileNames = {
-            "Combo1.wav", "Combo2.wav", "Combo3.wav", "Combo4.wav", "Combo5.wav", "Combo6.wav", "Combo7.wav",
-            "Remove1Line.wav", "Remove2Line.wav", "Remove3Line.wav", "Remove4Line_TSpin.wav",
-            "Hold.wav", "Space.wav", "KO1.wav", "KO2.wav", ""// ... add all your files
-    };
-    private final String[] bgmFileNames = {
-            "OSTShorten.wav"
-    };*/
 
     // Singleton Pattern
     private static AudioManager instance;
 
-    public AudioManager() {
+    private AudioManager() {
         loadSounds();
     }
 
@@ -37,38 +30,12 @@ public class AudioManager {
     }
 
     private void loadSounds() {
-        // load sfx sound
-
-        /*
-        for (int i = 0; i < sfxFileNames.length; i++) {
-            try {
-                // IMPORTANT: Use getResource so it works inside a JAR file later
-                URL resource = getClass().getResource("/sounds/" + sfxFileNames[i]);
-                if (resource != null) {
-                    sfxLibrary.put(i, new AudioClip(resource.toExternalForm()));
-                }
-            } catch (Exception e) {
-                System.err.println("Could not load sound: " + sfxFileNames[i]);
-            }
-        }
-        // load ost / bgm
-        for (int i = 0; i < bgmFileNames.length; i++) {
-            try {
-                // IMPORTANT: Use getResource so it works inside a JAR file later
-                URL resource = getClass().getResource("/sounds/" + bgmFileNames[i]);
-                if (resource != null) {
-                    bgmLibrary.put(i, new Media(resource.toExternalForm()));
-                }
-            } catch (Exception e) {
-                System.err.println("Could not load sound: " + bgmFileNames[i]);
-            }
-        }*/
-
         for (SoundType type : SoundType.values()) {
-            String path = type.getFileName();
-            URL resource = getClass().getResource(path);
+            String fullPath = "/sounds/" + type.getFileName();
+            URL resource = getClass().getResource(fullPath);
 
             if (resource == null) {
+                System.err.println("Warning: Could not find " + fullPath);
                 continue;
             }
 
@@ -85,14 +52,26 @@ public class AudioManager {
     public void playSfx(SoundType soundType) {
         AudioClip clip = sfxLibrary.get(soundType);
         if (clip != null) {
-            clip.play();
+            // separate thread for faster audio
+            new Thread(() -> clip.play()).start();
         }
+    }
+
+    public void playRandomGameOverSound() {
+        SoundType[] koSounds = {SoundType.KO1, SoundType.KO2, SoundType.WET_FART};
+
+        Random random = new Random();
+        SoundType randomType = koSounds[random.nextInt(koSounds.length)];
+
+        playSfx(randomType);
     }
 
     /** Handles the Background Music */
     public void playBGM(SoundType soundType) {
         if (musicPlayer != null) {
-            musicPlayer.stop();
+            if (musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+                musicPlayer.stop();
+            }
             musicPlayer.dispose();
         }
 
@@ -100,6 +79,14 @@ public class AudioManager {
         musicPlayer = new MediaPlayer(media);
         musicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Loop forever
         musicPlayer.play();
+    }
+
+    public void restartBGM() {
+        if (musicPlayer != null) {
+            // start at the beginning again
+            musicPlayer.seek(musicPlayer.getStartTime());
+            musicPlayer.play();
+        }
     }
 
     public void pauseBGM() {
@@ -111,6 +98,10 @@ public class AudioManager {
     }
 
     public void stopBGM() {
-        if (musicPlayer != null) musicPlayer.stop();
+        if (musicPlayer != null) {
+            if (musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+                musicPlayer.stop();
+            }
+        }
     }
 }

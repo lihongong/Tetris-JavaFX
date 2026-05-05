@@ -7,8 +7,14 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 javafx {
-    version = "21"  // Use your JavaFX version
+    version = "17.0.10"  // Use your JavaFX version
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]  // Add modules you need
 }
 

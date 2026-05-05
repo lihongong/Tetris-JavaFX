@@ -1,5 +1,6 @@
 package tetris.util;
 
+import javafx.animation.ParallelTransition;
 import javafx.scene.paint.Color;
 
 public class TetrisConstants {
@@ -59,7 +60,8 @@ public class TetrisConstants {
     public static final int BLOCK_FADING_DURATION = 7; // in millisecond, around 8 frames when FPS is 120
     public static final int BLOCK_FALLING_DURATION = 8; // in millisecond, around 8 frames when FPS is 120
     public static final int T_SPIN_DURATION = 30;
-    public static final int TWO_MINUTE_DURATION = FPS * 3;
+    public static final int TWO_MINUTE_DURATION = FPS * 120;
+    public static final int WARNING_TIME = FPS * 100; // elapsed 100 seconds --> 20 seconds left
 
     // =================================================
     // Colors and Designs
@@ -71,6 +73,8 @@ public class TetrisConstants {
     // =================================================
     // Scores and metrics
     // =================================================
+    public static final int BASIC_SCORE = 10;
+    public static final int T_SPIN_LINE = 6;
     public static final int SPRINT_MODE_A_CAP = 20;
     public static final int SPRINT_MODE_B_CAP = 40;
     public static final int SPRINT_MODE_C_CAP = 60;

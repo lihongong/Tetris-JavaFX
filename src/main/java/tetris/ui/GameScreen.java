@@ -561,7 +561,7 @@ public class GameScreen extends UiPart<VBox> {
 
     /**
      * Shows the remaining time and time bar on Blitz mode, 2 minutes count down timer
-     * @param currentCounter is the game counter, 120 times per second (FPS)
+     * @param currentCounter is the game counter, 120 times per second (FPS), is starting from 0 and counting up
      */
     public void updateRemainingTime(int currentCounter) {
         int numOfSecondsLeft = 120 - currentCounter / FPS;
@@ -578,7 +578,7 @@ public class GameScreen extends UiPart<VBox> {
         // set color of timer & timer bar
         String cssColor = getTimerBarColor(progress);
 
-        if (progress < (1.0 / 6) && second % 2 == 0) { // 20 seconds left, starts blinking the timer number :)
+        if (currentCounter >= WARNING_TIME && second % 2 == 0) { // 20 seconds left, starts blinking the timer number :)
             timer.setStyle("-fx-text-fill: " + cssColor + ";");
         } else {
             timer.setStyle("-fx-text-fill: white");

@@ -3,17 +3,16 @@ package tetris.logic;
 import javafx.animation.*;
 import javafx.scene.Scene;
 import javafx.util.Duration;
+import tetris.audio.AudioManager;
+import tetris.audio.SoundType;
 import tetris.ui.*;
 import tetris.util.GameMode;
 import tetris.util.SprintMode;
-
-import javax.print.attribute.standard.RequestingUserName;
 
 import static tetris.util.TetrisConstants.FPS;
 import static tetris.util.TetrisConstants.SPRINT_MODE_A_CAP;
 import static tetris.util.TetrisConstants.SPRINT_MODE_B_CAP;
 import static tetris.util.TetrisConstants.SPRINT_MODE_C_CAP;
-import static tetris.util.TetrisConstants.TWO_MINUTE_DURATION;
 
 public class GameController {
 
@@ -114,16 +113,19 @@ public class GameController {
         assert relaxGameLoop == currentGameLoop;
 
         if (gameState.isGameOver()) {
+            AudioManager.getInstance().stopBGM();
+            AudioManager.getInstance().playRandomGameOverSound();
+
             // pause game loop
             relaxGameLoop.pause();
 
             // disable key input
-            keyInputController.disableKeyInput();
+            keyInputController.disableAllKeyInput();
             // only enable key input after animation is fully finished
-            Runnable allowKeyInput = () -> {
-                keyInputController.enableKeyInput();
+            Runnable allowSystemKeyInput = () -> {
+                keyInputController.enableSystemInputOnly();
             };
-            gameOverScreen.openGameOverScreenEffects(gameScreen, allowKeyInput);
+            gameOverScreen.openGameOverScreenEffects(gameScreen, allowSystemKeyInput);
         } else {
             gameplayManager.update();
         }
@@ -136,56 +138,76 @@ public class GameController {
         gameScreen.updateStopWatch(timeManager.getCurrentCounter());
 
         if (gameState.isSprintOver()) {
-            Runnable pauseGameLoopAndSprintOverEffects = () -> {
-                sprintGameLoop.pause();
-                keyInputController.disableKeyInput();
 
-                Runnable allowKeyInput = () -> {
-                    keyInputController.enableKeyInput();
+            keyInputController.disableAllKeyInput();
+
+            // dont pause game loop yet, run the last clear line effect only then pause game loop
+            // after that, open the sprint over screen,
+            // after the effect, only enable system input (no gameplay input)
+            Runnable pauseGameLoopAndSprintOverEffects = () -> {
+                AudioManager.getInstance().stopBGM();
+
+                sprintGameLoop.pause();
+
+                Runnable allowSystemKeyInput = () -> {
+                    keyInputController.enableSystemInputOnly();
                 };
-                sprintOverScreen.openSprintOverScreenEffects(gameScreen, allowKeyInput);
+                sprintOverScreen.openSprintOverScreenEffects(gameScreen, allowSystemKeyInput);
             };
+
             gameplayManager.lastClearLineEffect(pauseGameLoopAndSprintOverEffects);
         } else if (gameState.isGameOver()) {
+            AudioManager.getInstance().stopBGM();
+            AudioManager.getInstance().playRandomGameOverSound();
+
             sprintGameLoop.pause();
 
             // disable key input
-            keyInputController.disableKeyInput();
+            keyInputController.disableAllKeyInput();
             // only enable key input after animation is fully finished
-            Runnable allowKeyInput = () -> {
-                keyInputController.enableKeyInput();
+            Runnable allowSystemKeyInput = () -> {
+                keyInputController.enableSystemInputOnly();
             };
-            gameOverScreen.openGameOverScreenEffects(gameScreen, allowKeyInput);
+            gameOverScreen.openGameOverScreenEffects(gameScreen, allowSystemKeyInput);
         } else {
-            //gameScreen.updateStopWatch(timeManager.getCurrentCounter());
             gameplayManager.update();
         }
     }
 
     public void blitzUpdate() {
         assert blitzGameLoop == currentGameLoop;
+
+        if (timeManager.isWarningTime()) {
+            AudioManager.getInstance().playSfx(SoundType.TIME_WARNING);
+        }
         gameScreen.updateRemainingTime(timeManager.getCurrentCounter());
 
         if (timeManager.isTimesUp()) {
+            AudioManager.getInstance().stopBGM();
+            AudioManager.getInstance().playSfx(SoundType.TIMES_UP);
+
             blitzGameLoop.pause();
 
             // disable key input
-            keyInputController.disableKeyInput();
+            keyInputController.disableAllKeyInput();
             // only enable key input after animation is fully finished
-            Runnable allowKeyInput = () -> {
-                keyInputController.enableKeyInput();
+            Runnable allowSystemKeyInput = () -> {
+                keyInputController.enableSystemInputOnly();
             };
-            timesUpScreen.openTimesUpScreenEffects(gameScreen, allowKeyInput);
+            timesUpScreen.openTimesUpScreenEffects(gameScreen, allowSystemKeyInput);
         } else if (gameState.isGameOver()) {
+            AudioManager.getInstance().stopBGM();
+            AudioManager.getInstance().playRandomGameOverSound();
+
             blitzGameLoop.pause();
 
             // disable key input
-            keyInputController.disableKeyInput();
+            keyInputController.disableAllKeyInput();
             // only enable key input after animation is fully finished
-            Runnable allowKeyInput = () -> {
-                keyInputController.enableKeyInput();
+            Runnable allowSystemKeyInput = () -> {
+                keyInputController.enableSystemInputOnly();
             };
-            gameOverScreen.openGameOverScreenEffects(gameScreen, allowKeyInput);
+            gameOverScreen.openGameOverScreenEffects(gameScreen, allowSystemKeyInput);
         } else {
             gameplayManager.update();
         }
@@ -197,6 +219,8 @@ public class GameController {
         if (UiPart.isUiEffectsOn()) {
             return;
         }
+        AudioManager.getInstance().pauseBGM();
+
         gameState.pauseTheGame();
         currentGameLoop.pause();
 
@@ -205,6 +229,8 @@ public class GameController {
     public void resumeGame() {
         // resuming game is more time sensitive, so make sure the transitions have ended, only then we resume gameplay
         Runnable resumeGameAfterEffects = () -> {
+            AudioManager.getInstance().resumeBGM();
+
             // only resume the game logic after the animation is finished
             gameState.resumeTheGame();
             currentGameLoop.play();
@@ -213,11 +239,14 @@ public class GameController {
     }
     // RESTART
     public void restartGameInGameOver() {
-        // restart model
-        gameplayManager.restartGame();
+        // restart model & gameScreen
+        gameplayManager.restartGameplayManager();
 
         Runnable restartGameAfterEffects = () -> {
+            AudioManager.getInstance().restartBGM();
+
             currentGameLoop.play();
+            keyInputController.enableAllKeyInput();
         };
 
         // transition effects
@@ -226,33 +255,47 @@ public class GameController {
     public void restartGameInSprintOver() {
         // restart model & game screen
         Runnable restartGameplayManagerAndGameScreen = () -> {
-            gameplayManager.restartGame();
+            gameplayManager.restartGameplayManager();
         };
-        Runnable restartGameLoopAfterEffects = () -> currentGameLoop.play();
+        Runnable restartGameAfterEffects = () -> {
+            AudioManager.getInstance().restartBGM();
+
+            currentGameLoop.play();
+            keyInputController.enableAllKeyInput();
+        };
         // transition effects
-        sprintOverScreen.closeSprintOverScreenEffects(gameScreen, restartGameLoopAfterEffects,
-                                                      restartGameplayManagerAndGameScreen);
+        sprintOverScreen.closeSprintOverScreenEffects(gameScreen, restartGameplayManagerAndGameScreen,
+                                                      restartGameAfterEffects);
     }
     public void restartGameInTimesUp() {
+        AudioManager.getInstance().restartBGM();
+
         // transition effects
         timesUpScreen.closeTimesUpScreenEffects(gameScreen);
 
         // restart model
+        gameplayManager.restartGameplayManager();
+        keyInputController.enableAllKeyInput();
         currentGameLoop.play();
-        gameplayManager.restartGame();
     }
     public void restartGameInPauseMenu() {
+        AudioManager.getInstance().restartBGM();
+
         // transition effects
         pauseMenuScreen.closePauseMenuEffects(gameScreen, null);
 
         // restart model
         currentGameLoop.play();
-        gameplayManager.restartGame();
+        gameplayManager.restartGameplayManager();
     }
 
     // EXIT
     public void exitButtonInGameOver() {
-        keyInputController.disableKeyInput();
+        if (gameState.getGameMode() == GameMode.BLITZ) {
+            AudioManager.getInstance().stopBGM();
+        }
+
+        keyInputController.disableAllKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by game over screen
@@ -263,20 +306,28 @@ public class GameController {
         }
     }
     public void exitButtonInSprintOver() {
-        keyInputController.disableKeyInput();
+        keyInputController.disableAllKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         sprintOverScreen.fromSprintOverToSprintMode(sprintModesScreen, gameScreen);
     }
     public void exitButtonInTimesUp() {
-        keyInputController.disableKeyInput();
+        if (gameState.getGameMode() == GameMode.BLITZ) {
+            AudioManager.getInstance().stopBGM();
+        }
+
+        keyInputController.disableAllKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by times up screen (DONT NEED CARE ABT SPRINT MODE CASE)
         timesUpScreen.fromTimesUpScreenToSelectMenu(selectMenuScreen, gameScreen);
     }
     public void exitButtonInPauseMenu() {
-        keyInputController.disableKeyInput();
+        if (gameState.getGameMode() == GameMode.BLITZ) {
+            AudioManager.getInstance().stopBGM();
+        }
+
+        keyInputController.disableAllKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         // transition effects -- handled by pause menu screen :)
@@ -293,14 +344,14 @@ public class GameController {
 
     public void startButtonInStartMenu() {
         // NOTE: no check of "is transition effects on" so it feels more responsive
-        keyInputController.disableKeyInput(); // don't allow key input
+        keyInputController.disableAllKeyInput(); // don't allow key input
 
         // transition effects
         startMenuScreen.fromStartMenuToSelectMenu(selectMenuScreen);
     }
 
     public void exitButtonInSelectMenu() {
-        keyInputController.disableKeyInput();
+        keyInputController.disableAllKeyInput();
 
         // transition effects
         selectMenuScreen.fromSelectMenuToStartMenu(startMenuScreen);
@@ -314,6 +365,9 @@ public class GameController {
         gameState.setGameMode(GameMode.RELAX); // will also set sprintMode to NONE
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
+
+        AudioManager.getInstance().playBGM(SoundType.BLITZ_OST);
+
         startGame();
     }
     public void blitzButton() {
@@ -325,6 +379,7 @@ public class GameController {
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
 
+        AudioManager.getInstance().playBGM(SoundType.BLITZ_OST);
 
         startGame();
     }
@@ -361,10 +416,12 @@ public class GameController {
         currentGameLoop = sprintGameLoop;
 
         sprintModesScreen.fromSprintModesToGameScreen(gameScreen);
-        keyInputController.enableKeyInput(); // allow key input when game start
+        keyInputController.enableAllKeyInput(); // allow key input when game start
         currentGameLoop.play(); // RUN THE GAME LOOP
 
-        gameplayManager.restartGame();
+        gameplayManager.restartGameplayManager();
+
+        AudioManager.getInstance().playBGM(SoundType.BLITZ_OST);
     }
     /**
      * Control the UI so that it is prepared for the gameplay
@@ -375,10 +432,10 @@ public class GameController {
         // NOTE: no check of "is transition effects on" so it feels more responsive
         //       but do set "is transition effects on" flag to true to prevent other transition effects
         //       from popping in (e.g. can't pause when starting game screen)
-        keyInputController.enableKeyInput(); // allow key input when game start
+        keyInputController.enableAllKeyInput(); // allow key input when game start
         currentGameLoop.play(); // RUN THE GAME LOOP
 
-        gameplayManager.restartGame();
+        gameplayManager.restartGameplayManager();
     }
 
     // UTILS

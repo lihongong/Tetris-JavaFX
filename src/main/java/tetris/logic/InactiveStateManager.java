@@ -109,9 +109,13 @@ public class InactiveStateManager {
 
         // invoked even if no line is cleared
         // passing 0 line clear into updateScore() will reset gameMetrics combo count
-        gameMetrics.updateScore(numLinesClear, gameState.isTSpin());
+        gameMetrics.updateScore(numLinesClear, isPotentialTSpin);
 
         if (gotLineRemoval) {
+            // Play audio first due to potential delay :)
+            // Clear line & Combo & Tspin Sound Effect -- if there is line clear
+            playClearSoundEffect(numLinesClear, gameMetrics.getCombo(), isPotentialTSpin);
+
             gameState.turnOnEffect();
             // TODO: sound effect based on numLinesClear & combo effects
             gameScreen.popComboEffect(gameMetrics.getCombo());
@@ -129,9 +133,6 @@ public class InactiveStateManager {
             if (isPotentialTSpin) {
                 gameState.setIsTSpin();
             }
-
-            // Clear line & Combo & Tspin Sound Effect -- if there is line clear
-            playClearSoundEffect(numLinesClear, gameMetrics.getCombo(), isPotentialTSpin);
         }
     }
     private void playClearSoundEffect(int numLinesClear, int combo, boolean isTSpin) {

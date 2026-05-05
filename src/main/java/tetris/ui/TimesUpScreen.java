@@ -111,6 +111,7 @@ public class TimesUpScreen extends UiPart<VBox> {
     private void timesUpAnimation(GameScreen gameScreen, Runnable runnable) {
         // pop in Time's Up title
         SequentialTransition poppingTimesUpTrans = UiAnimation.pop(0.5f, 1.3f, 1.0f, 0.13f, timesUpLabel);
+
         // Pause for 1 sec
         PauseTransition pauseAfterPopTitle = new PauseTransition(Duration.seconds(1));
 

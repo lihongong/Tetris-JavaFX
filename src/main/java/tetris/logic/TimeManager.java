@@ -6,6 +6,7 @@ import java.sql.Time;
 
 import static tetris.util.TetrisConstants.FPS;
 import static tetris.util.TetrisConstants.TWO_MINUTE_DURATION;
+import static tetris.util.TetrisConstants.WARNING_TIME;
 
 public class TimeManager {
     private GameScreen gameScreen;
@@ -23,5 +24,8 @@ public class TimeManager {
     }
     public boolean isTimesUp() {
         return counter >= blitzDuration;
+    }
+    public boolean isWarningTime() {
+        return counter == WARNING_TIME;
     }
 }

@@ -1,6 +1,8 @@
 package tetris.audio;
 
 
+import java.util.Random;
+
 public enum SoundType {
     COMBO_1("Combo1.wav", false),
     COMBO_2("Combo2.wav", false),
@@ -16,11 +18,12 @@ public enum SoundType {
     T_SPIN("Remove4Line.wav", false), // TSpin and Remove 4 lines are the same sound
     HOLD("Hold.wav", false),
     SPACE("Space.wav", false),
-    KO1("KO1", false),
+    KO1("KO1.wav", false),
     KO2("KO2.wav", false),
+    WET_FART("Wet_Fart.wav", false),
     TIME_WARNING("Time_Warning.wav", false),
     TIMES_UP("Times_Up.wav", false),
-    OST("OST.wav", true);
+    BLITZ_OST("OSTShorten.wav", true);
 
     private final String fileName;
     private final boolean isBgm;
@@ -55,8 +58,7 @@ public enum SoundType {
             case 4 -> SoundType.COMBO_4;
             case 5 -> SoundType.COMBO_5;
             case 6 -> SoundType.COMBO_6;
-            case 7 -> SoundType.COMBO_7;
-            default -> null;
+            default -> (combo >= 7) ? SoundType.COMBO_7 : null; // combo >= 7 uses the same sound, combo < 1 return null
         };
     }
 }
