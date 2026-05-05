@@ -35,8 +35,11 @@ public class Tetris extends Application {
      * the fonts programmatically.
      */
     public void loadFonts() {
-        Font font = Font.loadFont(
+        Font.loadFont(
                 getClass().getClassLoader().getResourceAsStream("fonts/Silkscreen_Regular.ttf"), 10
+        );
+        Font.loadFont(
+                getClass().getClassLoader().getResourceAsStream("fonts/Tetris_Battle_Font.ttf"), 10
         );
     }
 }

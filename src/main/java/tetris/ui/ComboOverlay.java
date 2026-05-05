@@ -4,19 +4,19 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.scene.CacheHint;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import tetris.util.UiAnimation;
 
 public class ComboOverlay extends StackPane {
-    private Label comboWording;
-    private Label comboNumber;
+    private Text comboWording;
+    private Text comboNumber;
 
-    private final int comboWordingRelativeToNumberPositionY = 25;
     private Animation comboAnimation;
     private final int comboOverlayPositionY = -80;
 
@@ -25,12 +25,20 @@ public class ComboOverlay extends StackPane {
         this.setMinSize(width, height);
         this.setPrefSize(width, height);
 
-        comboNumber = new Label("9");
-        comboWording = new Label("COMBO!");
-        comboWording.setTranslateY(comboWordingRelativeToNumberPositionY);
-        this.getChildren().addAll(comboNumber, comboWording);
+        // Add the stylesheet
+        this.getStylesheets().add(getClass().getResource("/view/game-screen.css").toExternalForm());
+
+        comboNumber = new Text();
+        comboNumber.getStyleClass().addAll("combo", "combo-number");
+        comboWording = new Text("COMBO!");
+        comboWording.getStyleClass().addAll("combo", "combo-text");
+        this.getChildren().addAll(comboWording, comboNumber);
 
         this.setVisible(false); // invisible at first
+
+        // Prevent laggy first few combo overlay display
+        this.setCache(true);
+        this.setCacheHint(CacheHint.SPEED); // Prioritize smooth animation over crispness
     }
 
     public void showComboAnimation(int combo) {

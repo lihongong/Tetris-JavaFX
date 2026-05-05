@@ -116,6 +116,8 @@ public class KeyInputController {
             }
         });
 
+        disableAllKeyInput();
+
         /**
          * Checks the {@code pressedKey} Set to see if a key (e.g. UP, DOWN, SPACE, ESCAPE) is being pressed.
          * If a key is being pressed, handle it via {@code holdableKeyHandler} and {@code onlyPressKeyHandler}.

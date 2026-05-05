@@ -74,8 +74,6 @@ public class GameController {
 
         this.keyInputController = new KeyInputController(mainScene, gameState, this,
                 gameplayManager.getActiveStateManager());
-
-        //this.isIgnoreKeyInput = true;
     }
     private void setUpGameLoop() {
         // Create the game loop
@@ -436,10 +434,5 @@ public class GameController {
         currentGameLoop.play(); // RUN THE GAME LOOP
 
         gameplayManager.restartGameplayManager();
-    }
-
-    // UTILS
-    public GameState getGameState() {
-        return this.gameState;
     }
 }

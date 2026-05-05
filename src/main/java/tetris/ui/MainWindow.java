@@ -73,11 +73,6 @@ public class MainWindow extends UiPart<StackPane> {
         primaryStage.setMinHeight((int) minHeight);
 
         primaryStage.setMaximized(true);
-        /*
-        Platform.runLater(() -> {
-            primaryStage.toFront();
-            primaryStage.requestFocus();
-        });*/
     }
 
     public void fillInnerParts() {
@@ -133,20 +128,5 @@ public class MainWindow extends UiPart<StackPane> {
         startMenuScreen.setStartButtonHandler(gameController::startButtonInStartMenu);
         selectMenuScreen.setSelectMenuButtonsHandler(gameController::relaxButton, gameController::sprintButton, gameController::blitzButton, gameController::exitButtonInSelectMenu);
         sprintModesScreen.setSprintModesButtonsHandler(gameController::clearALinesButton, gameController::clearBLinesButton, gameController::clearCLinesButton, gameController::sprintModesBackButton);
-
-        GameState gameState = gameController.getGameState();
-        //new KeyInputController(mainScene, gameState, gameController);
-    }
-
-    public void removeNodesFromRoot(Node... toBeRemovedNodes) {
-        for (Node toBeRemovedNode : toBeRemovedNodes) {
-            gameRoot.getChildren().remove(toBeRemovedNode);
-        }
-    }
-
-    public void addNodesToRoot(Node... toBeAddedNodes) {
-        for (Node toBeAddedNode : toBeAddedNodes) {
-            gameRoot.getChildren().add(toBeAddedNode);
-        }
     }
 }
