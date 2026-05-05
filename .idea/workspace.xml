@@ -4,33 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/Launcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/Tetris.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/Tetris.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/audio/AudioManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/audio/AudioManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/audio/SoundType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/audio/SoundType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/GameplayManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/GameplayManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/InactiveStateManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/InputHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/InputHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/KeyInputController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/KeyInputController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/logic/TimeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/logic/TimeManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/SprintOverScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/ui/TimesUpScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/util/TetrisConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameOverScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/GameScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/PauseMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SelectMenu.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SprintModesScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/SprintOverScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/SprintOverScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/TimesUpScreen.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="dd1c620e-ac4b-4af9-9371-a4b0c9d8245d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -113,7 +87,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.42068964",
     "settings.editor.selected.configurable": "configurable.group.appearance",
