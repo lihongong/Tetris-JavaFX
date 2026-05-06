@@ -1,7 +1,17 @@
 package tetris.logic;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import tetris.util.GameMode;
 import tetris.util.SprintMode;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 
 import static tetris.util.TetrisConstants.BASIC_SCORE;
 import static tetris.util.TetrisConstants.T_SPIN_LINE;
@@ -16,24 +26,41 @@ public class GameMetrics {
      * combo == 1 means 2 consecutive line clear etc.
      */
     private int combo;
+    private int sprintGoal;
 
     // data
-    private int relaxHighScore;
-    private int blitzHighScore;
-    private int sprintGoal;
-    private int sprintBestTimeA;
-    private int sprintBestTimeB;
-    private int sprintBestTimeC;
+    @Expose private int relaxHighScore;
+    @Expose private int blitzHighScore;
+    @Expose private int sprintBestTimeA;
+    @Expose private int sprintBestTimeB;
+    @Expose private int sprintBestTimeC;
 
-    public GameMetrics() {
+    // User data save
+    private static final String FILE_NAME = "tetris_metrics.json";
+    private final Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setPrettyPrinting()
+            .create();
+
+    // gson will run this constructor to load from disk
+    private GameMetrics() {
         this.score = 0;
+        this.combo = -1;
+        this.numLinesClear = 0;
+
+        // Default user data
         this.relaxHighScore = 0;
         this.blitzHighScore = 0;
-        this.combo = -1;
-
         this.sprintBestTimeA = Integer.MAX_VALUE;
         this.sprintBestTimeB = Integer.MAX_VALUE;
         this.sprintBestTimeC = Integer.MAX_VALUE;
+    }
+
+    /** factory method and will load from disk */
+    public static GameMetrics of() {
+        GameMetrics gameMetricsInstance = new GameMetrics();
+        gameMetricsInstance.loadFromDisk();
+        return gameMetricsInstance;
     }
 
     public void updateScore(int numLinesClear, boolean isTSpin) {
@@ -73,12 +100,14 @@ public class GameMetrics {
         combo = -1;
     }
     public int getHighScore(GameMode gameMode) {
+        assert gameMode == GameMode.RELAX || gameMode == GameMode.BLITZ:
+                "getHighScore should only be invoke when game mode is Relax or Blitz";
+
         if (gameMode == GameMode.RELAX) {
             return relaxHighScore;
-        } else if (gameMode == GameMode.BLITZ) {
+        } else {
             return blitzHighScore;
         }
-        return -1;
     }
     public void setHighScore(GameMode gameMode) {
         if (gameMode == GameMode.RELAX) {
@@ -91,6 +120,8 @@ public class GameMetrics {
             }
         } // when sprint mode finishes, it will have its score too because we still call updateScore() in Sprint mode,
           // but it won't update the high score
+
+        saveToDisk(); // remember to save to disk
     }
     public int getNumLinesClear() {
         return this.numLinesClear;
@@ -109,6 +140,8 @@ public class GameMetrics {
                 sprintBestTimeC = currentTimeToFinish;
             }
         }
+
+        saveToDisk(); // remember to save to disk
     }
     public int getBestTime(SprintMode sprintMode) {
         if (sprintMode == SprintMode.SPRINT_A) {
@@ -124,5 +157,32 @@ public class GameMetrics {
     }
     public int getSprintGoal() {
         return sprintGoal;
+    }
+
+    // SAVE TO / LOAD FROM DISK
+    public void saveToDisk() {
+        try (Writer writer = new FileWriter(FILE_NAME)) {
+            gson.toJson(this, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadFromDisk() {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) return;
+
+        try (Reader reader = new FileReader(file)) {
+            GameMetrics loadedData = gson.fromJson(reader, GameMetrics.class);
+
+            // Sync loaded data to this instance
+            this.relaxHighScore = loadedData.relaxHighScore;
+            this.blitzHighScore = loadedData.blitzHighScore;
+            this.sprintBestTimeA = loadedData.sprintBestTimeA;
+            this.sprintBestTimeB = loadedData.sprintBestTimeB;
+            this.sprintBestTimeC = loadedData.sprintBestTimeC;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

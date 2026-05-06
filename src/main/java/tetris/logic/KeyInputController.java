@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.Arrays.stream;
+
 public class KeyInputController {
 
     public GameState gameState;
@@ -150,11 +152,11 @@ public class KeyInputController {
                         holdableKeyHandler(KeyCode.LEFT, currentTime, activeStateManager::handleLeftPress);
                         holdableKeyHandler(KeyCode.RIGHT, currentTime, activeStateManager::handleRightPress);
                     }
-
+                    // allow continuous down request
                     holdableKeyHandler(KeyCode.DOWN, currentTime, activeStateManager::handleDownPress);
-                    holdableKeyHandler(KeyCode.UP, currentTime, activeStateManager::handleUpPress);
 
-                    // don't allow repeated space press when hold down on space key
+                    // don't allow repeated space press when hold down on space, up, escape key
+                    onlyPressKeyHandler(KeyCode.UP, activeStateManager::handleUpPress);
                     onlyPressKeyHandler(KeyCode.SPACE, activeStateManager::handleSpacePress);
                     onlyPressKeyHandler(KeyCode.ESCAPE, gameController::pauseGame);
                     // only handle once if both TAB & SHIFT are pressed

@@ -1,5 +1,6 @@
 package tetris.ui;
 
+import com.sun.tools.javac.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,7 +19,6 @@ public class MainWindow extends UiPart<StackPane> {
     private Stage primaryStage;
     private Scene mainScene;
 
-    private KeyInputController keyInputController;
     private GameController gameController;
 
     // UI Screens
@@ -35,20 +35,22 @@ public class MainWindow extends UiPart<StackPane> {
     @FXML
     private StackPane gameRoot; // stack different layers (gameplay, pause menu, game over screen)
 
-    public MainWindow(Stage primaryStage) {
+    public static MainWindow of(Stage primaryStage) {
+        MainWindow mainWindowInstance = new MainWindow(primaryStage);
+        mainWindowInstance.fillInnerParts();
+        mainWindowInstance.setUpGame();
+        mainWindowInstance.show();
+        return mainWindowInstance;
+    }
+    private MainWindow(Stage primaryStage) {
         super(FXML);
 
         config(primaryStage);
         setIcon(primaryStage);
     }
-
     private void config(Stage primaryStage) {
         try {
-            Parent root = getRoot();
-            // testing
-           // root.applyCss();
-            //root.layout();
-
+            Parent root = this.getRoot();
             this.primaryStage = primaryStage;
             this.mainScene = new Scene(root);
             mainScene.setFill(Color.BLACK);
@@ -58,24 +60,10 @@ public class MainWindow extends UiPart<StackPane> {
             e.printStackTrace();
         }
     }
-
     private void setIcon(Stage primaryStage) {
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/tetris_icon.png")));
     }
-
-    public void show() {
-        primaryStage.show();
-
-        double minWidth = primaryStage.getWidth();
-        double minHeight = primaryStage.getHeight();
-
-        primaryStage.setMinWidth((int) minWidth);
-        primaryStage.setMinHeight((int) minHeight);
-
-        primaryStage.setMaximized(true);
-    }
-
-    public void fillInnerParts() {
+    private void fillInnerParts() {
         this.gameScreen = new GameScreen();
 
         this.pauseMenuScreen = new PauseMenuScreen();
@@ -114,8 +102,7 @@ public class MainWindow extends UiPart<StackPane> {
         gameRoot.getChildren().addAll(startMenuScreen.getRoot());
         startMenuScreen.getRoot().setVisible(true);*/
     }
-
-    public void setUpGame() {
+    private void setUpGame() {
         this.gameController = new GameController(gameScreen, pauseMenuScreen, gameOverScreen, timesUpScreen,
                 sprintOverScreen, startMenuScreen, selectMenuScreen, sprintModesScreen, mainScene);
         // set button handler
@@ -128,5 +115,16 @@ public class MainWindow extends UiPart<StackPane> {
         startMenuScreen.setStartButtonHandler(gameController::startButtonInStartMenu);
         selectMenuScreen.setSelectMenuButtonsHandler(gameController::relaxButton, gameController::sprintButton, gameController::blitzButton, gameController::exitButtonInSelectMenu);
         sprintModesScreen.setSprintModesButtonsHandler(gameController::clearALinesButton, gameController::clearBLinesButton, gameController::clearCLinesButton, gameController::sprintModesBackButton);
+    }
+    private void show() {
+        primaryStage.show();
+
+        double minWidth = primaryStage.getWidth();
+        double minHeight = primaryStage.getHeight();
+
+        primaryStage.setMinWidth((int) minWidth);
+        primaryStage.setMinHeight((int) minHeight);
+
+        primaryStage.setMaximized(true);
     }
 }

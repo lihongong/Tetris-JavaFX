@@ -29,7 +29,7 @@ public class GameplayManager {
         this.inactiveBlocksArray = new MinoBlock[NUM_OF_ROW][NUM_OF_COL];
         this.minoManager = new MinoManager(gameScreen, gameState, inactiveBlocksArray);
 
-        gameMetrics = new GameMetrics();
+        gameMetrics = GameMetrics.of();
         activeStateManager = new ActiveStateManager(gameState, gameScreen, minoManager, inactiveBlocksArray);
         inactiveStateManager = new InactiveStateManager(gameState, gameScreen, minoManager, inactiveBlocksArray, gameMetrics);
     }
@@ -200,16 +200,6 @@ public class GameplayManager {
 
     public ActiveStateManager getActiveStateManager() {
         return activeStateManager;
-    }
-    public int getHighScore() {
-        return gameMetrics.getHighScore(gameState.getGameMode());
-    }
-    public int getBestTime() {
-        SprintMode currSprintMode = gameState.getSprintMode();
-        return gameMetrics.getBestTime(currSprintMode);
-    }
-    public int getSprintGoal() {
-        return gameMetrics.getSprintGoal();
     }
     public void setSprintGoal(int sprintGoal) {
         this.gameMetrics.setSprintGoal(sprintGoal);

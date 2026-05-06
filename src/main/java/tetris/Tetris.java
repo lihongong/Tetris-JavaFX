@@ -1,35 +1,31 @@
 package tetris;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import tetris.logic.GameState;
-import tetris.logic.KeyInputController;
-import tetris.logic.GameController;
-import tetris.ui.GameScreen;
+import tetris.ui.ExitDialog;
 import tetris.ui.MainWindow;
-import tetris.ui.PauseMenuScreen;
 
 public class Tetris extends Application {
     private MainWindow mainWindow;
+    private ExitDialog exitDialog;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
             loadFonts();
 
-            this.mainWindow = new MainWindow(primaryStage);
-            mainWindow.fillInnerParts();
-            mainWindow.setUpGame();
-            mainWindow.show();
+            this.mainWindow = MainWindow.of(primaryStage);
+            this.exitDialog = ExitDialog.of(primaryStage);
 
+            primaryStage.setOnCloseRequest(event -> {
+                event.consume(); // Stop the window from closing immediately
+                exitDialog.showExitConfirmation(primaryStage); // show the confirmation pop up
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * Sets up fonts for css. JavaFX css doesn't reliably load fonts in css using @font-face, so it is better to load
      * the fonts programmatically.
@@ -40,6 +36,12 @@ public class Tetris extends Application {
         );
         Font.loadFont(
                 getClass().getClassLoader().getResourceAsStream("fonts/Tetris_Battle_Font.ttf"), 10
+        );
+        Font.loadFont(
+                getClass().getClassLoader().getResourceAsStream("fonts/Quicksand-Bold.ttf"), 10
+        );
+        Font.loadFont(
+                getClass().getClassLoader().getResourceAsStream("fonts/Quicksand-Regular.ttf"), 10
         );
     }
 }

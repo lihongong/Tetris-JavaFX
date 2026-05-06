@@ -1,0 +1,91 @@
+.label {
+    -fx-font-family: "Quicksand";
+
+}
+
+.top-label {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 27px;
+}
+
+.bottom-label {
+    -fx-text-fill: #676767;
+    -fx-font-size: 20px;
+}
+
+.warning-triangle {
+    -fx-fill: #ff4860;
+    -fx-stroke: #ff4860;
+    -fx-stroke-width: 20;
+    -fx-stroke-line-join: round;
+}
+
+.warning-exclamation-label {
+    -fx-font-family: "Quicksand";
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-size: 45px;
+}
+
+.exit-dialog-root {
+    -fx-background-color: white; /* This will be the visible window */
+    -fx-background-radius: 30;   /* Matches the curve in your screenshot */
+    -fx-border-radius: 30;
+    -fx-padding: 40;             /* Give the content some breathing room */
+    -fx-background-insets: 20;   /* Prevent the shadow/glow from clipping to the edges only */
+    -fx-border-insets: 20;       /* Prevent the shadow/glow from clipping to the edges only */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.4), 30, 0.3, 0, 0);
+}
+
+.yes-button {
+    -fx-background-color: #f81737;
+    -fx-background-radius: 15;
+    -fx-padding: 20 60 20 60;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+
+    -fx-cursor: hand;
+}
+.yes-button:hover {
+    -fx-background-color: #dc223a; /* A slightly darker red */
+    -fx-scale-x: 1.01; /* pop up effect */
+    -fx-scale-y: 1.01;
+}
+
+.no-button {
+    -fx-background-color: #ffc8d0;
+    -fx-background-radius: 15;
+    -fx-padding: 20 60 20 60;
+    -fx-text-fill: #f65765;
+    -fx-font-size: 16;
+
+    -fx-cursor: hand;
+}
+.no-button:hover {
+    -fx-background-color: #ffbec5; /* A slightly darker pink */
+    -fx-scale-x: 1.01; /* pop up effect */
+    -fx-scale-y: 1.01;
+}
+
+.x-button {
+    -fx-min-width: 25;
+    -fx-min-height: 25;
+    -fx-max-width: 25;
+    -fx-max-height: 25;
+
+    -fx-background-color: white;
+
+    /* 3. Text/Icon styling */
+    -fx-font-family: "Quicksand";
+    -fx-text-fill: black;
+    -fx-font-weight: normal;
+    -fx-font-size: 20;
+    -fx-padding: 0; /* Remove default button padding to center the X */
+
+    -fx-cursor: hand;
+}
+.x-button:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
