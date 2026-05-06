@@ -36,6 +36,7 @@ public class GameMetrics {
     @Expose private int sprintBestTimeC;
 
     // User data save
+    private static final String FOLDER_NAME = ".my_tetris_game";
     private static final String FILE_NAME = "tetris_metrics.json";
     private final Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -161,7 +162,14 @@ public class GameMetrics {
 
     // SAVE TO / LOAD FROM DISK
     public void saveToDisk() {
-        try (Writer writer = new FileWriter(FILE_NAME)) {
+        File dir = new File(FOLDER_NAME);
+
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        File saveFile = new File(dir, FILE_NAME);
+        try (Writer writer = new FileWriter(saveFile)) {
             gson.toJson(this, writer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,10 +177,11 @@ public class GameMetrics {
     }
 
     public void loadFromDisk() {
-        File file = new File(FILE_NAME);
-        if (!file.exists()) return;
+        File dir = new File(FOLDER_NAME);
+        if (!dir.exists()) return;
 
-        try (Reader reader = new FileReader(file)) {
+        File saveFile = new File(dir, FILE_NAME);
+        try (Reader reader = new FileReader(saveFile)) {
             GameMetrics loadedData = gson.fromJson(reader, GameMetrics.class);
 
             // Sync loaded data to this instance
