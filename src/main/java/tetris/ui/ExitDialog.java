@@ -4,6 +4,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
+import javafx.css.PseudoClass;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -15,7 +16,6 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import tetris.Tetris;
 import tetris.util.UiAnimation;
 
 import java.util.Objects;
@@ -37,6 +37,8 @@ public class ExitDialog extends UiPart<StackPane> {
     private Button yesButton;
     @FXML
     private Button noButton;
+    @FXML
+    private Button xButton;
 
     @FXML
     private void yesButtonHandler() {
@@ -45,10 +47,13 @@ public class ExitDialog extends UiPart<StackPane> {
     }
     @FXML
     private void noButtonHandler() {
+        // strip away the "hover" state so that when exitDialog box pops up again, the no button won't be in "hover" state
+        noButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), false);
         exitDialogStage.close();
     }
     @FXML
     private void xButtonHandler() {
+        xButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), false);
         exitDialogStage.close();
     }
 

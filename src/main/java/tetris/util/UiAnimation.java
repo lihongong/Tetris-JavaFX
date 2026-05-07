@@ -58,6 +58,11 @@ public class UiAnimation {
         transY.setToY(toY);
         return transY;
     }
+    public static TranslateTransition translateToX(int toX, float animateDuration, Node node) {
+        TranslateTransition transToX = new TranslateTransition(Duration.seconds(animateDuration), node);
+        transToX.setToX(toX);
+        return transToX;
+    }
 
 
     // Fade

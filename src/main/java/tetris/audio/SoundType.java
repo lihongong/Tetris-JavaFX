@@ -23,7 +23,9 @@ public enum SoundType {
     WET_FART("Wet_Fart.wav", false),
     TIME_WARNING("Time_Warning.wav", false),
     TIMES_UP("Times_Up.wav", false),
-    BLITZ_OST("OSTShorten.wav", true);
+    BLITZ_OST("OSTShorten.wav", true),
+    OST1("Wet_Fart.wav", true);
+
 
     private final String fileName;
     private final boolean isBgm;

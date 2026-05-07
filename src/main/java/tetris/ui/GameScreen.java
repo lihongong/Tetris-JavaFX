@@ -624,35 +624,32 @@ public class GameScreen extends UiPart<VBox> {
 
         return String.format("rgb(%d,%d,%d)", (int) red, (int) green, (int) blue);
     }
-
+    /** When game over, collapse the game screen :) */
     public ParallelTransition collapsingGameScreenEffects() {
-        float animateDuration = 1.4f;
-        ParallelTransition timerAndHoldFallingEffects = UiAnimation.fall(0, 800, animateDuration,
+        // fall slower
+        ParallelTransition timerAndHoldFallingEffects = UiAnimation.fall(0, 800, 1.4f,
                 timerSection, holdBoxMetricsSection);
-
+        // fall faster
         ParallelTransition gameAndNextFallingEffects = UiAnimation.fall(0, 800, 1.2f,
                 gameplaySection, nextBoxSection);
 
-        Duration duration = Duration.seconds(1.4);
-        RotateTransition leftSectionRotate = new RotateTransition(duration, holdBoxMetricsSection);
-        leftSectionRotate.setToAngle(-15);
+        float animateDuration = 1.4f;
+        // timer section
+        RotateTransition timerSectionRotate = UiAnimation.rotate(-10, animateDuration, timerSection);
+        // left section
+        RotateTransition leftSectionTilt = UiAnimation.rotate(-14, animateDuration, holdBoxMetricsSection);
+        TranslateTransition leftSectionFallToLeft = UiAnimation.translateToX(-100, animateDuration, holdBoxMetricsSection);
+        // middle section
+        RotateTransition middleSectionTilt = UiAnimation.rotate(8, animateDuration, gameplaySection);
+        // right section
+        RotateTransition rightSectionTilt = UiAnimation.rotate(20, animateDuration, nextBoxSection);
+        TranslateTransition rightSectionFallToRight = UiAnimation.translateToX(70, animateDuration, nextBoxSection);
 
-        TranslateTransition holdBoxFallToLeft = new TranslateTransition(duration, holdBoxMetricsSection);
-        holdBoxFallToLeft.setToX(-100);
-
-        RotateTransition middleSectionTilt = new RotateTransition(duration, gameplaySection);
-        middleSectionTilt.setToAngle(8);
-
-        RotateTransition rightSectionTile = new RotateTransition(duration, nextBoxSection);
-        rightSectionTile.setToAngle(20);
-
-        TranslateTransition nextBoxFallToRight = new TranslateTransition(duration, nextBoxSection);
-        nextBoxFallToRight.setToX(70);
-
-        ParallelTransition combined = new ParallelTransition(leftSectionRotate, holdBoxFallToLeft, middleSectionTilt,
-                rightSectionTile, nextBoxFallToRight, timerAndHoldFallingEffects, gameAndNextFallingEffects);
-        return combined;
+        return new ParallelTransition(timerSectionRotate, leftSectionTilt, leftSectionFallToLeft,
+                middleSectionTilt, rightSectionTilt, rightSectionFallToRight, timerAndHoldFallingEffects,
+                gameAndNextFallingEffects);
     }
+    /** When restart game after game over, the game screen fly down from the sky again */
     public ParallelTransition flyDownFromTop() {
         resetUiPositionAfterAnimation();
         timerSection.setTranslateY(-800);
@@ -663,7 +660,7 @@ public class GameScreen extends UiPart<VBox> {
                 timerSection, holdBoxMetricsSection, gameplaySection, nextBoxSection);
         return fallingGameScreensParts;
     }
-
+    /** When Sprint over, the game screen zoom in for nice effect */
     public ParallelTransition zoomIn() {
         // custom interpolator: make animation progress fast then slow down to near linear speed
         Interpolator fastThenSlowInterpolator = Interpolator.SPLINE(0.1, 0.14, 0.8, 0.5);
@@ -675,6 +672,7 @@ public class GameScreen extends UiPart<VBox> {
 
         return new ParallelTransition(gameScreenZoomIn, gameScreenFadeOut);
     }
+    /** When restart game after sprint over, the game screen darkens then brightens again */
     public Animation darken() {
         root.setEffect(dimEffect);
         return new Timeline(
@@ -713,5 +711,4 @@ public class GameScreen extends UiPart<VBox> {
         // don't have to ask the model for the new best score
         return bestTimeLabel.getText();
     }
-
 }

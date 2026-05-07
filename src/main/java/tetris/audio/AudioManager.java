@@ -4,9 +4,13 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static java.util.Arrays.stream;
 
 public class AudioManager {
     // SFX: Use AudioClip for low-latency, overlapping sounds
@@ -80,13 +84,26 @@ public class AudioManager {
         musicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Loop forever
         musicPlayer.play();
     }
-
     public void restartBGM() {
         if (musicPlayer != null) {
             // start at the beginning again
             musicPlayer.seek(musicPlayer.getStartTime());
             musicPlayer.play();
         }
+    }
+
+    public void playRandomBGM() {
+        // only choose bgm (not include Blitz ost)
+        SoundType bgmSoundType[] = stream(SoundType.values())
+                .filter(soundType -> soundType.isBgm() && soundType != SoundType.BLITZ_OST)
+                .toArray(SoundType[]::new);
+        // safety :)
+        if (bgmSoundType.length == 0) return;
+
+        Random r = new Random();
+        SoundType randomBGMType = bgmSoundType[r.nextInt(bgmSoundType.length)];
+
+        playBGM(randomBGMType);
     }
 
     public void pauseBGM() {

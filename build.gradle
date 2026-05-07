@@ -37,9 +37,9 @@ jar {
     }
 
     // For Windows .ico support
-    from('src/main/resources') {
-        include 'app-icon.ico'
-    }
+    //from('src/main/resources') {
+    //    include 'app-icon.ico'
+    //}
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

@@ -364,7 +364,7 @@ public class GameController {
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
 
-        AudioManager.getInstance().playBGM(SoundType.BLITZ_OST);
+        AudioManager.getInstance().playRandomBGM();
 
         startGame();
     }
@@ -419,7 +419,7 @@ public class GameController {
 
         gameplayManager.restartGameplayManager();
 
-        AudioManager.getInstance().playBGM(SoundType.BLITZ_OST);
+        AudioManager.getInstance().playRandomBGM();
     }
     /**
      * Control the UI so that it is prepared for the gameplay

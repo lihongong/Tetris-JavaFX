@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" spacing="15.0">
          <children>
@@ -25,6 +25,6 @@
             </HBox>
          </children>
       </VBox>
-      <Button focusTraversable="false" mnemonicParsing="false" onAction="#xButtonHandler" styleClass="x-button" stylesheets="@exit-dialog.css" text="✕" translateX="161.0" translateY="-148.0" />
+      <Button focusTraversable="false" mnemonicParsing="false" onAction="#xButtonHandler" styleClass="x-button" stylesheets="@exit-dialog.css" text="✕" translateX="161.0" translateY="-148.0" fx:id="xButton" />
    </children>
 </StackPane>
