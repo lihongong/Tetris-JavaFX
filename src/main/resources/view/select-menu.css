@@ -17,7 +17,7 @@
 }
 
 #mainLayout {
-    -fx-background-image: url('/images/gameplay_backgrounds/3.png');
+    -fx-background-image: url('/images/gameplay_backgrounds/omori.png');
     -fx-background-size: 1024px 432px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;

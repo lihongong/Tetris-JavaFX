@@ -34,7 +34,7 @@ import static tetris.util.TetrisConstants.PLAYING_FIELD_HEIGHT;
 public class GameScreen extends UiPart<VBox> {
 
     private static final String FXML = "GameScreen.fxml";
-    private static final String backgroundImagePath = "/images/gameplay_backgrounds/";
+    private static final String BACKGROUND_IMAGE_PATH = "/images/gameplay_backgrounds/";
     private BackgroundImageSelector backgroundImageSelector;
 
     @FXML
@@ -107,7 +107,7 @@ public class GameScreen extends UiPart<VBox> {
     }
 
     private void setInitialBackGroundImage() {
-        backgroundImageSelector = new BackgroundImageSelector(backgroundImagePath);
+        backgroundImageSelector = new BackgroundImageSelector(BACKGROUND_IMAGE_PATH);
         backgroundImageSelector.setRandomBackgroundImage(getRoot()); // apply background to the root (mainLayout (HBox))
     }
 

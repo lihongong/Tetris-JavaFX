@@ -43,7 +43,7 @@
     -fx-background-radius: 15;
     -fx-padding: 20 60 20 60;
     -fx-text-fill: white;
-    -fx-font-size: 16;
+    -fx-font-size: 20;
 
     -fx-cursor: hand;
 }
@@ -58,7 +58,7 @@
     -fx-background-radius: 15;
     -fx-padding: 20 60 20 60;
     -fx-text-fill: #f65765;
-    -fx-font-size: 16;
+    -fx-font-size: 20;
 
     -fx-cursor: hand;
 }

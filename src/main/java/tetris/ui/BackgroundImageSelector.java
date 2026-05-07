@@ -2,10 +2,18 @@ package tetris.ui;
 
 import javafx.scene.Node;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -25,34 +33,63 @@ public class BackgroundImageSelector {
      * @param imageDirectoryPath the directory where background images are stored.
      */
     private void scanForImagesInDirectory(String imageDirectoryPath) {
-        try {
-            URL dirUrl = getClass().getResource(imageDirectoryPath);
-            String decodedPath = URLDecoder.decode(dirUrl.getFile(), "UTF-8");
-            File directory = new File(decodedPath);
+        String imageListFileName = "image_list.txt";
+        String imageListPath = imageDirectoryPath + imageListFileName;
 
-            // Note: listFiles applies filter (the lambda block) and lists all the files in the directory
-            File[] filesInDirectory = directory.listFiles((dir, fileName) -> {
-                String lowerCaseFileName = fileName.toLowerCase();
-                return lowerCaseFileName.endsWith(".png") ||
-                        lowerCaseFileName.endsWith(".jpg") ||
-                        lowerCaseFileName.endsWith(".jpeg") ||
-                        lowerCaseFileName.endsWith(".gif") ||
-                        lowerCaseFileName.endsWith(".bmp");
-            });
+        try (InputStream inputStream = getClass().getResourceAsStream(imageListPath);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
-            if (filesInDirectory == null || filesInDirectory.length == 0) {
-                System.err.println("No image files found in directory: " + imageDirectoryPath);
-                return;
+            String fileName;
+            while ((fileName = reader.readLine()) != null) {
+                fileName = fileName.trim();
+                if (!fileName.isEmpty() && isImageFileName(fileName)) {
+                    backgroundImagesFileNames.add(fileName);
+                    backgroundImagesFileNamesCopy.add(fileName);
+                }
             }
+        } catch (IOException e) {
+            System.err.println("Failed to read " + imageListFileName + " : " + e.getMessage());
+        }
+    }
+    private void lolscanForImagesInDirectory(String imageDirectoryPath) {
+        try {
+            URI uri = getClass().getResource(imageDirectoryPath).toURI();
 
-            // Add the file names in files into the array list
-            for (File file : filesInDirectory) {
-                backgroundImagesFileNames.add(file.getName());
-                backgroundImagesFileNamesCopy.add(file.getName());
+            if (uri.getScheme().equals("jar")) {
+                // --- CASE 1: RUNNING FROM JAR ---
+                // We "mount" the JAR as a filesystem so we can walk through it
+                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
+                    Path myPath = fileSystem.getPath(imageDirectoryPath);
+                    Files.walk(myPath, 1).forEach(p -> {
+                        String name = p.getFileName().toString();
+                        if (isImageFileName(name)) {
+                            backgroundImagesFileNames.add(name);
+                            backgroundImagesFileNamesCopy.add(name);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // --- CASE 2: RUNNING FROM IDE ---
+                File directory = new File(uri);
+                File[] files = directory.listFiles((dir, name) -> isImageFileName(name)); // list files that are images (image format)
+                if (files != null) {
+                    for (File f : files) {
+                        backgroundImagesFileNames.add(f.getName());
+                        backgroundImagesFileNamesCopy.add(f.getName());
+                    }
+                }
             }
         } catch (Exception e) {
-            System.err.println("Error loading image names: " + e.getMessage());
+            System.err.println("Scanning failed: " + e.getMessage());
         }
+    }
+    // Helper to keep code clean
+    private boolean isImageFileName(String name) {
+        String lower = name.toLowerCase();
+        return lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg")
+                || lower.endsWith(".bmp") || lower.endsWith(".gif");
     }
 
     /**
