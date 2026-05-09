@@ -241,7 +241,12 @@ public class GameController {
         gameplayManager.restartGameplayManager();
 
         Runnable restartGameAfterEffects = () -> {
-            AudioManager.getInstance().restartBGM();
+            if (gameState.getGameMode() == GameMode.BLITZ) {
+                AudioManager.getInstance().restartBGM();
+            } else {
+                AudioManager.getInstance().playRandomBGM(); // play new bgm on restart
+            }
+
 
             currentGameLoop.play();
             keyInputController.enableAllKeyInput();
@@ -256,7 +261,7 @@ public class GameController {
             gameplayManager.restartGameplayManager();
         };
         Runnable restartGameAfterEffects = () -> {
-            AudioManager.getInstance().restartBGM();
+            AudioManager.getInstance().playRandomBGM(); // play new bgm on restart
 
             currentGameLoop.play();
             keyInputController.enableAllKeyInput();
@@ -266,7 +271,7 @@ public class GameController {
                                                       restartGameAfterEffects);
     }
     public void restartGameInTimesUp() {
-        AudioManager.getInstance().restartBGM();
+        AudioManager.getInstance().restartBGM(); // Blitz mode, so just restart the blitz bgm
 
         // transition effects
         timesUpScreen.closeTimesUpScreenEffects(gameScreen);
@@ -277,7 +282,11 @@ public class GameController {
         currentGameLoop.play();
     }
     public void restartGameInPauseMenu() {
-        AudioManager.getInstance().restartBGM();
+        if (gameState.getGameMode() == GameMode.BLITZ) {
+            AudioManager.getInstance().restartBGM();
+        } else {
+            AudioManager.getInstance().playRandomBGM(); // play new bgm on restart
+        }
 
         // transition effects
         pauseMenuScreen.closePauseMenuEffects(gameScreen, null);
@@ -289,9 +298,7 @@ public class GameController {
 
     // EXIT
     public void exitButtonInGameOver() {
-        if (gameState.getGameMode() == GameMode.BLITZ) {
-            AudioManager.getInstance().stopBGM();
-        }
+        AudioManager.getInstance().stopBGM();
 
         keyInputController.disableAllKeyInput();
 
@@ -304,15 +311,15 @@ public class GameController {
         }
     }
     public void exitButtonInSprintOver() {
+        AudioManager.getInstance().stopBGM();
+
         keyInputController.disableAllKeyInput();
 
         gameplayManager.exitGame(); // save metrics and clear inactiveBlockArray
         sprintOverScreen.fromSprintOverToSprintMode(sprintModesScreen, gameScreen);
     }
     public void exitButtonInTimesUp() {
-        if (gameState.getGameMode() == GameMode.BLITZ) {
-            AudioManager.getInstance().stopBGM();
-        }
+        AudioManager.getInstance().stopBGM();
 
         keyInputController.disableAllKeyInput();
 
@@ -321,9 +328,7 @@ public class GameController {
         timesUpScreen.fromTimesUpScreenToSelectMenu(selectMenuScreen, gameScreen);
     }
     public void exitButtonInPauseMenu() {
-        if (gameState.getGameMode() == GameMode.BLITZ) {
-            AudioManager.getInstance().stopBGM();
-        }
+        AudioManager.getInstance().stopBGM();
 
         keyInputController.disableAllKeyInput();
 
@@ -377,7 +382,7 @@ public class GameController {
 
         selectMenuScreen.fromSelectMenuToGameScreen(gameScreen);
 
-        AudioManager.getInstance().playBGM(SoundType.BLITZ_OST);
+        AudioManager.getInstance().playLoopingBGM(SoundType.BLITZ_OST);
 
         startGame();
     }

@@ -15,11 +15,17 @@ public class Bag<T extends Copyable<T>> {
     /**
      * Initialise the bag and fill it with items.
      */
+    @SafeVarargs
     public Bag(T... items) {
-        for (int i = 0; i < items.length; i++) {
-            fixedSetOfItems.add(items[i]);
-            bagOfItems.add(items[i]);
+        for (T item : items) {
+            fixedSetOfItems.add(item);
+            bagOfItems.add(item);
         }
+    }
+
+    public void add(T item) {
+        fixedSetOfItems.add(item);
+        bagOfItems.add(item);
     }
     /**
      * Randomly picks a object from the bag until the bag is empty.

@@ -1,11 +1,17 @@
 package tetris.audio;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+import tetris.Bag;
+import tetris.util.GameMode;
+
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -17,7 +23,11 @@ public class AudioManager {
     private final Map<SoundType, AudioClip> sfxLibrary = new HashMap<>();
     // BGM: Use MediaPlayer for long tracks, looping, and volume control
     private final Map<SoundType, Media> bgmLibrary = new HashMap<>();
+    /** Contain all bgm sound type except for SoundType.BLITZ */
+    private final Bag<SoundType> bgmSoundType = new Bag<>();
     private MediaPlayer musicPlayer;
+
+    private Timeline musicPlayerTimeline;
 
     // Singleton Pattern
     private static AudioManager instance;
@@ -46,6 +56,11 @@ public class AudioManager {
             String externalForm = resource.toExternalForm();
             if (type.isBgm()) {
                 bgmLibrary.put(type, new Media(externalForm));
+
+                // exclude SoundType.BLITZ
+                if (type != SoundType.BLITZ_OST) {
+                    bgmSoundType.add(type);
+                }
             } else {
                 sfxLibrary.put(type, new AudioClip(externalForm));
             }
@@ -71,7 +86,11 @@ public class AudioManager {
     }
 
     /** Handles the Background Music */
-    public void playBGM(SoundType soundType) {
+    public void playLoopingBGM(SoundType soundType) {
+        if (musicPlayerTimeline != null) {
+            musicPlayerTimeline.stop();
+        }
+
         if (musicPlayer != null) {
             if (musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
                 musicPlayer.stop();
@@ -85,36 +104,85 @@ public class AudioManager {
         musicPlayer.play();
     }
     public void restartBGM() {
+        if (musicPlayerTimeline != null) {
+            musicPlayerTimeline.stop();
+        }
+
         if (musicPlayer != null) {
             // start at the beginning again
+            musicPlayer.setVolume(1.0); // pausing the game will set volume to 0
             musicPlayer.seek(musicPlayer.getStartTime());
             musicPlayer.play();
         }
     }
 
     public void playRandomBGM() {
-        // only choose bgm (not include Blitz ost)
-        SoundType bgmSoundType[] = stream(SoundType.values())
-                .filter(soundType -> soundType.isBgm() && soundType != SoundType.BLITZ_OST)
-                .toArray(SoundType[]::new);
-        // safety :)
-        if (bgmSoundType.length == 0) return;
+        if (musicPlayerTimeline != null) {
+            musicPlayerTimeline.stop();
+        }
 
-        Random r = new Random();
-        SoundType randomBGMType = bgmSoundType[r.nextInt(bgmSoundType.length)];
+        if (musicPlayer != null) {
+            if (musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+                musicPlayer.stop();
+            }
+            musicPlayer.dispose();
+        }
 
-        playBGM(randomBGMType);
+        SoundType randomBGMType = bgmSoundType.pickRandomly();
+        Media media = bgmLibrary.get(randomBGMType);
+        musicPlayer = new MediaPlayer(media);
+        // play a new bgm once the current one finishes
+        musicPlayer.setOnEndOfMedia(this::playRandomBGM);
+
+        musicPlayer.play();
     }
 
+    /**
+     * Pauses the bgm smoothly using {@code Timeline}
+     */
     public void pauseBGM() {
-        if (musicPlayer != null) musicPlayer.pause();
-    }
+        if (musicPlayer != null) {
+            if (musicPlayerTimeline != null) {
+                musicPlayerTimeline.stop();
+            }
+            musicPlayerTimeline = new Timeline(
+                    new KeyFrame(Duration.millis(200),
+                            new KeyValue(musicPlayer.volumeProperty(), 0))
+            );
 
+            musicPlayerTimeline.setOnFinished(e -> {
+                musicPlayer.pause();
+            });
+
+            musicPlayerTimeline.play();
+        }
+    }
+    /**
+     * Resumes the bgm smoothly using {@code Timeline}
+     */
     public void resumeBGM() {
-        if (musicPlayer != null) musicPlayer.play();
+        if (musicPlayer != null) {
+            if (musicPlayerTimeline != null) {
+                musicPlayerTimeline.stop();
+            }
+            musicPlayer.play();
+            musicPlayerTimeline = new Timeline(
+                    new KeyFrame(Duration.millis(150), // keep it at the same prev volume in the first 150ms for smoothness
+                            new KeyValue(musicPlayer.volumeProperty(), musicPlayer.getVolume())),
+                    new KeyFrame(Duration.millis(350), // Very fast fade (50ms)
+                            new KeyValue(musicPlayer.volumeProperty(), 1.0))
+            );
+
+            musicPlayerTimeline.play();
+            //musicPlayer.play();
+        }
     }
 
     public void stopBGM() {
+        if (musicPlayerTimeline != null) {
+            musicPlayerTimeline.stop();
+        }
+
         if (musicPlayer != null) {
             if (musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
                 musicPlayer.stop();

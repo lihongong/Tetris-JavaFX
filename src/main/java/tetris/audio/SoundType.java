@@ -1,9 +1,9 @@
 package tetris.audio;
 
+import tetris.util.Copyable;
 
-import java.util.Random;
-
-public enum SoundType {
+public enum SoundType implements Copyable<SoundType> {
+    // Sound effects
     COMBO_1("Combo1.wav", false),
     COMBO_2("Combo2.wav", false),
     COMBO_3("Combo3.wav", false),
@@ -23,8 +23,13 @@ public enum SoundType {
     WET_FART("Wet_Fart.wav", false),
     TIME_WARNING("Time_Warning.wav", false),
     TIMES_UP("Times_Up.wav", false),
-    BLITZ_OST("OSTShorten.wav", true),
-    OST1("Wet_Fart.wav", true);
+
+    // OST
+    BLITZ_OST("Tetris_Battle_OST.wav", true),
+    OST1("Amos_Fireflies.m4a", true),
+    OST2("C418_Subwoofer_Lullaby.m4a", true),
+    OST3("Project_Sekai_Song.m4a", true),
+    OST4("C418_Dreiton.m4a", true);
 
 
     private final String fileName;
@@ -62,5 +67,10 @@ public enum SoundType {
             case 6 -> SoundType.COMBO_6;
             default -> (combo >= 7) ? SoundType.COMBO_7 : null; // combo >= 7 uses the same sound, combo < 1 return null
         };
+    }
+
+    @Override
+    public SoundType copy() {
+        return this;
     }
 }
